@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
+// import React, {useState} from 'react';
+// import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import { loginRequest } from "./authConfig";
-import { callMsGraph,callMsGraphGroup,callAllTeamsRequest,callGetPublicTeams } from "./graph";
+import {callAllTeamsRequest} from "./graph"; //{ callMsGraph,callMsGraphGroup,callAllTeamsRequest,callGetPublicTeams } 
 
 
 export function ProfileContentBackendService  (instance : any,accounts : any)  {

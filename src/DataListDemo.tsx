@@ -1,15 +1,15 @@
 import * as React  from 'react';
-import { useMsal } from "@azure/msal-react";
+//import { useMsal } from "@azure/msal-react";
 import { TextField } from '@fluentui/react/lib/TextField';
-import { Toggle } from '@fluentui/react/lib/Toggle';
+//import { Toggle } from '@fluentui/react/lib/Toggle';
 import { Announced } from '@fluentui/react/lib/Announced';
 import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode, IColumn } from '@fluentui/react/lib/DetailsList';
 import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import { TooltipHost } from '@fluentui/react';
 import { loginRequest } from "./component/authConfig";
-import { callMsGraph,callMsGraphGroup,callAllTeamsRequest,callGetPublicTeams } from "./component/graph";
-import Button from "react-bootstrap/Button";
+import {callAllTeamsRequest}  from "./component/graph";//{ callMsGraph,callMsGraphGroup,callAllTeamsRequest,callGetPublicTeams }
+//import Button from "react-bootstrap/Button";
 import { Label } from '@fluentui/react/lib/Label';
 
 // import { GetMyPublicTeams } from './component/BackendService';
@@ -466,71 +466,71 @@ const classNames = mergeStyleSets({
   // }
   
   
-  function _randomDate(start: Date, end: Date): { value: number; dateFormatted: string } {
-    const date: Date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-    return {
-      value: date.valueOf(),
-      dateFormatted: date.toLocaleDateString(),
-    };
-  }
+  // function _randomDate(start: Date, end: Date): { value: number; dateFormatted: string } {
+  //   const date: Date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  //   return {
+  //     value: date.valueOf(),
+  //     dateFormatted: date.toLocaleDateString(),
+  //   };
+  // }
   
-  const FILE_ICONS: { name: string }[] = [
-    { name: 'accdb' },
-    { name: 'audio' },
-    { name: 'code' },
-    { name: 'csv' },
-    { name: 'docx' },
-    { name: 'dotx' },
-    { name: 'mpp' },
-    { name: 'mpt' },
-    { name: 'model' },
-    { name: 'one' },
-    { name: 'onetoc' },
-    { name: 'potx' },
-    { name: 'ppsx' },
-    { name: 'pdf' },
-    { name: 'photo' },
-    { name: 'pptx' },
-    { name: 'presentation' },
-    { name: 'potx' },
-    { name: 'pub' },
-    { name: 'rtf' },
-    { name: 'spreadsheet' },
-    { name: 'txt' },
-    { name: 'vector' },
-    { name: 'vsdx' },
-    { name: 'vssx' },
-    { name: 'vstx' },
-    { name: 'xlsx' },
-    { name: 'xltx' },
-    { name: 'xsn' },
-  ];
+  // const FILE_ICONS: { name: string }[] = [
+  //   { name: 'accdb' },
+  //   { name: 'audio' },
+  //   { name: 'code' },
+  //   { name: 'csv' },
+  //   { name: 'docx' },
+  //   { name: 'dotx' },
+  //   { name: 'mpp' },
+  //   { name: 'mpt' },
+  //   { name: 'model' },
+  //   { name: 'one' },
+  //   { name: 'onetoc' },
+  //   { name: 'potx' },
+  //   { name: 'ppsx' },
+  //   { name: 'pdf' },
+  //   { name: 'photo' },
+  //   { name: 'pptx' },
+  //   { name: 'presentation' },
+  //   { name: 'potx' },
+  //   { name: 'pub' },
+  //   { name: 'rtf' },
+  //   { name: 'spreadsheet' },
+  //   { name: 'txt' },
+  //   { name: 'vector' },
+  //   { name: 'vsdx' },
+  //   { name: 'vssx' },
+  //   { name: 'vstx' },
+  //   { name: 'xlsx' },
+  //   { name: 'xltx' },
+  //   { name: 'xsn' },
+  // ];
   
-  function _randomFileIcon(): { docType: string; url: string } {
-    const docType: string = FILE_ICONS[Math.floor(Math.random() * FILE_ICONS.length)].name;
-    return {
-      docType,
-      url: `https://static2.sharepointonline.com/files/fabric/assets/item-types/16/${docType}.svg`,
-    };
-  }
+  // function _randomFileIcon(): { docType: string; url: string } {
+  //   const docType: string = FILE_ICONS[Math.floor(Math.random() * FILE_ICONS.length)].name;
+  //   return {
+  //     docType,
+  //     url: `https://static2.sharepointonline.com/files/fabric/assets/item-types/16/${docType}.svg`,
+  //   };
+  // }
   
-  function _randomFileSize(): { value: string; rawSize: number } {
-    const fileSize: number = Math.floor(Math.random() * 100) + 30;
-    return {
-      value: `${fileSize} KB`,
-      rawSize: fileSize,
-    };
-  }
+  // function _randomFileSize(): { value: string; rawSize: number } {
+  //   const fileSize: number = Math.floor(Math.random() * 100) + 30;
+  //   return {
+  //     value: `${fileSize} KB`,
+  //     rawSize: fileSize,
+  //   };
+  // }
   
-  const LOREM_IPSUM = (
-    'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut ' +
-    'labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut ' +
-    'aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore ' +
-    'eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt '
-  ).split(' ');
-  let loremIndex = 0;
-  function _lorem(wordCount: number): string {
-    const startIndex = loremIndex + wordCount > LOREM_IPSUM.length ? 0 : loremIndex;
-    loremIndex = startIndex + wordCount;
-    return LOREM_IPSUM.slice(startIndex, loremIndex).join(' ');
-  }
+  // const LOREM_IPSUM = (
+  //   'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut ' +
+  //   'labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut ' +
+  //   'aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore ' +
+  //   'eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt '
+  // ).split(' ');
+  // let loremIndex = 0;
+  // function _lorem(wordCount: number): string {
+  //   const startIndex = loremIndex + wordCount > LOREM_IPSUM.length ? 0 : loremIndex;
+  //   loremIndex = startIndex + wordCount;
+  //   return LOREM_IPSUM.slice(startIndex, loremIndex).join(' ');
+  // }
