@@ -93,14 +93,20 @@ import  { DetailsListDemo } from './DataListDemo';
 class App extends Component {
   
 
-  public async handleLogin(instance :any) : Promise<any> {
-    instance.loginPopup(loginRequest).then((response : any) => {
-      console.log("Login response",response);
-    }).catch((e :any)  => {
+  // public async handleLogin(instance :any) : Promise<any> {
+  //   instance.loginPopup(loginRequest).then((response : any) => {
+  //     console.log("Login response",response);
+  //   }).catch((e :any)  => {
+  //       console.error(e);
+  //   });
+  //   return new Promise<any>(() => {})
+  // }
+  public handleLogin(instance: any) {
+    instance.loginPopup(loginRequest).catch((e :any) => {
         console.error(e);
     });
-    return new Promise<any>(() => {})
   }
+
 
   public ProfileContent = () => {
   
@@ -142,8 +148,8 @@ class App extends Component {
   render(){
     return (
       <div className="App">
-      <this.MainContent />
-    </div>
+        <this.MainContent />
+      </div>
     )
   }
 }
