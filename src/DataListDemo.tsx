@@ -91,7 +91,7 @@ const classNames = mergeStyleSets({
     accounts : any;
   }
   
-  export default class DetailsListDemo extends React.Component<IDetailsListDocumentsExampleProps, IDetailsListDocumentsExampleState> {
+  class DetailsListDemo extends React.Component<IDetailsListDocumentsExampleProps, IDetailsListDocumentsExampleState> {
     private _selection: Selection;
     private _allItems: IDocument[];
     //private _allpublicTeams : IPublicTeams[];
@@ -385,7 +385,7 @@ const classNames = mergeStyleSets({
       console.log("Teams", items)
     }
   }
-
+  export default DetailsListDemo;
   function getAllMyPublicTeams(instance :any, accounts :any) {
 
     const items: IDocument[] = [];
