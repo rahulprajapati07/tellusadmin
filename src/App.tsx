@@ -8,87 +8,87 @@ import  DetailsListDemo  from './DataListDemo';
 
 
 
-  // function handleLogin(instance :any) {
-  //   instance.loginRedirect(loginRequest).catch((e :any)  => {
-  //       console.error(e);
-  //   });
-  // }
+  function handleLogin(instance :any) {
+    instance.loginRedirect(loginRequest).catch((e :any)  => {
+        console.error(e);
+    });
+  }
 
-// const ProfileContent = () => {
+const ProfileContent = () => {
   
-//   const { instance, accounts } = useMsal();
-//   //const [graphData, setGraphData] = useState(null);
+  const { instance, accounts } = useMsal();
+  //const [graphData, setGraphData] = useState(null);
 
-// //   function RequestAllTeams() {
-// //     // Silently acquires an access token which is then attached to a request for MS Graph data
-// //     ProfileContentBackendService(instance,accounts);
-// //     // GetAllPublicTeams().then((data:any[]) =>
-// //     // {
-// //     //     console.log("Request all Teams data 1 :",data);
-// //     // });
-// //     // instance.acquireTokenSilent({
-// //     //     ...loginRequest,
-// //     //     account: accounts[0]
-// //     // }).then((response) => {
-// //     //     callAllTeamsRequest(response.accessToken).then(response => response).then((data:any[]) =>
-// //     //     {
-// //     //         console.log("Request all Teams data",data);
-// //     //     });;
-// //     // });
-// // }
-
-// // function GetPublicTeams() {
-// //     // Silently acquires an access token which is then attached to a request for MS Graph data
-// //     instance.acquireTokenSilent({
-// //         ...loginRequest,
-// //         account: accounts[0]
-// //     }).then((response) => {
-// //         callGetPublicTeams(response.accessToken).then(response => response).then((data:any[]) =>
-// //         {
-// //           console.log("Get public Teams data",data);
-// //         });
-// //     });
-// // }
-
-//     return(
-//       <>
-//         {/* <Button variant="secondary" onClick={RequestAllTeams}>Get All Teams</Button> */}
-//         {/* <Button variant="secondary" onClick={GetPublicTeams}>Get Public Teams</Button> */}
-//         <div>
-//             <DetailsListDemo instance = {instance} accounts = {accounts}  />
-//             {/* <div className={ styles.searchBoxContainer}>
-//                   <SearchBox 
-//                       value="Search box"
-//                       className={styles.searchBoxUser}
-//                   />
-//             </div> */}
-//         </div>
-//       </>
-//     );
+//   function RequestAllTeams() {
+//     // Silently acquires an access token which is then attached to a request for MS Graph data
+//     ProfileContentBackendService(instance,accounts);
+//     // GetAllPublicTeams().then((data:any[]) =>
+//     // {
+//     //     console.log("Request all Teams data 1 :",data);
+//     // });
+//     // instance.acquireTokenSilent({
+//     //     ...loginRequest,
+//     //     account: accounts[0]
+//     // }).then((response) => {
+//     //     callAllTeamsRequest(response.accessToken).then(response => response).then((data:any[]) =>
+//     //     {
+//     //         console.log("Request all Teams data",data);
+//     //     });;
+//     // });
 // }
+
+// function GetPublicTeams() {
+//     // Silently acquires an access token which is then attached to a request for MS Graph data
+//     instance.acquireTokenSilent({
+//         ...loginRequest,
+//         account: accounts[0]
+//     }).then((response) => {
+//         callGetPublicTeams(response.accessToken).then(response => response).then((data:any[]) =>
+//         {
+//           console.log("Get public Teams data",data);
+//         });
+//     });
+// }
+
+    return(
+      <>
+        {/* <Button variant="secondary" onClick={RequestAllTeams}>Get All Teams</Button> */}
+        {/* <Button variant="secondary" onClick={GetPublicTeams}>Get Public Teams</Button> */}
+        <div>
+            <DetailsListDemo instance = {instance} accounts = {accounts}  />
+            {/* <div className={ styles.searchBoxContainer}>
+                  <SearchBox 
+                      value="Search box"
+                      className={styles.searchBoxUser}
+                  />
+            </div> */}
+        </div>
+      </>
+    );
+}
 
 /**
  * If a user is authenticated the ProfileContent component above is rendered. Otherwise a message indicating a user is not authenticated is rendered.
  */
-// const MainContent = () => {    
-//   const { instance } = useMsal();
-//   if(instance.getAllAccounts() == null)
-//   {
-//     handleLogin(instance);
-//   }
-//   return (
-//       <div className="App">
-//         <ProfileContent />
-//           <AuthenticatedTemplate>
-//                <ProfileContent />
-//           </AuthenticatedTemplate>
+const MainContent = () => {    
+  const { instance } = useMsal();
+  // if(instance.getAllAccounts() == null)
+  // {
+  //   handleLogin(instance);
+  // }
+  return (
+      <div className="App">
+        
+          <AuthenticatedTemplate>
+               <ProfileContent />
+          </AuthenticatedTemplate>
 
-//           {/* <UnauthenticatedTemplate>
-//           <Button variant="secondary" className="ml-auto" onClick={() => handleLogin(instance)}>Sign in using Popup</Button>
-//           </UnauthenticatedTemplate> */}
-//       </div>
-//   );
-// };
+          <UnauthenticatedTemplate>
+          <Button variant="secondary" className="ml-auto" onClick={() => handleLogin(instance)}>Sign in using Popup</Button>
+          </UnauthenticatedTemplate>
+      </div>
+  );
+};
 
 class App extends Component {
   
@@ -101,52 +101,52 @@ class App extends Component {
   //   });
   //   return new Promise<any>(() => {})
   // }
-  public handleLogin(instance: any) {
-    instance.loginPopup(loginRequest).catch((e :any) => {
-        console.error(e);
-    });
-  }
+  // public handleLogin(instance: any) {
+  //   instance.loginPopup(loginRequest).catch((e :any) => {
+  //       console.error(e);
+  //   });
+  // }
 
 
-  public ProfileContent = () => {
+  // public ProfileContent = () => {
   
-    const { instance, accounts } = useMsal();
-      return(
-        <>
-          {/* <Button variant="secondary" onClick={RequestAllTeams}>Get All Teams</Button> */}
-          {/* <Button variant="secondary" onClick={GetPublicTeams}>Get Public Teams</Button> */}
-          <div>
-              <DetailsListDemo instance = {instance} accounts = {accounts}  />
+  //   const { instance, accounts } = useMsal();
+  //     return(
+  //       <>
+  //         {/* <Button variant="secondary" onClick={RequestAllTeams}>Get All Teams</Button> */}
+  //         {/* <Button variant="secondary" onClick={GetPublicTeams}>Get Public Teams</Button> */}
+  //         <div>
+  //             <DetailsListDemo instance = {instance} accounts = {accounts}  />
               
-          </div>
-        </>
-      );
-  }
+  //         </div>
+  //       </>
+  //     );
+  // }
 
-  public MainContent = ()  => {    
-    const { instance } = useMsal();
-    // if(instance.getAllAccounts()[0] === undefined)
-    // {
-    //    this.handleLogin(instance);
-    // }
-    return (
-        <div className="App">
-          <div>
-            Template
-          </div>
-            <AuthenticatedTemplate>
-              <div>
-                AuthenticatedTemplate 
-              </div>
-                 <this.ProfileContent />
-            </AuthenticatedTemplate>
+  // public MainContent = ()  => {    
+  //   const { instance } = useMsal();
+  //   // if(instance.getAllAccounts()[0] === undefined)
+  //   // {
+  //   //    this.handleLogin(instance);
+  //   // }
+  //   return (
+  //       <div className="App">
+  //         <div>
+  //           Template
+  //         </div>
+  //           <AuthenticatedTemplate>
+  //             <div>
+  //               AuthenticatedTemplate 
+  //             </div>
+  //                <this.ProfileContent />
+  //           </AuthenticatedTemplate>
   
-            <UnauthenticatedTemplate>
-            <Button variant="secondary" className="ml-auto" onClick={() => this.handleLogin(instance)}>Sign in using Popup</Button>
-            </UnauthenticatedTemplate>
-        </div>
-    );
-  };
+  //           <UnauthenticatedTemplate>
+  //           <Button variant="secondary" className="ml-auto" onClick={() => this.handleLogin(instance)}>Sign in using Popup</Button>
+  //           </UnauthenticatedTemplate>
+  //       </div>
+  //   );
+  // };
   // componentDidMount(){
   //   SignOutButton();
   // }
@@ -154,7 +154,7 @@ class App extends Component {
   render(){
     return (
       <div className="App">
-        <this.MainContent />
+        <MainContent />
       </div>
     )
   }

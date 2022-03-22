@@ -2,7 +2,8 @@ export const msalConfig = {
     auth: {
       clientId: "b0785c01-bd69-4a12-bfe1-e558e7a4b7d1",
       authority: "https://login.microsoftonline.com/common", // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
-      redirectUri: "https://ambitious-pebble-0b2637f10.1.azurestaticapps.net/",//"http://localhost:3000/"
+     // redirectUri: "http://localhost:3000/",// "https://ambitious-pebble-0b2637f10.1.azurestaticapps.net/",
+      redirectUri: "https://ambitious-pebble-0b2637f10.1.azurestaticapps.net/"
     },
     cache: {
       cacheLocation: "sessionStorage", // This configures where your cache will be stored
