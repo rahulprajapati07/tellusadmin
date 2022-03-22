@@ -94,7 +94,7 @@ class App extends Component {
   
 
   public handleLogin(instance :any) {
-    instance.loginRedirect(loginRequest).then((response : any) => {
+    instance.loginPopup(loginRequest).then((response : any) => {
       console.log("Login response",response);
     }).catch((e :any)  => {
         console.error(e);
