@@ -93,12 +93,13 @@ import  { DetailsListDemo } from './DataListDemo';
 class App extends Component {
   
 
-  public handleLogin(instance :any) {
+  public async handleLogin(instance :any) : Promise<any> {
     instance.loginPopup(loginRequest).then((response : any) => {
       console.log("Login response",response);
     }).catch((e :any)  => {
         console.error(e);
     });
+    return new Promise<any>(() => {})
   }
 
   public ProfileContent = () => {
@@ -116,12 +117,12 @@ class App extends Component {
       );
   }
 
-  public MainContent = () => {    
+  public MainContent = ()  => {    
     const { instance } = useMsal();
-    if(instance.getAllAccounts()[0] === undefined)
-    {
-      this.handleLogin(instance);
-    }
+    // if(instance.getAllAccounts()[0] === undefined)
+    // {
+    //    this.handleLogin(instance);
+    // }
     return (
         <div className="App">
             <AuthenticatedTemplate>
@@ -140,7 +141,6 @@ class App extends Component {
 
   render(){
     return (
-      
       <div className="App">
       <this.MainContent />
     </div>
