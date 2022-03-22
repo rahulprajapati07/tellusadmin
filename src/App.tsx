@@ -9,7 +9,7 @@ import  DetailsListDemo  from './DataListDemo';
 
 
   function handleLogin(instance :any) {
-    instance.loginRedirect(loginRequest).catch((e :any)  => {
+    instance.loginPopup(loginRequest).catch((e :any)  => {
         console.error(e);
     });
   }
