@@ -131,7 +131,13 @@ class App extends Component {
     // }
     return (
         <div className="App">
+          <div>
+            Template
+          </div>
             <AuthenticatedTemplate>
+              <div>
+                AuthenticatedTemplate 
+              </div>
                  <this.ProfileContent />
             </AuthenticatedTemplate>
   
