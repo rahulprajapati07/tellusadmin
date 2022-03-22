@@ -1,9 +1,9 @@
-import React,{ Component } from 'react'; //, {useState}
+import React , {Component } from 'react'; //, {useState}
 import './App.css';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import { loginRequest } from "./component/authConfig";
-import Button from "react-bootstrap/Button";
-import  { DetailsListDemo } from './DataListDemo';
+import  Button from "react-bootstrap/Button";
+import  DetailsListDemo  from './DataListDemo';
 //import { ProfileContentBackendService } from './component/BackendService';
 
 
