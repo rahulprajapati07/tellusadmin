@@ -386,6 +386,7 @@ const classNames = mergeStyleSets({
     }
   }
   export default DetailsListDemo;
+  
   function getAllMyPublicTeams(instance :any, accounts :any) {
 
     const items: IDocument[] = [];
