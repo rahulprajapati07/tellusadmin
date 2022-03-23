@@ -72,10 +72,14 @@ const ProfileContent = () => {
  */
 const MainContent = () => {    
   const { instance } = useMsal();
-  // if(instance.getAllAccounts() == null)
-  // {
-  //   handleLogin(instance);
-  // }
+  var loginSuccess = 1;
+  for (let index = 0; index <= loginSuccess; index++) {
+    if(instance.getAllAccounts()[0] == undefined)
+        {
+          handleLogin(instance);
+        }
+  }
+  
   return (
       <div className="App">
         
@@ -147,9 +151,9 @@ class App extends Component {
   //       </div>
   //   );
   // };
-  // componentDidMount(){
-  //   SignOutButton();
-  // }
+  componentDidMount(){
+    
+  }
 
   render(){
     return (
