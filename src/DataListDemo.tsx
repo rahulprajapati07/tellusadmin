@@ -94,14 +94,16 @@ const classNames = mergeStyleSets({
   class DetailsListDemo extends React.Component<IDetailsListDocumentsExampleProps, IDetailsListDocumentsExampleState> {
     private _selection: Selection;
     private _allItems: IDocument[];
+    //private _allTeamsData : IDocument[];
     //private _allpublicTeams : IPublicTeams[];
     
     constructor(props: IDetailsListDocumentsExampleProps) {
       super(props);
       //getAllMyPublicTeams(this.props.instance,this.props.accounts);
       //this._allItems = _generateDocuments();
-      this._allItems = getAllMyPublicTeams(this.props.instance,this.props.accounts);
-
+      //this._allItems = getAllMyPublicTeams(this.props.instance,this.props.accounts);
+      this._allItems = [];
+      
       const columns: IColumn[] = [
         {
           key: 'column1',
@@ -219,7 +221,7 @@ const classNames = mergeStyleSets({
       });
   
       this.state = {
-        items: this._allItems,
+        items: [],
         columns: columns,
         selectionDetails: this._getSelectionDetails(),
         isModalSelection: false,
@@ -228,6 +230,14 @@ const classNames = mergeStyleSets({
       };
     }
     
+    public async componentDidMount(){
+      await this._getAllPublicTeams().then((teamsDetails : any[]) => {
+        console.log("Component Teams Log" + teamsDetails )
+        this.setState({
+          items: teamsDetails
+        });
+      });
+    }
     public render() {
       const { columns, isCompactMode, items, selectionDetails, isModalSelection, announcedMessage } = this.state;
       
@@ -264,7 +274,7 @@ const classNames = mergeStyleSets({
                 compact={isCompactMode}
                 columns={columns}
                 selectionMode={SelectionMode.multiple}
-                getKey={this._getKey}
+                //getKey={this._getKey}
                 setKey="multiple"
                 layoutMode={DetailsListLayoutMode.justified}
                 isHeaderVisible={true}
@@ -283,7 +293,7 @@ const classNames = mergeStyleSets({
               compact={isCompactMode}
               columns={columns}
               selectionMode={SelectionMode.none}
-              getKey={this._getKey}
+              //getKey={this._getKey}
               setKey="none"
               layoutMode={DetailsListLayoutMode.justified}
               isHeaderVisible={true}
@@ -301,17 +311,17 @@ const classNames = mergeStyleSets({
       }
     }
   
-    private _getKey(item: any, index?: number): string {
-      return item.key;
-    }
+    // private _getKey(item: any, index?: number): string {
+    //   return item.key;
+    // }
   
-    private _onChangeCompactMode = (ev: React.MouseEvent<HTMLElement>, checked: boolean): void => {
-      this.setState({ isCompactMode: checked });
-    };
+    // private _onChangeCompactMode = (ev: React.MouseEvent<HTMLElement>, checked: boolean): void => {
+    //   this.setState({ isCompactMode: checked });
+    // };
   
-    private _onChangeModalSelection = (ev: React.MouseEvent<HTMLElement>, checked: boolean): void => {
-      this.setState({ isModalSelection: checked });
-    };
+    // private _onChangeModalSelection = (ev: React.MouseEvent<HTMLElement>, checked: boolean): void => {
+    //   this.setState({ isModalSelection: checked });
+    // };
   
     private _onChangeText = (ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, text: string): void => {
       this.setState({
@@ -361,56 +371,62 @@ const classNames = mergeStyleSets({
       });
     };
 
-    private _getAllPublicTeams = () => {
-      const items: IDocument[] = [];
-      this.props.instance.acquireTokenSilent({
-        ...loginRequest,
-        account: this.props.accounts[0]
-          }).then((response:any) => {
-        callAllTeamsRequest(response.accessToken).then(response => response).then((data:any[]) =>
-        {
-          data.forEach(element => {
-            items.push({
-              key: element.imageBlob,
-              name: element.title,
-              businessDepartment: element.businessDepartment,
-              status: element.status,
-              type: '',
-              classification: element.classification,
-              businessOwner : '',
-            });
+    public _getAllPublicTeams = async () : Promise<any>  =>  {
+      
+      return new Promise<any>((resolve, reject) => 
+      {
+        const items: IDocument[] = [];
+        this.props.instance.acquireTokenSilent({
+          ...loginRequest,
+          account: this.props.accounts[0]
+            }).then((response:any) => {
+          callAllTeamsRequest(response.accessToken).then(response => response).then((data:any[]) =>
+          {
+            data.forEach(element => {
+              items.push({
+                key: element.imageBlob,
+                name: element.title,
+                businessDepartment: element.businessDepartment,
+                status: element.status,
+                type: '',
+                classification: element.classification,
+                businessOwner : '',
+              });
+            })
+            resolve(items);
           });
-        });;
-      }); 
-      console.log("Teams", items)
+        });
+        
+      }
+      );
     }
   }
   export default DetailsListDemo;
   
-  function getAllMyPublicTeams(instance :any, accounts :any) {
+  // function getAllMyPublicTeams(instance :any, accounts :any) {
 
-    const items: IDocument[] = [];
-      instance.acquireTokenSilent({
-        ...loginRequest,
-        account: accounts[0]
-          }).then((response:any) => {
-        callAllTeamsRequest(response.accessToken).then(response => response).then((data:any[]) =>
-        {
-          data.forEach(element => {
-            items.push({
-              key: element.imageBlob,
-              name: element.title,
-              businessDepartment: element.businessDepartment,
-              status: element.status,
-              type: element.visibility,
-              classification: element.classification,
-              businessOwner : element.ownerName,
-            });
-          });
-        });;
-      }); 
-      return items;
-    }
+  //   const items: IDocument[] = [];
+  //     instance.acquireTokenSilent({
+  //       ...loginRequest,
+  //       account: accounts[0]
+  //         }).then((response:any) => {
+  //       callAllTeamsRequest(response.accessToken).then(response => response).then((data:any[]) =>
+  //       {
+  //         data.forEach(element => {
+  //           items.push({
+  //             key: element.imageBlob,
+  //             name: element.title,
+  //             businessDepartment: element.businessDepartment,
+  //             status: element.status,
+  //             type: element.visibility,
+  //             classification: element.classification,
+  //             businessOwner : element.ownerName,
+  //           });
+  //         });
+  //       });;
+  //     }); 
+  //     return items;
+  //   }
   
   function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
     const key = columnKey as keyof T;
