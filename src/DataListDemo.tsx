@@ -11,7 +11,15 @@ import { loginRequest } from "./component/authConfig";
 import {callAllTeamsRequest}  from "./component/graph";//{ callMsGraph,callMsGraphGroup,callAllTeamsRequest,callGetPublicTeams }
 //import Button from "react-bootstrap/Button";
 import { Label } from '@fluentui/react/lib/Label';
-
+import {
+  HoverCard,
+  HoverCardType,
+  IPlainCardProps,
+  
+} from "office-ui-fabric-react/lib/HoverCard";
+import {
+  Button,
+} from "office-ui-fabric-react/lib/Button";
 // import { GetMyPublicTeams } from './component/BackendService';
 
 
@@ -42,6 +50,10 @@ const classNames = mergeStyleSets({
       display: 'flex',
       flexWrap: 'wrap',
     },
+    workspaceImage: {
+      width: '36px',
+      height: '36px',
+    },
     exampleToggle: {
       display: 'inline-block',
       marginBottom: '10px',
@@ -50,6 +62,7 @@ const classNames = mergeStyleSets({
     selectionDetails: {
       marginBottom: '20px',
     },
+    
   });
   const controlStyles = {
     root: {
@@ -210,7 +223,36 @@ const classNames = mergeStyleSets({
             return <span>{item.classification}</span>;
           },
         },
+        {
+          key: "column8",
+          name: "Dots",
+          fieldName: "Options",
+          minWidth: 50,
+          maxWidth: 50,
+          onRender:(item: IDocument) => {
+            const plainCardProps: IPlainCardProps = {
+              onRenderPlainCard: this.onRenderPlainCard,
+              renderData: item,
+            };
+            return (
+              // <div className={classNames.controlWrapper}> 
+              <HoverCard
+                plainCardProps={plainCardProps}
+                instantOpenOnClick={true}
+                type={HoverCardType.plain}
+              >
+             <div>. </div>
+              {/* <IconButton
+               // className = { classNames.workspaceImage } //{styles.workspaceImage}
+                iconProps={{ iconName: "GripperDotsVertical" }}
+              /> */}
+                </HoverCard>
+                // </div>
+               );
+          },
+        },
       ];
+      
   
       this._selection = new Selection({
         onSelectionChanged: () => {
@@ -230,6 +272,30 @@ const classNames = mergeStyleSets({
       };
     }
     
+    public onRenderPlainCard(){
+      return(
+        <div>
+          <Button
+          text="Edit"
+          //className= {styles.createNewButton}
+          //onClick={() => this.setState({ currentItem: item, dialog: "Delete" })}
+        />
+        <br />
+        <Button
+          text="Archived"
+          //className= {styles.createNewButton}
+          //onClick={() => this.setState({ currentItem: item, dialog: "Delete" })}
+        />
+        <br />
+        <Button
+          text="Delete"
+          //className= {styles.createNewButton}
+          //onClick={() => this.setState({ currentItem: item, dialog: "Delete" })}
+        />
+        <br />
+        </div>
+      );
+    }
     public async componentDidMount(){
       await this._getAllPublicTeams().then((teamsDetails : any[]) => {
         console.log("Component Teams Log" + teamsDetails )
