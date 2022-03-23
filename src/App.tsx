@@ -74,7 +74,7 @@ const MainContent = () => {
   const { instance } = useMsal();
   var loginSuccess = 1;
   for (let index = 0; index <= loginSuccess; index++) {
-    if(instance.getAllAccounts()[0] == undefined)
+    if(instance.getAllAccounts()[0] === undefined)
         {
           handleLogin(instance);
         }
