@@ -5,18 +5,38 @@ import { loginRequest } from "./component/authConfig";
 import  Button from "react-bootstrap/Button";
 import  DetailsListDemo  from './DataListDemo';
 //import { ProfileContentBackendService } from './component/BackendService';
+import {canUserRestoreTeams} from './component/graph';
 
 
+let userIsAdmin = false;
 
-  function handleLogin(instance :any) {
+function handleLogin(instance :any,accounts:any) {
     instance.loginPopup(loginRequest).catch((e :any)  => {
         console.error(e);
     });
   }
+  
+  // function CheckUserAdmin(instance:any,accounts:any) {
+  //         instance.acquireTokenSilent({
+  //           ...loginRequest,
+  //           account: accounts[0]
+  //       }).then((response:any)  => {
+  //         canUserRestoreTeams(response.accessToken,accounts[0].username).then((response :boolean )=> response).then((data:boolean) =>
+  //           {
+  //             console.log("UserAdmin 0 :- " + userIsAdmin);
+  //             if(data == true){
+  //               userIsAdmin = true;
+  //               console.log("UserAdmin :- " + userIsAdmin);
+  //             }
+  //             console.log("userIsAdmin status :" + userIsAdmin);
+  //           });
+  //       });
+  // }
 
 const ProfileContent = () => {
   
   const { instance, accounts } = useMsal();
+  //CheckUserAdmin(instance, accounts);
   //const [graphData, setGraphData] = useState(null);
 
 //   function RequestAllTeams() {
@@ -37,46 +57,44 @@ const ProfileContent = () => {
 //     // });
 // }
 
-// function GetPublicTeams() {
-//     // Silently acquires an access token which is then attached to a request for MS Graph data
-//     instance.acquireTokenSilent({
-//         ...loginRequest,
-//         account: accounts[0]
-//     }).then((response) => {
-//         callGetPublicTeams(response.accessToken).then(response => response).then((data:any[]) =>
-//         {
-//           console.log("Get public Teams data",data);
-//         });
-//     });
-// }
-
-    return(
+function GetUser() {
+    // Silently acquires an access token which is then attached to a request for MS Graph data
+  
+    instance.acquireTokenSilent({
+        ...loginRequest,
+        account: accounts[0]
+    }).then((response) => {
+      canUserRestoreTeams(response.accessToken,accounts[0].username).then((response :boolean )=> response).then((data:boolean) =>
+        {
+          console.log("UserAdmin 0 :- " + userIsAdmin);
+          if(data == true){
+            userIsAdmin = true;
+            console.log("UserAdmin :- " + userIsAdmin);
+          }
+          console.log("userIsAdmin status :" + userIsAdmin);
+        });
+    });
+}
+    return (
       <>
-        {/* <Button variant="secondary" onClick={RequestAllTeams}>Get All Teams</Button> */}
-        {/* <Button variant="secondary" onClick={GetPublicTeams}>Get Public Teams</Button> */}
-        <div>
-            <DetailsListDemo instance = {instance} accounts = {accounts}  />
-            {/* <div className={ styles.searchBoxContainer}>
-                  <SearchBox 
-                      value="Search box"
-                      className={styles.searchBoxUser}
-                  />
-            </div> */}
-        </div>
+        <DetailsListDemo instance = {instance} accounts = {accounts}  />
+        {/* {
+          userIsAdmin == true ?  : <Button variant="secondary" onClick={GetUser}>Get USer </Button> 
+        } */}
       </>
     );
 }
-
 /**
  * If a user is authenticated the ProfileContent component above is rendered. Otherwise a message indicating a user is not authenticated is rendered.
  */
 const MainContent = () => {    
-  const { instance } = useMsal();
+  const { instance , accounts } = useMsal();
+  //CheckUserAdmin();
   var loginSuccess = 1;
   for (let index = 0; index <= loginSuccess; index++) {
     if(instance.getAllAccounts()[0] === undefined)
         {
-          handleLogin(instance);
+          handleLogin(instance,accounts);
         }
   }
   
@@ -88,7 +106,7 @@ const MainContent = () => {
           </AuthenticatedTemplate>
 
           <UnauthenticatedTemplate>
-          <Button variant="secondary" className="ml-auto" onClick={() => handleLogin(instance)}>Sign in using Popup</Button>
+          <Button variant="secondary" className="ml-auto" onClick={() => handleLogin(instance,accounts)}>Sign in using Popup</Button>
           </UnauthenticatedTemplate>
       </div>
   );
@@ -96,7 +114,7 @@ const MainContent = () => {
 
 class App extends Component {
   
-
+  
   // public async handleLogin(instance :any) : Promise<any> {
   //   instance.loginPopup(loginRequest).then((response : any) => {
   //     console.log("Login response",response);
@@ -152,7 +170,6 @@ class App extends Component {
   //   );
   // };
   componentDidMount(){
-    
   }
 
   render(){

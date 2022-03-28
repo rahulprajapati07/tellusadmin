@@ -1,5 +1,5 @@
 import { graphConfig } from "./authConfig";
-import { getAllGroups, getTeams,getPublicTeams } from "./authConfig";
+import { getAllGroups, getTeams,getPublicTeams, canUserRestoreTeam } from "./authConfig";
 
 /**
  * Attaches a given access token to a MS Graph API call. Returns information about the user
@@ -83,4 +83,34 @@ export async function callGetPublicTeams(accessToken : string) : Promise<any> {
     })
 }
 
+export async function canUserRestoreTeams(accessToken : string, userMail:string) : Promise<boolean> {
+    const headers = new Headers();
+    const bearer = `Bearer ${accessToken}`;
 
+    headers.append("Authorization", bearer);
+    headers.append("Content-Type","application/json");
+    headers.append("API-Key","");
+
+
+    // const config = {
+    //     headers: {'content-type': 'application/x-www-form-urlencoded'}
+    // };
+    const options = {
+        method: "POST",
+        headers: headers,
+        body : JSON.stringify({
+            username: userMail,
+            adminDirectoryRoleNames: ["Teams Administrator"]    
+        })
+    };
+    return new Promise<boolean>((resolve, reject) => {
+        fetch(canUserRestoreTeam.canUserRestoreTeam, options)
+        .then(response => response.json())
+        .then((data:boolean) => {
+            resolve(data);
+            console.log("Teams USer" + data);
+        })
+        .catch(error => console.log(error));
+    })
+
+}

@@ -8,9 +8,14 @@ import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import { TooltipHost } from '@fluentui/react';
 import { loginRequest } from "./component/authConfig";
-import {callAllTeamsRequest}  from "./component/graph";//{ callMsGraph,callMsGraphGroup,callAllTeamsRequest,callGetPublicTeams }
+import {callAllTeamsRequest,canUserRestoreTeams}  from "./component/graph";//{ callMsGraph,callMsGraphGroup,callAllTeamsRequest,callGetPublicTeams }
 //import Button from "react-bootstrap/Button";
 import { Label } from '@fluentui/react/lib/Label';
+import { Icon } from '@fluentui/react/lib/Icon';
+import * as ReactIcons from '@fluentui/react-icons-mdl2';
+import InfiniteScroll from "react-infinite-scroll-component";
+
+
 import {
   HoverCard,
   HoverCardType,
@@ -18,6 +23,7 @@ import {
   
 } from "office-ui-fabric-react/lib/HoverCard";
 import {
+  IconButton,
   Button,
 } from "office-ui-fabric-react/lib/Button";
 // import { GetMyPublicTeams } from './component/BackendService';
@@ -70,14 +76,51 @@ const classNames = mergeStyleSets({
       maxWidth: '300px',
     },
   };
+
+  const classes = mergeStyleSets({
+    cell: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      margin: '80px',
+      float: 'left',
+      height: '50px',
+      width: '50px',
+    },
+    icon: {
+      fontSize: '50px',
+    },
+    code: {
+      background: '#f2f2f2',
+      borderRadius: '4px',
+      padding: '4px',
+    },
+    navigationText: {
+      width: 100,
+      margin: '0 5px',
+    },
+  });
+
+  const icons = Object.keys(ReactIcons).reduce((acc: React.FC[], exportName) => {
+    if ((ReactIcons as any)[exportName]?.displayName) {
+      if(exportName === "MoreVerticalIcon"){
+        acc.push((ReactIcons as any)[exportName] as React.FunctionComponent);
+      }
+    }
+  
+    return acc;
+  }, []);
   
   export interface IDetailsListDocumentsExampleState {
     columns: IColumn[];
     items: IDocument[];
+    itemsList : IDocument[];
     selectionDetails: string;
     isModalSelection: boolean;
     isCompactMode: boolean;
     announcedMessage?: string;
+    userIsAdmin : boolean;
+    hasMore : boolean;
   }
   
   export interface IDocument {
@@ -107,10 +150,11 @@ const classNames = mergeStyleSets({
   class DetailsListDemo extends React.Component<IDetailsListDocumentsExampleProps, IDetailsListDocumentsExampleState> {
     private _selection: Selection;
     private _allItems: IDocument[];
+    
     //private _allTeamsData : IDocument[];
     //private _allpublicTeams : IPublicTeams[];
     
-    constructor(props: IDetailsListDocumentsExampleProps) {
+    constructor(props: IDetailsListDocumentsExampleProps, state: IDetailsListDocumentsExampleState) {
       super(props);
       //getAllMyPublicTeams(this.props.instance,this.props.accounts);
       //this._allItems = _generateDocuments();
@@ -153,7 +197,41 @@ const classNames = mergeStyleSets({
           isPadded: true,
         },
         {
-          key: 'column3',
+          key: "column3",
+          name: "",
+          fieldName: "Options",
+          minWidth: 10,
+          maxWidth: 10,
+          onRender:(item: IDocument) => {
+            const plainCardProps: IPlainCardProps = {
+              onRenderPlainCard: this.onRenderPlainCard,
+              renderData: item,
+            };
+            return (
+              // <div className={classNames.controlWrapper}> 
+              <HoverCard
+                plainCardProps={plainCardProps}
+                instantOpenOnClick={true}
+                type={HoverCardType.plain}
+              >
+          {icons
+            .map((Icon: React.FunctionComponent<ReactIcons.ISvgIconProps>)  => (
+                <Icon aria-label={ 'MoreVertical'?.replace('', '') }  />
+            ))
+          }
+             
+              {/* <IconButton
+               // className = { classNames.workspaceImage } //{styles.workspaceImage}
+                iconProps={{ iconName: "MoreVerticalIcon" }}
+                aria-label = { iconName 'MoreVerticalIcon'}
+              /> */}
+                </HoverCard>
+                // </div>
+               );
+          },
+        },
+        {
+          key: 'column4',
           name: 'Business Department',
           fieldName: 'businessDepartment',
           minWidth: 70,
@@ -167,7 +245,7 @@ const classNames = mergeStyleSets({
           isPadded: true,
         },
         {
-          key: 'column4',
+          key: 'column5',
           name: 'Business Owner',
           fieldName: 'businessOwner',
           minWidth: 70,
@@ -181,7 +259,7 @@ const classNames = mergeStyleSets({
           isPadded: true,
         },
         {
-          key: 'column5',
+          key: 'column6',
           name: 'Status',
           fieldName: 'status',
           minWidth: 70,
@@ -196,7 +274,7 @@ const classNames = mergeStyleSets({
           isPadded: true,
         },
         {
-          key: 'column6',
+          key: 'column7',
           name: 'Type',
           fieldName: 'type',
           minWidth: 70,
@@ -210,7 +288,7 @@ const classNames = mergeStyleSets({
           },
         },
         {
-          key: 'column7',
+          key: 'column8',
           name: 'Classification',
           fieldName: 'classification',
           minWidth: 70,
@@ -223,34 +301,7 @@ const classNames = mergeStyleSets({
             return <span>{item.classification}</span>;
           },
         },
-        {
-          key: "column8",
-          name: "Dots",
-          fieldName: "Options",
-          minWidth: 50,
-          maxWidth: 50,
-          onRender:(item: IDocument) => {
-            const plainCardProps: IPlainCardProps = {
-              onRenderPlainCard: this.onRenderPlainCard,
-              renderData: item,
-            };
-            return (
-              // <div className={classNames.controlWrapper}> 
-              <HoverCard
-                plainCardProps={plainCardProps}
-                instantOpenOnClick={true}
-                type={HoverCardType.plain}
-              >
-             <div>. </div>
-              {/* <IconButton
-               // className = { classNames.workspaceImage } //{styles.workspaceImage}
-                iconProps={{ iconName: "GripperDotsVertical" }}
-              /> */}
-                </HoverCard>
-                // </div>
-               );
-          },
-        },
+        
       ];
       
   
@@ -261,14 +312,25 @@ const classNames = mergeStyleSets({
           });
         },
       });
-  
+      const emptyItem : IDocument = {
+                  key:'',
+                  name: '',
+                  businessDepartment: '',
+                  status: '',
+                  type: '',
+                  classification: '',
+                  businessOwner : '',
+      }
       this.state = {
         items: [],
+        itemsList : Array.from({ length: 20 }),
         columns: columns,
         selectionDetails: this._getSelectionDetails(),
         isModalSelection: false,
         isCompactMode: false,
         announcedMessage: undefined,
+        userIsAdmin : false,
+        hasMore : true
       };
     }
     
@@ -297,77 +359,122 @@ const classNames = mergeStyleSets({
       );
     }
     public async componentDidMount(){
+
+      await this._getUserRole().then((teamsUserRoleStatus:boolean)  => {
+        if(teamsUserRoleStatus == true){
+          this.setState({
+            userIsAdmin : true
+          })
+          console.log("Teams User Role status : " + this.state.userIsAdmin );
+        }
+        else {
+          this.setState({
+            userIsAdmin : false
+          })
+        }
+      });
+
       await this._getAllPublicTeams().then((teamsDetails : any[]) => {
-        console.log("Component Teams Log" + teamsDetails )
+        console.log("Component Teams Log" + teamsDetails );
+        //if(teamsDetails.status === ''){}
         this.setState({
           items: teamsDetails
         });
       });
     }
-    public render() {
-      const { columns, isCompactMode, items, selectionDetails, isModalSelection, announcedMessage } = this.state;
+
+    public fetchMoreData = () => {
+
+      if (this.state.items.length >= 1000) {
+        this.setState({ hasMore: false });
+        return;
+      }
+
+      // a fake async api call like which sends
+      // 20 more records in 1.5 secs
+      setTimeout(() => {
+        this.setState({
+          itemsList: this.state.items.slice(0,20)
+        });
+      }, 1500);
+    };
+
+    public render(){
+      //const { columns, isCompactMode, items, selectionDetails, isModalSelection, announcedMessage , userIsAdmin } = this.state;
       
-      return (
-        <div>
-          <div className={classNames.controlWrapper}>
-            {/* <Toggle
-              label="Teams"
-              checked={isCompactMode}
-              onChange={() => this._onChangeCompactMode}
-              onText="Teams"
-              offText="Normal"
-              styles={controlStyles}
-            /> */}
-            {/* <Toggle
-              label="Enable modal selection"
-              checked={isModalSelection}
-              onChange={ () => this._onChangeModalSelection}
-              onText="Modal"
-              offText="Normal"
-              styles={controlStyles}
-            /> */}
-            <Label style={{fontWeight:"bold"}}>Teams</Label>
-            <TextField label="Filter by name:" onChange={() => this._onChangeText} styles={controlStyles} />
-            <Announced message={`Number of items after filter applied: ${items.length}.`} />
-          </div>
-          <div className={classNames.selectionDetails}>{selectionDetails}</div>
-          <Announced message={selectionDetails} />
-          {announcedMessage ? <Announced message={announcedMessage} /> : undefined}
-          {isModalSelection ? (
-            <MarqueeSelection selection={this._selection}>
-              <DetailsList
-                items={items}
-                compact={isCompactMode}
-                columns={columns}
-                selectionMode={SelectionMode.multiple}
-                //getKey={this._getKey}
-                setKey="multiple"
-                layoutMode={DetailsListLayoutMode.justified}
-                isHeaderVisible={true}
-                selection={this._selection}
-                selectionPreservedOnEmptyClick={true}
-                onItemInvoked={this._onItemInvoked}
-                enterModalSelectionOnTouch={true}
-                ariaLabelForSelectionColumn="Toggle selection"
-                ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-                checkButtonAriaLabel="select row"
-              />
-            </MarqueeSelection>
-          ) : (
-            <DetailsList
-              items={items}
-              compact={isCompactMode}
-              columns={columns}
-              selectionMode={SelectionMode.none}
-              //getKey={this._getKey}
-              setKey="none"
-              layoutMode={DetailsListLayoutMode.justified}
-              isHeaderVisible={true}
-              onItemInvoked={this._onItemInvoked}
-            />
-          )}
-        </div>
-      );
+      console.log("Teams User Role :- " + this.state.userIsAdmin);
+        return (
+          <div>
+            {
+              this.state.userIsAdmin ? <div>
+                  <div>
+                  <Label style={{fontWeight:"bold"}}>Teams</Label>
+                  <TextField label="Filter by name:" onChange={() => this._onChangeText} styles={controlStyles} />
+                  <Announced message={`Number of items after filter applied: ${this.state.items.length}.`} />
+                  </div>
+                  <div className={classNames.selectionDetails}>{this.state.selectionDetails}</div>
+                  <Announced message={this.state.selectionDetails} />
+                   {this.state.announcedMessage ? <Announced message={this.state.announcedMessage} /> : undefined}
+                   
+                   {/* <DetailsList
+
+                      items={this.state.items}
+                      compact={this.state.isCompactMode}
+                      columns={this.state.columns}
+                      selectionMode={SelectionMode.none}
+                      //getKey={this._getKey}
+                      setKey="none"
+                      layoutMode={DetailsListLayoutMode.justified}
+                      isHeaderVisible={true}
+                      onItemInvoked={this._onItemInvoked} />  */}
+
+                      {/* <InfiniteScroll
+                                dataLength={this.state.items.length}
+                                next={this.fetchMoreData}
+                                hasMore={this.state.hasMore}
+                                loader={<h4>Loading...</h4>}
+                                endMessage={
+                                  <p style={{ textAlign: "center" }}>
+                                    <b>Yay! You have seen it all</b>
+                                  </p>
+                                }
+                              > */}
+
+                        <DetailsList
+                            items={this.state.items}
+                            compact={this.state.isCompactMode}
+                            columns={this.state.columns}
+                            selectionMode={SelectionMode.none}
+                            //getKey={this._getKey}
+                            setKey="none"
+                            layoutMode={DetailsListLayoutMode.justified}
+                            isHeaderVisible={true}
+                            onItemInvoked={this._onItemInvoked}
+                              />
+                      
+                    {/* </InfiniteScroll> */}
+                   
+                   {/* <DetailsList
+                      items={items}
+                      
+                      compact={isCompactMode}
+                      columns={columns}
+                      selectionMode={SelectionMode.none}
+                      //getKey={this._getKey}
+                      setKey="none"
+                      layoutMode={DetailsListLayoutMode.justified}
+                      isHeaderVisible={true}
+                      onItemInvoked={this._onItemInvoked}
+              /> */}
+            </div>
+                :
+              <div>
+                  User Unauthorized 
+              </div>
+            }
+          </div> 
+        );
+      
     }
   
     public componentDidUpdate(previousProps: any, previousState: IDetailsListDocumentsExampleState) {
@@ -437,7 +544,7 @@ const classNames = mergeStyleSets({
       });
     };
 
-    public _getAllPublicTeams = async () : Promise<any>  =>  {
+    public _getAllPublicTeams = async () : Promise<IDocument[]>  =>  {
       
       return new Promise<any>((resolve, reject) => 
       {
@@ -449,15 +556,17 @@ const classNames = mergeStyleSets({
           callAllTeamsRequest(response.accessToken).then(response => response).then((data:any[]) =>
           {
             data.forEach(element => {
-              items.push({
-                key: element.imageBlob,
-                name: element.title,
-                businessDepartment: element.businessDepartment,
-                status: element.status,
-                type: '',
-                classification: element.classification,
-                businessOwner : '',
-              });
+              if(element.status === 'Active' || element.status === 'Inactive'){
+                items.push({
+                  key: element.imageBlob,
+                  name: element.title,
+                  businessDepartment: element.businessDepartment,
+                  status: element.status,
+                  type: '',
+                  classification: element.classification,
+                  businessOwner : '',
+                });
+              }
             })
             resolve(items);
           });
@@ -466,7 +575,21 @@ const classNames = mergeStyleSets({
       }
       );
     }
+
+    public _getUserRole = async () : Promise<boolean> => {
+        return new Promise<boolean>((resolve, reject) =>{
+          this.props.instance.acquireTokenSilent({
+            ...loginRequest,
+          account: this.props.accounts[0]
+          }).then((response:any) => {
+            canUserRestoreTeams(response.accessToken,this.props.accounts[0].username).then(response => response).then((data:any) =>{
+                resolve(data);
+            })
+          })
+        })
+    }
   }
+
   export default DetailsListDemo;
   
   // function getAllMyPublicTeams(instance :any, accounts :any) {
