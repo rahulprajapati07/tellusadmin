@@ -5,10 +5,10 @@ import { loginRequest } from "./component/authConfig";
 import  Button from "react-bootstrap/Button";
 import  DetailsListDemo  from './DataListDemo';
 //import { ProfileContentBackendService } from './component/BackendService';
-import {canUserRestoreTeams} from './component/graph';
+// import {canUserRestoreTeams} from './component/graph';
 
 
-let userIsAdmin = false;
+// let userIsAdmin = false;
 
 function handleLogin(instance :any,accounts:any) {
     instance.loginPopup(loginRequest).catch((e :any)  => {
@@ -57,24 +57,24 @@ const ProfileContent = () => {
 //     // });
 // }
 
-function GetUser() {
-    // Silently acquires an access token which is then attached to a request for MS Graph data
+// function GetUser() {
+//     // Silently acquires an access token which is then attached to a request for MS Graph data
   
-    instance.acquireTokenSilent({
-        ...loginRequest,
-        account: accounts[0]
-    }).then((response) => {
-      canUserRestoreTeams(response.accessToken,accounts[0].username).then((response :boolean )=> response).then((data:boolean) =>
-        {
-          console.log("UserAdmin 0 :- " + userIsAdmin);
-          if(data == true){
-            userIsAdmin = true;
-            console.log("UserAdmin :- " + userIsAdmin);
-          }
-          console.log("userIsAdmin status :" + userIsAdmin);
-        });
-    });
-}
+//     instance.acquireTokenSilent({
+//         ...loginRequest,
+//         account: accounts[0]
+//     }).then((response) => {
+//       canUserRestoreTeams(response.accessToken,accounts[0].username).then((response :boolean )=> response).then((data:boolean) =>
+//         {
+//           console.log("UserAdmin 0 :- " + userIsAdmin);
+//           if(data == true){
+//             userIsAdmin = true;
+//             console.log("UserAdmin :- " + userIsAdmin);
+//           }
+//           console.log("userIsAdmin status :" + userIsAdmin);
+//         });
+//     });
+// }
     return (
       <>
         <DetailsListDemo instance = {instance} accounts = {accounts}  />

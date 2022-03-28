@@ -4,16 +4,16 @@ import { TextField } from '@fluentui/react/lib/TextField';
 //import { Toggle } from '@fluentui/react/lib/Toggle';
 import { Announced } from '@fluentui/react/lib/Announced';
 import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode, IColumn } from '@fluentui/react/lib/DetailsList';
-import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
+//import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import { TooltipHost } from '@fluentui/react';
 import { loginRequest } from "./component/authConfig";
 import {callAllTeamsRequest,canUserRestoreTeams}  from "./component/graph";//{ callMsGraph,callMsGraphGroup,callAllTeamsRequest,callGetPublicTeams }
 //import Button from "react-bootstrap/Button";
 import { Label } from '@fluentui/react/lib/Label';
-import { Icon } from '@fluentui/react/lib/Icon';
+//import { Icon } from '@fluentui/react/lib/Icon';
 import * as ReactIcons from '@fluentui/react-icons-mdl2';
-import InfiniteScroll from "react-infinite-scroll-component";
+//import InfiniteScroll from "react-infinite-scroll-component";
 
 
 import {
@@ -23,7 +23,7 @@ import {
   
 } from "office-ui-fabric-react/lib/HoverCard";
 import {
-  IconButton,
+  // IconButton,
   Button,
 } from "office-ui-fabric-react/lib/Button";
 // import { GetMyPublicTeams } from './component/BackendService';
@@ -77,29 +77,29 @@ const classNames = mergeStyleSets({
     },
   };
 
-  const classes = mergeStyleSets({
-    cell: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      margin: '80px',
-      float: 'left',
-      height: '50px',
-      width: '50px',
-    },
-    icon: {
-      fontSize: '50px',
-    },
-    code: {
-      background: '#f2f2f2',
-      borderRadius: '4px',
-      padding: '4px',
-    },
-    navigationText: {
-      width: 100,
-      margin: '0 5px',
-    },
-  });
+  // const classes = mergeStyleSets({
+  //   cell: {
+  //     display: 'flex',
+  //     flexDirection: 'column',
+  //     alignItems: 'center',
+  //     margin: '80px',
+  //     float: 'left',
+  //     height: '50px',
+  //     width: '50px',
+  //   },
+  //   icon: {
+  //     fontSize: '50px',
+  //   },
+  //   code: {
+  //     background: '#f2f2f2',
+  //     borderRadius: '4px',
+  //     padding: '4px',
+  //   },
+  //   navigationText: {
+  //     width: 100,
+  //     margin: '0 5px',
+  //   },
+  // });
 
   const icons = Object.keys(ReactIcons).reduce((acc: React.FC[], exportName) => {
     if ((ReactIcons as any)[exportName]?.displayName) {
@@ -312,15 +312,15 @@ const classNames = mergeStyleSets({
           });
         },
       });
-      const emptyItem : IDocument = {
-                  key:'',
-                  name: '',
-                  businessDepartment: '',
-                  status: '',
-                  type: '',
-                  classification: '',
-                  businessOwner : '',
-      }
+      // const emptyItem : IDocument = {
+      //             key:'',
+      //             name: '',
+      //             businessDepartment: '',
+      //             status: '',
+      //             type: '',
+      //             classification: '',
+      //             businessOwner : '',
+      // }
       this.state = {
         items: [],
         itemsList : Array.from({ length: 20 }),
@@ -361,7 +361,7 @@ const classNames = mergeStyleSets({
     public async componentDidMount(){
 
       await this._getUserRole().then((teamsUserRoleStatus:boolean)  => {
-        if(teamsUserRoleStatus == true){
+        if(teamsUserRoleStatus === true){
           this.setState({
             userIsAdmin : true
           })
