@@ -13,7 +13,7 @@ import {callAllTeamsRequest,canUserRestoreTeams}  from "./component/graph";//{ c
 import { Label } from '@fluentui/react/lib/Label';
 //import { Icon } from '@fluentui/react/lib/Icon';
 import * as ReactIcons from '@fluentui/react-icons-mdl2';
-//import InfiniteScroll from "react-infinite-scroll-component";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 
 import {
@@ -111,11 +111,14 @@ const classNames = mergeStyleSets({
     return acc;
   }, []);
   
+let allItems : IDocument[] = [];
+
   export interface IDetailsListDocumentsExampleState {
     columns: IColumn[];
     items: IDocument[];
+    serachItem: IDocument[];
     itemsList : IDocument[];
-    selectionDetails: string;
+    //selectionDetails: string;
     isModalSelection: boolean;
     isCompactMode: boolean;
     announcedMessage?: string;
@@ -124,7 +127,8 @@ const classNames = mergeStyleSets({
   }
   
   export interface IDocument {
-    key: string;
+    key: number;
+    test: string;
     name: string;
     businessDepartment: string;
     status: string;
@@ -147,10 +151,12 @@ const classNames = mergeStyleSets({
     accounts : any;
   }
   
+ 
+
   class DetailsListDemo extends React.Component<IDetailsListDocumentsExampleProps, IDetailsListDocumentsExampleState> {
-    private _selection: Selection;
+    //private _selection: Selection;
     private _allItems: IDocument[];
-    
+
     //private _allTeamsData : IDocument[];
     //private _allpublicTeams : IPublicTeams[];
     
@@ -161,10 +167,12 @@ const classNames = mergeStyleSets({
       //this._allItems = getAllMyPublicTeams(this.props.instance,this.props.accounts);
       this._allItems = [];
       
+      
+      //this._onChangeText = this._onChangeText.bind(this);
       const columns: IColumn[] = [
         {
           key: 'column1',
-          name: 'key',
+          name: 'test',
           className: classNames.fileIconCell,
           iconClassName: classNames.fileIconHeaderIcon,
           ariaLabel: 'Column operations for File type, Press to sort on File type',
@@ -173,10 +181,10 @@ const classNames = mergeStyleSets({
           fieldName: 'name',
           minWidth: 16,
           maxWidth: 16,
-          onColumnClick: this._onColumnClick,
+          // onColumnClick: this._onColumnClick,
           onRender: (item: IDocument) => (
-            <TooltipHost content={`${item.key} file`}>
-              <img src={item.key} className={classNames.fileIconImg} alt={`${item.key} file icon`} />
+            <TooltipHost content={`${item.test} file`}>
+              <img src={item.test} className={classNames.fileIconImg} alt={`${item.test} file icon`} />
             </TooltipHost>
           ),
         },
@@ -186,14 +194,16 @@ const classNames = mergeStyleSets({
           fieldName: 'name',
           minWidth: 210,
           maxWidth: 350,
-          isRowHeader: true,
           isResizable: true,
+          // onColumnClick: this._onColumnClick,
           isSorted: true,
           isSortedDescending: false,
           sortAscendingAriaLabel: 'Sorted A to Z',
           sortDescendingAriaLabel: 'Sorted Z to A',
-          onColumnClick: this._onColumnClick,
-          data: 'string',
+          data: 'number',
+          onRender: (item: IDocument) => {
+            return <span>{item.name}</span>;
+          },
           isPadded: true,
         },
         {
@@ -237,7 +247,7 @@ const classNames = mergeStyleSets({
           minWidth: 70,
           maxWidth: 90,
           isResizable: true,
-          onColumnClick: this._onColumnClick,
+          // onColumnClick: this._onColumnClick,
           data: 'number',
           onRender: (item: IDocument) => {
             return <span>{item.businessDepartment}</span>;
@@ -251,7 +261,7 @@ const classNames = mergeStyleSets({
           minWidth: 70,
           maxWidth: 90,
           isResizable: true,
-          onColumnClick: this._onColumnClick,
+          // onColumnClick: this._onColumnClick,
           data: 'number',
           onRender: (item: IDocument) => {
             return <span>{item.businessOwner}</span>;
@@ -267,7 +277,7 @@ const classNames = mergeStyleSets({
           isResizable: true,
           isCollapsible: true,
           data: 'string',
-          onColumnClick: this._onColumnClick,
+          // onColumnClick: this._onColumnClick,
           onRender: (item: IDocument) => {
             return <span>{item.status}</span>;
           },
@@ -282,7 +292,7 @@ const classNames = mergeStyleSets({
           isResizable: true,
           isCollapsible: true,
           data: 'number',
-          onColumnClick: this._onColumnClick,
+          // onColumnClick: this._onColumnClick,
           onRender: (item: IDocument) => {
             return <span>{item.type}</span>;
           },
@@ -296,7 +306,7 @@ const classNames = mergeStyleSets({
           isResizable: true,
           isCollapsible: true,
           data: 'number',
-          onColumnClick: this._onColumnClick,
+          // onColumnClick: this._onColumnClick,
           onRender: (item: IDocument) => {
             return <span>{item.classification}</span>;
           },
@@ -304,28 +314,20 @@ const classNames = mergeStyleSets({
         
       ];
       
-  
-      this._selection = new Selection({
-        onSelectionChanged: () => {
-          this.setState({
-            selectionDetails: this._getSelectionDetails(),
-          });
-        },
-      });
-      // const emptyItem : IDocument = {
-      //             key:'',
-      //             name: '',
-      //             businessDepartment: '',
-      //             status: '',
-      //             type: '',
-      //             classification: '',
-      //             businessOwner : '',
-      // }
+      // this._selection = new Selection({
+      //   onSelectionChanged: () => {
+      //     this.setState({
+      //       selectionDetails: this._getSelectionDetails(),
+      //     });
+      //   },
+      // });
+      
       this.state = {
         items: [],
+        serachItem : [],
         itemsList : Array.from({ length: 20 }),
         columns: columns,
-        selectionDetails: this._getSelectionDetails(),
+        // selectionDetails: this._getSelectionDetails(),
         isModalSelection: false,
         isCompactMode: false,
         announcedMessage: undefined,
@@ -377,27 +379,43 @@ const classNames = mergeStyleSets({
       await this._getAllPublicTeams().then((teamsDetails : any[]) => {
         console.log("Component Teams Log" + teamsDetails );
         //if(teamsDetails.status === ''){}
+        this._allItems = teamsDetails;
+
         this.setState({
-          items: teamsDetails
+          items: teamsDetails,
+          serachItem : teamsDetails
         });
       });
     }
 
-    public fetchMoreData = () => {
+    // public fetchMoreData = () => {
 
-      if (this.state.items.length >= 1000) {
-        this.setState({ hasMore: false });
-        return;
-      }
+    //   if (this.state.items.length >= 1000) {
+    //     this.setState({ hasMore: false });
+    //     return;
+    //   }
+    //   let numberOfItem = 20;
 
-      // a fake async api call like which sends
-      // 20 more records in 1.5 secs
-      setTimeout(() => {
-        this.setState({
-          itemsList: this.state.items.slice(0,20)
-        });
-      }, 1500);
-    };
+    //   // for(var i=0;i<20;i++){
+    //   //   numberOfItem = numberOfItem;
+    //   //   //let itemsFromArray = this.state.items.slice(0,numberOfItem);
+        
+    //   //     this.setState({
+    //   //       itemsList: this.state.items.slice(0,numberOfItem)
+    //   //     });
+        
+    //   //   numberOfItem ++;
+    //   // }
+
+    //   // a fake async api call like which sends
+    //   // 20 more records in 1.5 secs
+    //   setTimeout(() => {
+    //     this.setState({
+    //       itemsList: this.state.items.slice(0,numberOfItem)
+    //     });
+    //   }, 1500);
+    //   numberOfItem = numberOfItem + 20;
+    // };
 
     public render(){
       //const { columns, isCompactMode, items, selectionDetails, isModalSelection, announcedMessage , userIsAdmin } = this.state;
@@ -409,63 +427,29 @@ const classNames = mergeStyleSets({
               this.state.userIsAdmin ? <div>
                   <div>
                   <Label style={{fontWeight:"bold"}}>Teams</Label>
-                  <TextField label="Filter by name:" onChange={() => this._onChangeText} styles={controlStyles} />
-                  <Announced message={`Number of items after filter applied: ${this.state.items.length}.`} />
+                  <TextField label="Filter by name:" onChange={ (event: any) => this._onChangeText(event)} styles={controlStyles} />
+                  
                   </div>
-                  <div className={classNames.selectionDetails}>{this.state.selectionDetails}</div>
-                  <Announced message={this.state.selectionDetails} />
-                   {this.state.announcedMessage ? <Announced message={this.state.announcedMessage} /> : undefined}
+                  
                    
-                   {/* <DetailsList
-
-                      items={this.state.items}
-                      compact={this.state.isCompactMode}
-                      columns={this.state.columns}
-                      selectionMode={SelectionMode.none}
-                      //getKey={this._getKey}
-                      setKey="none"
-                      layoutMode={DetailsListLayoutMode.justified}
-                      isHeaderVisible={true}
-                      onItemInvoked={this._onItemInvoked} />  */}
-
-                      {/* <InfiniteScroll
-                                dataLength={this.state.items.length}
-                                next={this.fetchMoreData}
-                                hasMore={this.state.hasMore}
-                                loader={<h4>Loading...</h4>}
-                                endMessage={
-                                  <p style={{ textAlign: "center" }}>
-                                    <b>Yay! You have seen it all</b>
-                                  </p>
-                                }
-                              > */}
-
-                        <DetailsList
-                            items={this.state.items}
-                            compact={this.state.isCompactMode}
-                            columns={this.state.columns}
-                            selectionMode={SelectionMode.none}
-                            //getKey={this._getKey}
-                            setKey="none"
-                            layoutMode={DetailsListLayoutMode.justified}
-                            isHeaderVisible={true}
-                            onItemInvoked={this._onItemInvoked}
-                              />
-                      
-                    {/* </InfiniteScroll> */}
-                   
-                   {/* <DetailsList
-                      items={items}
-                      
-                      compact={isCompactMode}
-                      columns={columns}
-                      selectionMode={SelectionMode.none}
-                      //getKey={this._getKey}
-                      setKey="none"
-                      layoutMode={DetailsListLayoutMode.justified}
-                      isHeaderVisible={true}
-                      onItemInvoked={this._onItemInvoked}
-              /> */}
+                    {console.log("Item Count :- " + this.state.items.length)}
+                    <DetailsList
+                        items={this.state.items}
+                        compact={this.state.isCompactMode}
+                        columns={this.state.columns}
+                        selectionMode={SelectionMode.multiple}
+                        getKey={this._getKey}
+                        setKey="multiple"
+                        layoutMode={DetailsListLayoutMode.justified}
+                        isHeaderVisible={true}
+                        //selection={this._selection}
+                        selectionPreservedOnEmptyClick={true}
+                        onItemInvoked= {this._onItemInvoked}
+                        enterModalSelectionOnTouch={true}
+                        ariaLabelForSelectionColumn="Toggle selection"
+                        ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+                        checkButtonAriaLabel="select row"
+            /> 
             </div>
                 :
               <div>
@@ -474,19 +458,19 @@ const classNames = mergeStyleSets({
             }
           </div> 
         );
-      
     }
   
-    public componentDidUpdate(previousProps: any, previousState: IDetailsListDocumentsExampleState) {
-      if (previousState.isModalSelection !== this.state.isModalSelection && !this.state.isModalSelection) {
-        this._selection.setAllSelected(false);
+    // public componentDidUpdate(previousProps: any, previousState: IDetailsListDocumentsExampleState) {
+    //   if (previousState.isModalSelection !== this.state.isModalSelection && !this.state.isModalSelection) {
+    //     this._selection.setAllSelected(false);
         
-      }
-    }
-  
-    // private _getKey(item: any, index?: number): string {
-    //   return item.key;
+    //   }
     // }
+  
+    private _getKey(item: any, index?: number): string {
+      console.log("Item Key :- " + item.key);
+      return item.key;
+    }
   
     // private _onChangeCompactMode = (ev: React.MouseEvent<HTMLElement>, checked: boolean): void => {
     //   this.setState({ isCompactMode: checked });
@@ -496,53 +480,59 @@ const classNames = mergeStyleSets({
     //   this.setState({ isModalSelection: checked });
     // };
   
-    private _onChangeText = (ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, text: string): void => {
+    public _onChangeText = (ev: any): void => {
+
+     let testData = this._allItems ;
+     let searchData = ev.target.value != ""  ?  testData.filter(i => i.name.toLowerCase().startsWith(ev.target.value.toLowerCase())) : testData;
+
       this.setState({
-        items: text ? this._allItems.filter(i => i.name.toLowerCase().indexOf(text) > -1) : this._allItems,
-      });
+        items: searchData
+      },
+       () => console.log(this.state.items));
     };
   
     private _onItemInvoked(item: any): void {
+      console.log("Item invoked " + item);
       alert(`Item invoked: ${item.name}`);
     }
   
-    private _getSelectionDetails(): string {
-      const selectionCount = this._selection.getSelectedCount();
+    // private _getSelectionDetails(): string {
+    //   const selectionCount = this._selection.getSelectedCount();
   
-      switch (selectionCount) {
-        case 0:
-          return 'No items selected';
-        case 1:
-          return '1 item selected: ' + (this._selection.getSelection()[0] as IDocument).name;
-        default:
-          return `${selectionCount} items selected`;
-      }
-    }
+    //   switch (selectionCount) {
+    //     case 0:
+    //       return 'No items selected';
+    //     case 1:
+    //       return '1 item selected: ' + (this._selection.getSelection()[0] as IDocument).name;
+    //     default:
+    //       return `${selectionCount} items selected`;
+    //   }
+    // }
   
-    private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-      const { columns, items } = this.state;
-      const newColumns: IColumn[] = columns.slice();
-      const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
-      newColumns.forEach((newCol: IColumn) => {
-        if (newCol === currColumn) {
-          currColumn.isSortedDescending = !currColumn.isSortedDescending;
-          currColumn.isSorted = true;
-          this.setState({
-            announcedMessage: `${currColumn.name} is sorted ${
-              currColumn.isSortedDescending ? 'descending' : 'ascending'
-            }`,
-          });
-        } else {
-          newCol.isSorted = false;
-          newCol.isSortedDescending = true;
-        }
-      });
-      const newItems = _copyAndSort(items, currColumn.fieldName!, currColumn.isSortedDescending);
-      this.setState({
-        columns: newColumns,
-        items: newItems,
-      });
-    };
+    // private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
+    //   const { columns, items } = this.state;
+    //   const newColumns: IColumn[] = columns.slice();
+    //   const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
+    //   newColumns.forEach((newCol: IColumn) => {
+    //     if (newCol === currColumn) {
+    //       currColumn.isSortedDescending = !currColumn.isSortedDescending;
+    //       currColumn.isSorted = true;
+    //       this.setState({
+    //         announcedMessage: `${currColumn.name} is sorted ${
+    //           currColumn.isSortedDescending ? 'descending' : 'ascending'
+    //         }`,
+    //       });
+    //     } else {
+    //       newCol.isSorted = false;
+    //       newCol.isSortedDescending = true;
+    //     }
+    //   });
+    //   const newItems = _copyAndSort(items, currColumn.fieldName!, currColumn.isSortedDescending);
+    //   this.setState({
+    //     columns: newColumns,
+    //     items: newItems,
+    //   });
+    // };
 
     public _getAllPublicTeams = async () : Promise<IDocument[]>  =>  {
       
@@ -558,13 +548,14 @@ const classNames = mergeStyleSets({
             data.forEach(element => {
               if(element.status === 'Active' || element.status === 'Inactive'){
                 items.push({
-                  key: element.imageBlob,
+                  key: element.id,
+                  test: element.imageBlob,
                   name: element.title,
                   businessDepartment: element.businessDepartment,
                   status: element.status,
-                  type: '',
+                  type: '1',
                   classification: element.classification,
-                  businessOwner : '',
+                  businessOwner : '1',
                 });
               }
             })
@@ -617,10 +608,10 @@ const classNames = mergeStyleSets({
   //     return items;
   //   }
   
-  function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
-    const key = columnKey as keyof T;
-    return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
-  }
+  // function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+  //   const key = columnKey as keyof T;
+  //   return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+  // }
   
 
   // function _generateDocuments() {
