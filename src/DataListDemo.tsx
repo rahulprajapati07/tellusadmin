@@ -2,8 +2,8 @@ import * as React  from 'react';
 //import { useMsal } from "@azure/msal-react";
 import { TextField } from '@fluentui/react/lib/TextField';
 //import { Toggle } from '@fluentui/react/lib/Toggle';
-import { Announced } from '@fluentui/react/lib/Announced';
-import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode, IColumn } from '@fluentui/react/lib/DetailsList';
+// import { Announced } from '@fluentui/react/lib/Announced';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from '@fluentui/react/lib/DetailsList';
 //import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
 import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import { TooltipHost } from '@fluentui/react';
@@ -13,7 +13,7 @@ import {callAllTeamsRequest,canUserRestoreTeams}  from "./component/graph";//{ c
 import { Label } from '@fluentui/react/lib/Label';
 //import { Icon } from '@fluentui/react/lib/Icon';
 import * as ReactIcons from '@fluentui/react-icons-mdl2';
-import InfiniteScroll from "react-infinite-scroll-component";
+//import InfiniteScroll from "react-infinite-scroll-component";
 
 
 import {
@@ -111,7 +111,7 @@ const classNames = mergeStyleSets({
     return acc;
   }, []);
   
-let allItems : IDocument[] = [];
+//let allItems : IDocument[] = [];
 
   export interface IDetailsListDocumentsExampleState {
     columns: IColumn[];
@@ -483,7 +483,7 @@ let allItems : IDocument[] = [];
     public _onChangeText = (ev: any): void => {
 
      let testData = this._allItems ;
-     let searchData = ev.target.value != ""  ?  testData.filter(i => i.name.toLowerCase().startsWith(ev.target.value.toLowerCase())) : testData;
+     let searchData = ev.target.value !== ""  ?  testData.filter(i => i.name.toLowerCase().startsWith(ev.target.value.toLowerCase())) : testData;
 
       this.setState({
         items: searchData
