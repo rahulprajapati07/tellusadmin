@@ -3,7 +3,9 @@ import './App.css';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import { loginRequest } from "./component/authConfig";
 import  Button from "react-bootstrap/Button";
-import  DetailsListDemo  from './DataListDemo';
+//import  DetailsListDemo  from './DataListDemo';
+import WorkspaceDetails from './component/Workspace';
+
 //import { ProfileContentBackendService } from './component/BackendService';
 // import {canUserRestoreTeams} from './component/graph';
 
@@ -77,7 +79,7 @@ const ProfileContent = () => {
 // }
     return (
       <>
-        <DetailsListDemo instance = {instance} accounts = {accounts}  />
+        <WorkspaceDetails instance = {instance} accounts = {accounts}  />
         {/* {
           userIsAdmin == true ?  : <Button variant="secondary" onClick={GetUser}>Get USer </Button> 
         } */}
