@@ -3,21 +3,22 @@ import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import * as ReactIcons from '@fluentui/react-icons-mdl2';
 import { DetailsList, SelectionMode, IColumn } from '@fluentui/react/lib/DetailsList';
 import { TooltipHost } from '@fluentui/react';
+import { Panel } from '@fluentui/react/lib/Panel';
 import {
   // IconButton,
   Button,
 } from "office-ui-fabric-react/lib/Button";
+
 import {
     HoverCard,
     HoverCardType,
     IPlainCardProps,
-    
   } from "office-ui-fabric-react/lib/HoverCard";
+
   import {
     IContextualMenuProps,
-    IContextualMenuItem,
     DirectionalHint,
-    // ContextualMenu,
+    ContextualMenu,
   } from 'office-ui-fabric-react/lib/ContextualMenu';
 
   import { TextField } from '@fluentui/react/lib/TextField';
@@ -90,12 +91,15 @@ const classNames = mergeStyleSets({
     displayItems: IWorkspace[];
     serachItem: IWorkspace[];
     itemsList : IWorkspace[];
+    sortItemsDetails : IWorkspace[];
     //selectionDetails: string;
     isModalSelection: boolean;
     isCompactMode: boolean;
     announcedMessage?: string;
     userIsAdmin : boolean;
     hasMore : boolean;
+    isPanelOpen : boolean;
+    isPanelClose : boolean;
     itemArrayAppend : number;
     checkSearchItem : boolean;
     contextualMenuProps? : IContextualMenuProps;
@@ -138,7 +142,7 @@ const classNames = mergeStyleSets({
                 fieldName: 'name',
                 minWidth: 16,
                 maxWidth: 16,
-                onColumnClick: (ev, columns) =>  this._onColumnClick(columns),
+                // onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
                 onRender: (item: IWorkspace) => (
                   <TooltipHost key={item.key} content={`${item.test} file`}>
                     <img src={item.test} className={classNames.fileIconImg} alt={`${item.test} file icon`} /> 
@@ -152,7 +156,7 @@ const classNames = mergeStyleSets({
                 minWidth: 210,
                 maxWidth: 350,
                 isResizable: true,
-                onColumnClick: (ev, columns) =>  this._onColumnClick(columns),
+                onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
 
                 // onColumnClick: (ev, column) => {
                 //   this.onColumnClick(column, ev);
@@ -211,7 +215,7 @@ const classNames = mergeStyleSets({
                 minWidth: 70,
                 maxWidth: 90,
                 isResizable: true,
-                onColumnClick: (ev, columns) =>  this._onColumnClick(columns),
+                onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
                 data: 'number',
                 onRender: (item: IWorkspace) => {
                   return <span key={item.key}>{item.businessDepartment}</span>;
@@ -225,7 +229,7 @@ const classNames = mergeStyleSets({
                 minWidth: 70,
                 maxWidth: 90,
                 isResizable: true,
-                onColumnClick: (ev, columns) =>  this._onColumnClick(columns),
+                onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
                 data: 'number',
                 onRender: (item: IWorkspace) => {
                   return <span >{item.businessOwner}</span>;
@@ -241,7 +245,7 @@ const classNames = mergeStyleSets({
                 isResizable: true,
                 isCollapsible: true,
                 data: 'string',
-                onColumnClick: (ev, columns) =>  this._onColumnClick(columns),
+                onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
                 onRender: (item: IWorkspace) => {
                   return <span>{item.status}</span>;
                 },
@@ -256,7 +260,7 @@ const classNames = mergeStyleSets({
                 isResizable: true,
                 isCollapsible: true,
                 data: 'number',
-                onColumnClick: (ev, columns) =>  this._onColumnClick(columns),
+                onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
                 onRender: (item: IWorkspace) => {
                   return <span key={item.key}>{item.type}</span>;
                 },
@@ -270,7 +274,7 @@ const classNames = mergeStyleSets({
                 isResizable: true,
                 isCollapsible: true,
                 data: 'number',
-                onColumnClick: (ev, columns) =>  this._onColumnClick(columns),
+                onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
                 onRender: (item: IWorkspace) => {
                   return <span key={item.key}>{item.classification}</span>;
                 },
@@ -281,6 +285,7 @@ const classNames = mergeStyleSets({
           displayItems: [],
           serachItem : [],
           itemsList : [],
+          sortItemsDetails : [],
           columns: columns,
           contextualMenuProps:undefined,
           // selectionDetails: this._getSelectionDetails(),
@@ -289,78 +294,70 @@ const classNames = mergeStyleSets({
           announcedMessage: undefined,
           userIsAdmin : false,
           hasMore : true,
+          isPanelOpen : false,
+          isPanelClose : true,
           checkSearchItem : false,
           itemArrayAppend : 20,
         };
     }
 
-    private onColumnClick = (column: IColumn, ev: React.MouseEvent<HTMLElement>): void => {
-      console.log("column", column);
+    private _onColumnContextMenu = (column: IColumn, ev: React.MouseEvent<HTMLElement>): void => {
       this.setState({
-        contextualMenuProps: this.getContextualMenuProps(ev, column),
-      });
-    }
+          contextualMenuProps: this._getContextualMenuProps(ev, column),
+        });
+    };
 
-    private getContextualMenuProps = (ev: React.MouseEvent<HTMLElement>, column: IColumn): IContextualMenuProps => {
-    var items: IContextualMenuItem[] = [
-    ];
-
-    if (column.fieldName !== "name") {
-      items.push({
-        key: 'aToZ',
-        name: 'A to Z',
-        iconProps: { iconName: 'SortUp' },
-        canCheck: true,
-        checked: column.isSorted && !column.isSortedDescending,
-        onClick: () => this._onColumnClick(column),
-      },
+    private _getContextualMenuProps(ev: React.MouseEvent<HTMLElement>, column: IColumn): IContextualMenuProps {
+      const items = [
+        {
+          key: 'aToZ',
+          name: 'A to Z',
+          iconProps: { iconName: 'SortUp' },
+          canCheck: true,
+          checked: column.isSorted && !column.isSortedDescending,
+          onClick: () => this._onColumnClick(column, false),
+        },
         {
           key: 'zToA',
           name: 'Z to A',
           iconProps: { iconName: 'SortDown' },
           canCheck: true,
           checked: column.isSorted && column.isSortedDescending,
-          onClick: () => this._onColumnClick(column),
-        });
-    } else {
-      items.push({
-        key: 'aToZ',
-        name: 'Oldest',
-        iconProps: { iconName: 'SortUp' },
-        canCheck: true,
-        checked: column.isSorted && !column.isSortedDescending,
-        onClick: () => this._onColumnClick(column),
-      },
-        {
-          key: 'zToA',
-          name: 'Newest',
-          iconProps: { iconName: 'SortDown' },
+          onClick: () => this._onColumnClick(column,true ),
+        },
+        
+      ];
+      if(column.name !== 'Name'){
+        items.push({
+          key: 'filter',
+          name: 'Filter by',
+          iconProps: { iconName: 'Filter' },
           canCheck: true,
-          checked: column.isSorted && column.isSortedDescending,
-          onClick: () => this._onColumnClick(column),
+          checked: column.isFiltered,
+          onClick: () => this.onFilterColumn(column),
         });
+      }
+      return {
+        items: items,
+        target: ev.currentTarget as HTMLElement,
+        directionalHint: DirectionalHint.bottomLeftEdge,
+        gapSpace: 10,
+        isBeakVisible: true,
+        onDismiss: this.onContextualMenuDismissed,
+      };
     }
 
-    if (column.fieldName !== "title" && column.fieldName !== "createdDate") {
-      items.push({
-        key: 'filter',
-        name: 'Filter by',
-        iconProps: { iconName: 'Filter' },
-        canCheck: true,
-        checked: column.isFiltered,
-        onClick: () => this._onColumnClick(column),
+    private onFilterColumn = (column: IColumn): void => {
+
+      // var uniqueVals = [], enabledVals = [];
+      // var workspacesUnfiltered, workspaces;
+      
+  
+      this.setState({
+        isPanelOpen: true,
+        isPanelClose : true,
       });
     }
-
-    return {
-      items: items,
-      target: ev.currentTarget as HTMLElement,
-      directionalHint: DirectionalHint.bottomLeftEdge,
-      gapSpace: 10,
-      isBeakVisible: true,
-      onDismiss: this.onContextualMenuDismissed,
-    };
-  }
 
   private onContextualMenuDismissed = (): void => {
     this.setState({
@@ -368,8 +365,8 @@ const classNames = mergeStyleSets({
     });
   }
 
-    private _onColumnClick = (column: IColumn): void => {
-      const { columns, displayItems } = this.state;
+    private _onColumnClick = (column: IColumn , checkOrder : boolean): void => {
+      const { columns, sortItemsDetails } = this.state;
       const newColumns: IColumn[] = columns.slice();
       const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
       newColumns.forEach((newCol: IColumn) => {
@@ -386,10 +383,18 @@ const classNames = mergeStyleSets({
           newCol.isSortedDescending = true;
         }
       });
-      const newItems = _copyAndSort(displayItems, currColumn.fieldName!, currColumn.isSortedDescending);
+      const newItems = _copyAndSort(sortItemsDetails, currColumn.fieldName!, checkOrder);
+      let itemsCount = 20;
+      // this.setState({
+      //   itemsList:newItems,
+      //   itemArrayAppend : itemsCount
+      // });
+      let getItemsbyScroll = newItems.slice(0, itemsCount);
       this.setState({
+        itemsList:newItems,
+        itemArrayAppend : itemsCount,
         columns: newColumns,
-        displayItems: newItems,
+        displayItems: getItemsbyScroll,
       });
     };
     
@@ -431,7 +436,7 @@ const classNames = mergeStyleSets({
         else {
           this.setState({
             userIsAdmin : false
-          })
+          });
         }
       });
 
@@ -443,6 +448,7 @@ const classNames = mergeStyleSets({
           displayItems: teamsDetails.slice(0,this.state.itemArrayAppend),
           serachItem : teamsDetails,
           itemsList : teamsDetails,
+          sortItemsDetails : teamsDetails,
         });
       });
     }
@@ -482,7 +488,6 @@ const classNames = mergeStyleSets({
           });
         }, 1500);
       }
-
       else {
         if (this.state.displayItems.length === tempAllItems.length) {
           this.setState({ hasMore: false });
@@ -498,6 +503,7 @@ const classNames = mergeStyleSets({
     };
 
     render(){
+      
       return(
         <div>
             {
@@ -507,7 +513,7 @@ const classNames = mergeStyleSets({
 
                   <TextField label="Search Teams Here :" onScroll  = {this.fetchMoreData} onChange={ (event: any) => this._onChangeText(event)}
                    styles={controlStyles} />
-                   
+                   {this.state.contextualMenuProps && <ContextualMenu {...this.state.contextualMenuProps} />}
                   </div>
                   <InfiniteScroll
                         dataLength={this.state.displayItems.length}
@@ -557,6 +563,16 @@ const classNames = mergeStyleSets({
                         columns={this.state.columns}
                         getKey={this._getKey}
                     />  */}
+
+                      <Panel
+                        headerText="Sample panel"
+                        isOpen={this.state.isPanelOpen}
+                        onDismiss={() => { this.setState({ isPanelOpen: false }); }}
+                        // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
+                        closeButtonAriaLabel="Close"
+                      >
+                        <p>Content goes here.</p>
+                      </Panel>
             </div>
                 :
               <div>
@@ -567,6 +583,12 @@ const classNames = mergeStyleSets({
       )
     }
     
+    public _closePanel(){
+      this.setState({
+        isPanelOpen : false,
+        isPanelClose : false,
+      });
+    }
 
     private _getKey(item: any, index?: number): string {
       return item.key ;
@@ -577,13 +599,26 @@ const classNames = mergeStyleSets({
       let testData = this.state.serachItem ;
       let searchData = ev.target.value !== ""  ?  testData.filter(i => i.name.toLowerCase().startsWith(ev.target.value.toLowerCase())) : testData;
       
-       this.setState({
-        displayItems: searchData.slice(0, this.state.itemArrayAppend),
-        itemsList : searchData,
-        checkSearchItem : true,
-        hasMore : true,
-       },
-        () => console.log(this.state.displayItems));
+
+      if(searchData.length < 20)
+      {
+        this.setState({
+          displayItems: searchData.slice(0, this.state.itemArrayAppend),
+          itemsList : searchData,
+          checkSearchItem : true,
+          hasMore : false,
+         },
+          () => console.log(this.state.displayItems));
+      }
+      else {
+        this.setState({
+          displayItems: searchData.slice(0, this.state.itemArrayAppend),
+          itemsList : searchData,
+          checkSearchItem : true,
+          hasMore : true,
+         },
+          () => console.log(this.state.displayItems));
+      }
      };
 
     public _getAllPublicTeams = async () : Promise<IWorkspace[]>  =>  {
@@ -614,7 +649,6 @@ const classNames = mergeStyleSets({
             resolve(items);
           });
         });
-        
       }
       );
     }
@@ -634,8 +668,11 @@ const classNames = mergeStyleSets({
   }
 
   function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
-    const key = columnKey as keyof T;
-    return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+    let key = columnKey as keyof T;
+    let sortedItems = items.slice(0).sort((a :any , b:any) => ( //a[key] === null ? 1 : b[key] === null ? -1 :
+      (a[key].toString().toLowerCase() === b[key].toString().toLowerCase() ? 0 : isSortedDescending ? a[key].toString().toLowerCase() < b[key].toString().toLowerCase() : a[key].toString().toLowerCase() > b[key].toString().toLowerCase()) ? 1 : -1)
+    );
+    return sortedItems;
   }
 
   export default WorkspaceDetails;
