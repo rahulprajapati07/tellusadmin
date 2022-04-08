@@ -1,9 +1,21 @@
 import * as React  from 'react';
-import { mergeStyleSets } from '@fluentui/react/lib/Styling';
+//import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import * as ReactIcons from '@fluentui/react-icons-mdl2';
-import { DetailsList, SelectionMode, IColumn } from '@fluentui/react/lib/DetailsList';
+import { DetailsList, IColumn } from '@fluentui/react/lib/DetailsList'; //SelectionMode
 import { TooltipHost } from '@fluentui/react';
 import { Panel } from '@fluentui/react/lib/Panel';
+//import { useState } from 'react';
+import { mergeStyleSets, SelectionMode, TextField } from '@fluentui/react'; //DetailsListLayoutMode, mergeStyles,
+import { IColumnConfig } from 'fluentui-editable-grid'; //, EventEmitter, EventType, NumberAndDateOperators, EditableGrid, EditControlType,
+//import { Fabric, Checkbox } from 'office-ui-fabric-react';
+import "office-ui-fabric-core/dist/css/fabric.min.css";
+//import { Image } from '@fluentui/react/lib/Image';
+
+import InactiveIconTeams from '../Icons/InactiveIconTeams.png';
+import ExtUsersIcon from '../Icons/ExtUsersIcon.png';
+import NoOwnersIcon from '../Icons/NoOwnersIcon.png';
+import TeamsMissingIcon from '../Icons/TeamsMissingIcon.png';
+//import { ContextualMenuCheckmarksExample } from '../component/ContextualMenuCheckmarksExample';
 import {
   // IconButton,
   Button,
@@ -19,13 +31,15 @@ import {
     IContextualMenuProps,
     DirectionalHint,
     ContextualMenu,
+    //IContextualMenuItem,
   } from 'office-ui-fabric-react/lib/ContextualMenu';
 
-  import { TextField } from '@fluentui/react/lib/TextField';
-  import { Label } from '@fluentui/react/lib/Label';
+  //import { TextField } from '@fluentui/react/lib/TextField';
+//  import { Label } from '@fluentui/react/lib/Label';
   import { loginRequest } from "../component/authConfig";
-  import {callAllTeamsRequest,canUserRestoreTeams}  from "../component/graph";
+  import {callGetPublicTeams,canUserRestoreTeams}  from "../component/graph";
   import InfiniteScroll from "react-infinite-scroll-component";
+// import { getTsBuildInfoEmitOutputFilePath } from 'typescript';
 
 
 const classNames = mergeStyleSets({
@@ -73,6 +87,7 @@ const classNames = mergeStyleSets({
     root: {
       margin: '0 30px 20px 0',
       maxWidth: '300px',
+      marginLeft : 10,
     },
   };
   
@@ -88,11 +103,14 @@ const classNames = mergeStyleSets({
 
   export interface IWorkspaceExampleState {
     columns: IColumn[];
+    columnsData : IColumnConfig[];
     displayItems: IWorkspace[];
     serachItem: IWorkspace[];
     itemsList : IWorkspace[];
     sortItemsDetails : IWorkspace[];
+    uniqueFilterValues : string[];
     //selectionDetails: string;
+    sortItemCheck : boolean;
     isModalSelection: boolean;
     isCompactMode: boolean;
     announcedMessage?: string;
@@ -103,6 +121,10 @@ const classNames = mergeStyleSets({
     itemArrayAppend : number;
     checkSearchItem : boolean;
     contextualMenuProps? : IContextualMenuProps;
+    today: Date;
+    inActiveCount : number;
+    itemWithNoOwner : number;
+    teamsMissingInfo : number;
   }
 
   export interface IWorkspace {
@@ -144,9 +166,11 @@ const classNames = mergeStyleSets({
                 maxWidth: 16,
                 // onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
                 onRender: (item: IWorkspace) => (
-                  <TooltipHost key={item.key} content={`${item.test} file`}>
-                    <img src={item.test} className={classNames.fileIconImg} alt={`${item.test} file icon`} /> 
-                  </TooltipHost>
+                  <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1"> 
+                    <TooltipHost key={item.key} content={`${item.test} file`}>
+                      <img src={item.test} className={classNames.fileIconImg} alt={`${item.test} file icon`} /> 
+                    </TooltipHost>
+                  </div>
                 ),
               },
               {
@@ -156,7 +180,7 @@ const classNames = mergeStyleSets({
                 minWidth: 210,
                 maxWidth: 350,
                 isResizable: true,
-                onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
+                onColumnClick: (ev, columns) =>  this._onColumnClick(columns, this.state.sortItemCheck),
 
                 // onColumnClick: (ev, column) => {
                 //   this.onColumnClick(column, ev);
@@ -170,7 +194,7 @@ const classNames = mergeStyleSets({
                 sortDescendingAriaLabel: 'Sorted Z to A',
                 data: 'number',
                 onRender: (item: IWorkspace) => {
-                  return <span > {item.name}</span>;
+                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span > {item.name}</span> </div> ;
                 },
                 isPadded: true,
               },
@@ -187,6 +211,7 @@ const classNames = mergeStyleSets({
                   };
                   return (
                     // <div className={classNames.controlWrapper}> 
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1"> 
                     <HoverCard
                       plainCardProps={plainCardProps}
                       instantOpenOnClick={true}
@@ -204,7 +229,7 @@ const classNames = mergeStyleSets({
                       aria-label = { iconName 'MoreVerticalIcon'}
                     /> */}
                       </HoverCard>
-                      // </div>
+                      </div>
                      );
                 },
               },
@@ -218,7 +243,7 @@ const classNames = mergeStyleSets({
                 onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
                 data: 'number',
                 onRender: (item: IWorkspace) => {
-                  return <span key={item.key}>{item.businessDepartment}</span>;
+                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span key={item.key}>{item.businessDepartment}</span> </div>;
                 },
                 isPadded: true,
               },
@@ -232,7 +257,7 @@ const classNames = mergeStyleSets({
                 onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
                 data: 'number',
                 onRender: (item: IWorkspace) => {
-                  return <span >{item.businessOwner}</span>;
+                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span >{item.businessOwner}</span> </div>;
                 },
                 isPadded: true,
               },
@@ -247,7 +272,7 @@ const classNames = mergeStyleSets({
                 data: 'string',
                 onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
                 onRender: (item: IWorkspace) => {
-                  return <span>{item.status}</span>;
+                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span>{item.status}</span> </div>;
                 },
                 isPadded: true,
               },
@@ -262,7 +287,7 @@ const classNames = mergeStyleSets({
                 data: 'number',
                 onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
                 onRender: (item: IWorkspace) => {
-                  return <span key={item.key}>{item.type}</span>;
+                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.type}</span> </div>;
                 },
               },
               {
@@ -276,87 +301,138 @@ const classNames = mergeStyleSets({
                 data: 'number',
                 onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
                 onRender: (item: IWorkspace) => {
-                  return <span key={item.key}>{item.classification}</span>;
+                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.classification}</span> </div>;
                 },
               },
         ]; 
         
+
+        const columnsData : IColumnConfig[] = [
+          {
+            key: 'id',
+            name: 'ID',
+            text: 'ID',
+            editable: false,
+            dataType: 'number',
+            minWidth: 100,
+            maxWidth: 100,
+            isResizable: true,
+            includeColumnInExport: true,
+            includeColumnInSearch: true,
+            applyColumnFilter: true,
+            disableSort: true
+        },
+        {
+            key: 'name',
+            name: 'Name',
+            text: 'Name',
+            editable: true,
+            dataType: 'string',
+            minWidth: 100,
+            maxWidth: 100,
+            isResizable: true,
+            includeColumnInExport: true,
+            includeColumnInSearch: true,
+            applyColumnFilter: true
+        },
+        ];
+
+        let today = new Date();
         this.state = {
           displayItems: [],
           serachItem : [],
           itemsList : [],
           sortItemsDetails : [],
           columns: columns,
+          columnsData : columnsData,
           contextualMenuProps:undefined,
+          sortItemCheck : true,
+          uniqueFilterValues : [],
           // selectionDetails: this._getSelectionDetails(),
           isModalSelection: false,
           isCompactMode: false,
           announcedMessage: undefined,
           userIsAdmin : false,
           hasMore : true,
+          today :today ,
           isPanelOpen : false,
           isPanelClose : true,
           checkSearchItem : false,
           itemArrayAppend : 20,
+          inActiveCount : 0,
+          itemWithNoOwner :0,
+          teamsMissingInfo : 0,
         };
     }
 
     private _onColumnContextMenu = (column: IColumn, ev: React.MouseEvent<HTMLElement>): void => {
       this.setState({
-          contextualMenuProps: this._getContextualMenuProps(ev, column),
-        });
+        contextualMenuProps: this._getContextualMenuProps(ev, column),
+      });
     };
 
-    private _getContextualMenuProps(ev: React.MouseEvent<HTMLElement>, column: IColumn): IContextualMenuProps {
+    
+
+    private _getContextualMenuProps(ev: React.MouseEvent<HTMLElement>, column: IColumn): IContextualMenuProps  {
+      
+
+      // var uniqueVals = [], enabledVals = [];
+      //var workspacesUnfiltered :any , workspaces;
+      
+      // workspaces = this.state.itemsList;
+      // workspacesUnfiltered = this.state.columns;
+      
+      // let namesArray = workspaces.map(elem => elem.businessDepartment);
+      // let namesTraversed : any = [];
+      // let currentCountOfName = 1;
+      // let len = 0;
+      let itemForCheckbox = this.state.itemsList;
+      
+      let uniqueValues  = itemForCheckbox.filter( (ele, ind) => ind === itemForCheckbox.findIndex( elem => elem.businessDepartment.trim() !== "" ?  elem.businessDepartment.trim() === ele.businessDepartment.trim() : undefined ) );
+      
+      let uniqueString : string [] = [];
+      
+      uniqueValues.forEach((element) => uniqueString.push(element.businessDepartment));
+      
+      this.setState({
+        uniqueFilterValues : uniqueString
+      });
+
+      // let ItemsForCheckBox ;
+
+      // const items = [
+      //   { key: uniqueString[0], text: uniqueString[0], canCheck: true  },
+      //   { key: uniqueString[1], text: uniqueString[1], canCheck: true },
+      //   { key: uniqueString[1], text: uniqueString[0], canCheck: true },
+      // ];
+      
       const items = [
         {
-          key: 'aToZ',
-          name: 'A to Z',
+          key: uniqueString[0],
+          name: uniqueString[0],
           iconProps: { iconName: 'SortUp' },
           canCheck: true,
           checked: column.isSorted && !column.isSortedDescending,
-          onClick: () => this._onColumnClick(column, false),
+          isChecked :  uniqueString[0],
         },
         {
-          key: 'zToA',
-          name: 'Z to A',
+          key: uniqueString[1],
+          name: uniqueString[1],
           iconProps: { iconName: 'SortDown' },
           canCheck: true,
           checked: column.isSorted && column.isSortedDescending,
-          onClick: () => this._onColumnClick(column,true ),
+          isChecked : uniqueString[1] ,
         },
-        
       ];
-      if(column.name !== 'Name'){
-        items.push({
-          key: 'filter',
-          name: 'Filter by',
-          iconProps: { iconName: 'Filter' },
-          canCheck: true,
-          checked: column.isFiltered,
-          onClick: () => this.onFilterColumn(column),
-        });
-      }
+
       return {
-        items: items,
+        items : items,
         target: ev.currentTarget as HTMLElement,
         directionalHint: DirectionalHint.bottomLeftEdge,
         gapSpace: 10,
         isBeakVisible: true,
         onDismiss: this.onContextualMenuDismissed,
       };
-    }
-
-    private onFilterColumn = (column: IColumn): void => {
-
-      // var uniqueVals = [], enabledVals = [];
-      // var workspacesUnfiltered, workspaces;
-      
-  
-      this.setState({
-        isPanelOpen: true,
-        isPanelClose : true,
-      });
     }
 
   private onContextualMenuDismissed = (): void => {
@@ -395,6 +471,7 @@ const classNames = mergeStyleSets({
         itemArrayAppend : itemsCount,
         columns: newColumns,
         displayItems: getItemsbyScroll,
+        sortItemCheck: !checkOrder,
       });
     };
     
@@ -440,15 +517,33 @@ const classNames = mergeStyleSets({
         }
       });
 
+      await this._getInActiveTeams().then((ActiveTeams : any[]) => {
+        console.log("Component Teams Log =-=-=-=-= " + ActiveTeams );
+      })
+
       await this._getAllPublicTeams().then((teamsDetails : any[]) => {
         console.log("Component Teams Log" + teamsDetails );
         //if(teamsDetails.status === ''){}
         // this._allItems = teamsDetails;
+
+        let countNumber = 0;
+        let countMissiongInformation = 0; 
+        for(let i=0; i< teamsDetails.length ; i++) {
+          if(teamsDetails[i].businessOwner === ''){
+            countNumber = countNumber + 1;
+          }
+          if(teamsDetails[i].businessOwner ===''  || teamsDetails[i].businessDepartment === ''  || teamsDetails[i].classification === '' || teamsDetails[i].type === '' ) {
+            countMissiongInformation = countMissiongInformation + 1;
+          }
+        }
+
         this.setState({
           displayItems: teamsDetails.slice(0,this.state.itemArrayAppend),
           serachItem : teamsDetails,
           itemsList : teamsDetails,
           sortItemsDetails : teamsDetails,
+          itemWithNoOwner : countNumber,
+          teamsMissingInfo : countMissiongInformation,
         });
       });
     }
@@ -499,64 +594,208 @@ const classNames = mergeStyleSets({
           });
         }, 1500);
       }
-      
     };
-
+    
     render(){
       
       return(
         <div>
             {
-              this.state.userIsAdmin ? <div>
-                  <div>
-                  <Label style={{fontWeight:"bold"}}>Teams</Label>
+              this.state.userIsAdmin ? <div className="ms-Grid" dir="ltr">
+                {/* style= {{ height : '40px' }} */}
+                <div className="ms-Grid-row" style= {{ height : '40px' }}> 
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"> 
+                    {/* style = {{ textAlign: 'left', marginLeft:'10px'}} */}
+                        <h3 style = {{ textAlign: 'left', marginLeft:'10px'}}> Manage Teams </h3> 
+                    </div>
+                </div>
 
-                  <TextField label="Search Teams Here :" onScroll  = {this.fetchMoreData} onChange={ (event: any) => this._onChangeText(event)}
-                   styles={controlStyles} />
+                <div className="ms-Grid-row"> 
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3"> 
+                      <div style= {{
+                                backgroundColor: '#FFFFFF',
+                                margin: '0px 10px 0px 0px ' ,
+                                padding:2, 
+                              } }>
+                          <h6 style={{ textAlign: 'left',  margin:'10px 15px 0px 15px', width: '80%' , fontFamily:'Segoe UI' }} > Inactive Teams </h6>
+                          <div className="ms-Grid-row">    
+                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                                <h3 style= {{ textAlign:'left', margin:'10px 15px 0px 13px', fontSize: 36 }}> { this.state.inActiveCount } </h3>
+                              </div>
+                              
+                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                              <img 
+                                    height = "41.67"
+                                    width = "33.33"
+                                    src= {InactiveIconTeams}
+                                    alt="new"
+                                    />
+                              </div>
+                            </div>
+                      </div>
+                    </div>
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
+                      <div style= {{
+                                backgroundColor: '#FFFFFF',
+                                margin: '0px 10px 0px 0px ' ,
+                                padding:2,
+                              } }> 
+                                <h6 style={{ textAlign: 'left', margin:'10px 15px 0px 15px', width: '80%' , fontFamily:'Segoe UI' }}  > Teams With No Owner </h6>
+                              
+                                <div className="ms-Grid-row">    
+                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                                <h3 style= {{ textAlign:'left', margin:'10px 15px 0px 13px', fontSize: 36 }}> {this.state.itemWithNoOwner} </h3>
+                              </div>
+                              
+                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                              <img 
+                                    height = "41.67"
+                                    width = "33.33"
+                                    src={NoOwnersIcon}
+                                    alt="new"
+                                    />
+                              </div>
+                            </div>
+                      </div>
+                    </div>
+
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
+                      <div style= {{
+                                  backgroundColor: '#FFFFFF',
+                                  margin: '0px 10px 0px 0px ' ,
+                                  padding:2,
+                                } }> 
+                      <h6 style={{ textAlign: 'left', margin:'10px 15px 0px 15px', width: '80%' , fontFamily:'Segoe UI' }}> Teams With External User </h6>
+                      <div className="ms-Grid-row">    
+                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                                <h3 style= {{ textAlign:'left', margin:'10px 15px 0px 13px', fontSize: 36 }}> 1000 </h3>
+                              </div>
+                              
+                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                              <img 
+                                    height = "41.67"
+                                    width = "33.33"
+                                    src={ExtUsersIcon}
+                                    alt="new"
+                                    />
+                              </div>
+                            </div>
+                      </div>
+                    </div>
+
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
+                      <div style= {{
+                                  
+                                  backgroundColor: '#FFFFFF',
+                                  margin: '0px 10px 0px 0px ' ,
+                                  padding:2,
+                                } }> 
+                      <h6  style={{ textAlign: 'left', margin:'10px 15px 0px 15px', width: '80%' , fontFamily:'Segoe UI' }}> Teams Missing Information </h6>
+                      <div className="ms-Grid-row">    
+                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                                <h3 style= {{ textAlign:'left', margin:'10px 15px 0px 13px', fontSize: 36 }}> {this.state.teamsMissingInfo} </h3>
+                              </div>
+                              
+                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                              <img 
+                                    height = "41.67"
+                                    width = "33.33"
+                                    src={TeamsMissingIcon}
+                                    alt="new"
+                                    />
+                              </div>
+                            </div>
+                      </div>
+                    </div>
+                </div>
+
+                {/* Render table  */}
+                  <div className="ms-Grid" style={{ marginTop:10 ,backgroundColor: '#FFFFFF',}}> 
+                      {/* region Showing the All Teams Section  */}
+                      <div className="ms-Grid-row" style = {{ height: 40,  marginTop:10}}>
+                        <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"> 
+                          <h5 style = {{ textAlign:'left', marginLeft:15}}> All Teams </h5>
+                        </div>
+                      </div>
+
+                      {/* showing the search teams section */}
+                    <div> 
+                        <div className="ms-Grid-row" style = {{ height: 40 }}> 
+                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"> 
+                                <TextField placeholder="Search For a Team" onScroll  = {this.fetchMoreData} onChange={ (event: any) => this._onChangeText(event)}
+                                styles={controlStyles} />
+                            </div>
+                        </div>
+                    </div>
+                   {/* {this.state.contextualMenuProps && <ContextualMenu {... } />} */}
                    {this.state.contextualMenuProps && <ContextualMenu {...this.state.contextualMenuProps} />}
+                   
+                   {/* {this.state.uniqueFilterValues.map((value) => {
+                        return <Checkbox
+                          label={value ? value : "(No value)"}
+                          //className={styles.checkbox}
+                          // disabled={this.state.enabledValues.indexOf(value) == -1}
+                          // defaultChecked={this.state.checkedFilterValues.indexOf(value) !== -1}
+                          // onChange={(ev: any, checked: boolean) => {
+                          //   if (checked) {
+                          //     this.state.checkedFilterValues.push(value);
+                          //   } else {
+                          //     let index = this.state.checkedFilterValues.indexOf(value);
+                          //     if (index !== -1) {
+                          //       this.state.checkedFilterValues.splice(index, 1);
+                          //     }
+                          //   }
+                          //   this.setState({ checkedFilterValues: this.state.checkedFilterValues });
+                          // }}
+                           />;
+                      })} */}
+                  
+                  {/* This Renders the Teams Records */}
+                  <div className="ms-Grid-row" > 
+                      <div className= "ms-Grid-col ms-sm6 ms-md4 ms-lg12"> 
+                          <InfiniteScroll
+                                dataLength={this.state.displayItems.length}
+                                next={this.fetchMoreData}
+                                hasMore={this.state.hasMore}
+                                loader={<h4>Loading...</h4>}
+                                // onScroll = { this.updateMoreData }
+                                endMessage={
+                                  <p style={{ textAlign: "center" }}>
+                                    <b>Yay! You have seen it all</b>
+                                  </p>
+                                }
+                          >
+                            <DetailsList
+                                    items= {[ ...this.state.displayItems]}
+                                    compact={this.state.isCompactMode}
+                                    columns={this.state.columns}
+                                    selectionMode={SelectionMode.none}
+                                    getKey={this._getKey}
+                                    setKey="set"
+                                    // layoutMode={DetailsListLayoutMode.justified}
+                                    // isHeaderVisible={true}
+                                    // data-is-scrollable="true"
+                                    // onItemInvoked={this._onItemInvoked}
+                                  />
+
+                              {/* <DetailsList
+                                    items= {[ ...this.state.displayItems]}
+                                    compact={this.state.isCompactMode}
+                                    columns={this.state.columns}
+                                    selectionMode={SelectionMode.none}
+                                    onRenderItemColumn = { (item) => {
+                                        return item
+                                    } }
+                                    // getKey={this._getKey}
+                                    // setKey="set"
+                                    // layoutMode={DetailsListLayoutMode.justified}
+                                    // isHeaderVisible={true}
+                                    // data-is-scrollable="true"
+                                    // onItemInvoked={this._onItemInvoked}
+                                  /> */}
+                          </InfiniteScroll>
+                      </div>
                   </div>
-                  <InfiniteScroll
-                        dataLength={this.state.displayItems.length}
-                        next={this.fetchMoreData}
-                        hasMore={this.state.hasMore}
-                        loader={<h4>Loading...</h4>}
-                        // onScroll = { this.updateMoreData }
-                        endMessage={
-                          <p style={{ textAlign: "center" }}>
-                            <b>Yay! You have seen it all</b>
-                          </p>
-                        }
-                  >
-
-                    <DetailsList
-                            items= {[ ...this.state.displayItems]}
-                            compact={this.state.isCompactMode}
-                            columns={this.state.columns}
-                            selectionMode={SelectionMode.none}
-                            getKey={this._getKey}
-                            setKey="set"
-                            // layoutMode={DetailsListLayoutMode.justified}
-                            // isHeaderVisible={true}
-                            // data-is-scrollable="true"
-                            // onItemInvoked={this._onItemInvoked}
-                          />
-
-                      {/* <DetailsList
-                            items= {[ ...this.state.displayItems]}
-                            compact={this.state.isCompactMode}
-                            columns={this.state.columns}
-                            selectionMode={SelectionMode.none}
-                            onRenderItemColumn = { (item) => {
-                                return item
-                            } }
-                            // getKey={this._getKey}
-                            // setKey="set"
-                            // layoutMode={DetailsListLayoutMode.justified}
-                            // isHeaderVisible={true}
-                            // data-is-scrollable="true"
-                            // onItemInvoked={this._onItemInvoked}
-                          /> */}
-                  </InfiniteScroll>
                     {/* {console.log("Item Count :- " + this.state.items.length)}
                     <DetailsList
                         items={this.state.items}
@@ -573,7 +812,8 @@ const classNames = mergeStyleSets({
                       >
                         <p>Content goes here.</p>
                       </Panel>
-            </div>
+                    </div>
+                </div>   
                 :
               <div>
                   User Unauthorized 
@@ -626,30 +866,121 @@ const classNames = mergeStyleSets({
       return new Promise<any>((resolve, reject) => 
       {
         const items: IWorkspace[] = [];
+        var today = this.state.today.getTime();
+        let totalInActiveTeams = 0;
+        // let countItem = 0;
+
         this.props.instance.acquireTokenSilent({
           ...loginRequest,
           account: this.props.accounts[0]
             }).then((response:any) => {
-          callAllTeamsRequest(response.accessToken).then(response => response).then((data:any[]) =>
+          callGetPublicTeams(response.accessToken).then(response => response).then((data:any[]) =>
           {
             data.forEach(element => {
-              if(element.status === 'Active' || element.status === 'Inactive'){
-                items.push({
-                  test: element.imageBlob,
-                  key: element.id.toString(),
-                  name: element.title,
-                  businessDepartment: element.businessDepartment,
-                  status: element.status,
-                  type: '1',
-                  classification: element.classification,
-                  businessOwner : '1',
-                });
-              }
-            })
+              var daysSinceActivity = 0;
+
+                if (element.latestActivityDate != null) {
+                  daysSinceActivity =
+                    (today - new Date(element.latestActivityDate).getTime()) /
+                    (1000 * 60 * 60 * 24.0);
+                }
+                if (element.latestActivityDate != null) {
+                  daysSinceActivity =
+                    (today - new Date(element.latestActivityDate).getTime()) /
+                    (1000 * 60 * 60 * 24.0);
+                }
+                if (element.status === "Active" && daysSinceActivity >= 97) {
+                  element.status = "Inactive";
+                  totalInActiveTeams = totalInActiveTeams + 1; 
+                  items.push({
+                    test: element.imageBlob,
+                    key: element.id.toString(),
+                    name: element.title,
+                    businessDepartment: element.businessDepartment,
+                    status: element.status,
+                    type: element.template,
+                    classification: element.classification,
+                    businessOwner : element.ownerName,
+                  });
+                }
+                else {
+                  items.push({
+                    test: element.imageBlob,
+                    key: element.id.toString(),
+                    name: element.title,
+                    businessDepartment: element.businessDepartment,
+                    status: element.status,
+                    type: element.template,
+                    classification: element.classification,
+                    businessOwner : element.ownerName,
+                  });
+                }
+            });
+            // let countWithnoOwner = items.map(x => x.businessOwner == null || "" ? true : false).length;
+            
+            this.setState({
+              inActiveCount : totalInActiveTeams,
+              // itemWithNoOwner : countWithnoOwner,
+            });
+            
             resolve(items);
           });
         });
       }
+      );
+    }
+
+    public _getInActiveTeams = async () : Promise<IWorkspace[]>  =>  {
+
+        return new Promise<any>((resolve, reject) => 
+        {
+          const items: IWorkspace[] = [];
+          this.props.instance.acquireTokenSilent({
+            ...loginRequest,
+            account: this.props.accounts[0]
+              }).then((response:any) => {
+            callGetPublicTeams(response.accessToken).then(response => response).then((data:any[]) =>
+            {
+
+              var today = this.state.today.getTime();
+              data.forEach(element => {
+                var daysSinceActivity = 0;
+                
+                if (element.latestActivityDate != null) {
+                  daysSinceActivity =
+                    (today - new Date(element.latestActivityDate).getTime()) /
+                    (1000 * 60 * 60 * 24.0);
+                }
+                if (element.status === "Active" && daysSinceActivity >= 97) {
+                  element.status = "Inactive";
+                  items.push({
+                    test: element.imageBlob,
+                    key: element.id.toString(),
+                    name: element.title,
+                    businessDepartment: element.businessDepartment,
+                    status: element.status,
+                    type: element.template,
+                    classification: element.classification,
+                    businessOwner : element.ownerName,
+                  });
+                }
+                else {
+                  items.push({
+                    test: element.imageBlob,
+                    key: element.id.toString(),
+                    name: element.title,
+                    businessDepartment: element.businessDepartment,
+                    status: element.status,
+                    type: element.template,
+                    classification: element.classification,
+                    businessOwner : element.ownerName,
+                  });
+                }
+              })
+              resolve(items);
+            });
+          });
+        }
       );
     }
 
@@ -664,10 +995,11 @@ const classNames = mergeStyleSets({
           })
         })
       })
-  }
+    }
   }
 
   function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+    
     let key = columnKey as keyof T;
     let sortedItems = items.slice(0).sort((a :any , b:any) => ( //a[key] === null ? 1 : b[key] === null ? -1 :
       (a[key].toString().toLowerCase() === b[key].toString().toLowerCase() ? 0 : isSortedDescending ? a[key].toString().toLowerCase() < b[key].toString().toLowerCase() : a[key].toString().toLowerCase() > b[key].toString().toLowerCase()) ? 1 : -1)
@@ -675,4 +1007,22 @@ const classNames = mergeStyleSets({
     return sortedItems;
   }
 
+
+
+  // function getContextualMenuDetails(){
+  //   const [Selection, SetSelection] = React.useState<{ [key: string]: boolean }>({});
+  //   // const menuProps: IContextualMenuProps = React.useMemo(
+  //   //   () => ({
+  //   //     shouldFocusOnMount: true,
+  //   //     items: [
+  //   //       { key: "HR", text: 'New', canCheck: true, isChecked: selection["HR"] },
+  //   //       { key: "Developer", text: 'Share', canCheck: true, isChecked: selection["Developer"]},
+  //   //       { key: "Infra", text: 'Mobile', canCheck: true, isChecked: selection["Infra"]},
+  //   //     ],
+  //   //   }),
+  //   //   [selection],
+  //   // );
+  // }
+
   export default WorkspaceDetails;
+  
