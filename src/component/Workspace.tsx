@@ -534,13 +534,13 @@ const classNames = mergeStyleSets({
 
         let countNumber = teamsDetails.length;
         let countMissiongInformation = 0; 
-        let countExternalUser = teamsDetails.length;
+        let countExternalUser = 0;
         for(let i=0; i< teamsDetails.length ; i++) {
           if(teamsDetails[i].teamsWithNoOwner > 0){
             countNumber = countNumber - 1;
           }
           if(teamsDetails[i].teamsExternalUser > 0) {
-            countExternalUser = countExternalUser - 1;
+            countExternalUser = countExternalUser + 1;
           }
           if(teamsDetails[i].businessOwner ===''  || teamsDetails[i].businessDepartment === ''  || teamsDetails[i].classification === '' || teamsDetails[i].type === '' ) {
             countMissiongInformation = countMissiongInformation + 1;
