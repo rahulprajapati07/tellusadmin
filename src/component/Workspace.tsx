@@ -15,6 +15,8 @@ import InactiveIconTeams from '../Icons/InactiveIconTeams.png';
 import ExtUsersIcon from '../Icons/ExtUsersIcon.png';
 import NoOwnersIcon from '../Icons/NoOwnersIcon.png';
 import TeamsMissingIcon from '../Icons/TeamsMissingIcon.png';
+import LockIcon from '../Icons/LockIcon.png';
+
 //import { ContextualMenuCheckmarksExample } from '../component/ContextualMenuCheckmarksExample';
 import {
   // IconButton,
@@ -125,6 +127,7 @@ const classNames = mergeStyleSets({
     inActiveCount : number;
     itemWithNoOwner : number;
     teamsMissingInfo : number;
+    teamsExternalUser : number;
   }
 
   export interface IWorkspace {
@@ -136,7 +139,9 @@ const classNames = mergeStyleSets({
     type: string;
     classification : string;
     businessOwner : string;
-  }
+    teamsWithNoOwner : number;
+    teamsExternalUser : number;
+    }
 
   interface IWorkspaceProps {
     instance : any;
@@ -362,6 +367,7 @@ const classNames = mergeStyleSets({
           inActiveCount : 0,
           itemWithNoOwner :0,
           teamsMissingInfo : 0,
+          teamsExternalUser : 0,
         };
     }
 
@@ -506,13 +512,13 @@ const classNames = mergeStyleSets({
       await this._getUserRole().then((teamsUserRoleStatus:boolean)  => {
         if(teamsUserRoleStatus === true){
           this.setState({
-            userIsAdmin : true
+            userIsAdmin : teamsUserRoleStatus // true
           })
           console.log("Teams User Role status : " + this.state.userIsAdmin );
         }
         else {
           this.setState({
-            userIsAdmin : false
+            userIsAdmin : teamsUserRoleStatus
           });
         }
       });
@@ -526,11 +532,15 @@ const classNames = mergeStyleSets({
         //if(teamsDetails.status === ''){}
         // this._allItems = teamsDetails;
 
-        let countNumber = 0;
+        let countNumber = teamsDetails.length;
         let countMissiongInformation = 0; 
+        let countExternalUser = teamsDetails.length;
         for(let i=0; i< teamsDetails.length ; i++) {
-          if(teamsDetails[i].businessOwner === ''){
-            countNumber = countNumber + 1;
+          if(teamsDetails[i].teamsWithNoOwner > 0){
+            countNumber = countNumber - 1;
+          }
+          if(teamsDetails[i].teamsExternalUser > 0) {
+            countExternalUser = countExternalUser - 1;
           }
           if(teamsDetails[i].businessOwner ===''  || teamsDetails[i].businessDepartment === ''  || teamsDetails[i].classification === '' || teamsDetails[i].type === '' ) {
             countMissiongInformation = countMissiongInformation + 1;
@@ -544,6 +554,7 @@ const classNames = mergeStyleSets({
           sortItemsDetails : teamsDetails,
           itemWithNoOwner : countNumber,
           teamsMissingInfo : countMissiongInformation,
+          teamsExternalUser : countExternalUser,
         });
       });
     }
@@ -668,7 +679,7 @@ const classNames = mergeStyleSets({
                       <h6 style={{ textAlign: 'left', margin:'10px 15px 0px 15px', width: '80%' , fontFamily:'Segoe UI' }}> Teams With External User </h6>
                       <div className="ms-Grid-row">    
                               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
-                                <h3 style= {{ textAlign:'left', margin:'10px 15px 0px 13px', fontSize: 36 }}> 1000 </h3>
+                                <h3 style= {{ textAlign:'left', margin:'10px 15px 0px 13px', fontSize: 36 }}> {this.state.teamsExternalUser} </h3>
                               </div>
                               
                               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
@@ -815,8 +826,30 @@ const classNames = mergeStyleSets({
                     </div>
                 </div>   
                 :
-              <div>
-                  User Unauthorized 
+              <div className="ms-Grid" dir="ltr" style={{  }}>
+                <div className="ms-Grid-row" style={{ marginTop : 300 }}> 
+                  <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+                                <img 
+                                    height = "140"
+                                    width = "140"
+                                    src={LockIcon}
+                                    alt="new"
+                                    /></div>
+                  
+                </div>
+                
+                <div className="ms-Grid-row">
+                  <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+                                <h5> Sorry but you don't have access to this feature </h5>
+                                </div>
+                </div>
+
+                <div className="ms-Grid-row">
+                
+                  <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+                                <p style={{ fontFamily:"Segoe UI" }}> Tellus Admin is only available to administrators </p>
+                  </div>
+                </div>
               </div>
             }
           </div>
@@ -901,6 +934,8 @@ const classNames = mergeStyleSets({
                     type: element.template,
                     classification: element.classification,
                     businessOwner : element.ownerName,
+                    teamsExternalUser : element.teamsExternalUser,
+                    teamsWithNoOwner : element.teamsOwner
                   });
                 }
                 else {
@@ -913,6 +948,8 @@ const classNames = mergeStyleSets({
                     type: element.template,
                     classification: element.classification,
                     businessOwner : element.ownerName,
+                    teamsExternalUser : element.teamsExternalUser,
+                    teamsWithNoOwner : element.teamsOwner
                   });
                 }
             });
@@ -962,6 +999,8 @@ const classNames = mergeStyleSets({
                     type: element.template,
                     classification: element.classification,
                     businessOwner : element.ownerName,
+                    teamsExternalUser : element.teamsExternalUser,
+                    teamsWithNoOwner : element.teamsOwner
                   });
                 }
                 else {
@@ -974,6 +1013,8 @@ const classNames = mergeStyleSets({
                     type: element.template,
                     classification: element.classification,
                     businessOwner : element.ownerName,
+                    teamsExternalUser : element.teamsExternalUser,
+                    teamsWithNoOwner : element.teamsOwner
                   });
                 }
               })
