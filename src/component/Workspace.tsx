@@ -1,21 +1,32 @@
 import * as React  from 'react';
 //import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import * as ReactIcons from '@fluentui/react-icons-mdl2';
-import { DetailsList, IColumn } from '@fluentui/react/lib/DetailsList'; //SelectionMode
+import {  IColumn } from '@fluentui/react/lib/DetailsList'; //SelectionMode DetailsList,
 import { TooltipHost } from '@fluentui/react';
 import { Panel } from '@fluentui/react/lib/Panel';
 //import { useState } from 'react';
-import { mergeStyleSets, SelectionMode, TextField } from '@fluentui/react'; //DetailsListLayoutMode, mergeStyles,
+import { mergeStyleSets, SelectionMode, TextField } from '@fluentui/react'; //DetailsListLayoutMode, mergeStyles,DetailsListLayoutMode
 import { IColumnConfig } from 'fluentui-editable-grid'; //, EventEmitter, EventType, NumberAndDateOperators, EditableGrid, EditControlType,
 //import { Fabric, Checkbox } from 'office-ui-fabric-react';
 import "office-ui-fabric-core/dist/css/fabric.min.css";
 //import { Image } from '@fluentui/react/lib/Image';
-
+//import WorkspaceDetailsList from '../component/editabledetailslist/gridworkspace';
 import InactiveIconTeams from '../Icons/InactiveIconTeams.png';
 import ExtUsersIcon from '../Icons/ExtUsersIcon.png';
 import NoOwnersIcon from '../Icons/NoOwnersIcon.png';
 import TeamsMissingIcon from '../Icons/TeamsMissingIcon.png';
 import LockIcon from '../Icons/LockIcon.png';
+import sharepointImg from '../Icons/sharepointImg.png';
+import InfoIcon from '../Icons/InfoIcon.jpg';
+import { EditableGrid } from 'fluentui-editable-grid';
+// import {
+//   Provider as TeamsProvider,
+//   Table,
+//   List,
+//   TSortable
+// } from "@fluentui/react-teams";
+
+import  '../component/Pagination.scss';
 
 //import { ContextualMenuCheckmarksExample } from '../component/ContextualMenuCheckmarksExample';
 import {
@@ -40,7 +51,9 @@ import {
 //  import { Label } from '@fluentui/react/lib/Label';
   import { loginRequest } from "../component/authConfig";
   import {callGetPublicTeams,canUserRestoreTeams}  from "../component/graph";
-  import InfiniteScroll from "react-infinite-scroll-component";
+//  import InfiniteScroll from "react-infinite-scroll-component";
+import ReactPaginate from 'react-paginate';
+import ReactTooltip from 'react-tooltip';
 // import { getTsBuildInfoEmitOutputFilePath } from 'typescript';
 
 
@@ -104,8 +117,7 @@ const classNames = mergeStyleSets({
   }, []);
 
   export interface IWorkspaceExampleState {
-    columns: IColumn[];
-    columnsData : IColumnConfig[];
+    columns: IColumnConfig[];
     displayItems: IWorkspace[];
     serachItem: IWorkspace[];
     itemsList : IWorkspace[];
@@ -128,6 +140,10 @@ const classNames = mergeStyleSets({
     itemWithNoOwner : number;
     teamsMissingInfo : number;
     teamsExternalUser : number;
+    Paginationdata: any;
+    perPage: number;
+    pages: number;
+    currentItem : any;
   }
 
   export interface IWorkspace {
@@ -141,13 +157,17 @@ const classNames = mergeStyleSets({
     businessOwner : string;
     teamsWithNoOwner : number;
     teamsExternalUser : number;
+    teamsSiteUrl : string;
+    sharePointSiteUrl : string;
     }
+    
 
   interface IWorkspaceProps {
     instance : any;
     accounts : any;
+    userIsAdmin : any;
   }
-
+ // let userRole :any ;
   class WorkspaceDetails extends React.Component<IWorkspaceProps, IWorkspaceExampleState> {
     
     constructor(props: IWorkspaceProps, state: IWorkspaceExampleState){
@@ -156,59 +176,74 @@ const classNames = mergeStyleSets({
         // onscroll = (event) => {
         //   console.log(event);
         // }
+        
 
-        const columns : IColumn[] = [
+        const columns : IColumnConfig[] = [
             {
                 key: 'column1',
                 name: 'test',
+                text:'',
                 className: classNames.fileIconCell,
                 iconClassName: classNames.fileIconHeaderIcon,
                 ariaLabel: 'Column operations for File type, Press to sort on File type',
                 iconName: 'Page',
                 isIconOnly: true,
                 fieldName: 'name',
-                minWidth: 16,
-                maxWidth: 16,
-                // onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
+                minWidth: 20,
+                maxWidth: 20,
+                // onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev), content={`${item.test} file`}
                 onRender: (item: IWorkspace) => (
                   <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1"> 
-                    <TooltipHost key={item.key} content={`${item.test} file`}>
+                    <TooltipHost key={item.key} > 
                       <img src={item.test} className={classNames.fileIconImg} alt={`${item.test} file icon`} /> 
                     </TooltipHost>
                   </div>
                 ),
               },
+            //   {
+            //     key: 'name',
+            //     name: 'Name',
+            //     text: 'Name',
+            //     editable: true,
+            //     dataType: 'string',
+            //     minWidth: 150,
+            //     maxWidth: 150,
+            //     isResizable: true,
+            //     includeColumnInExport: true,
+            //     includeColumnInSearch: true,
+            //     applyColumnFilter: true,
+            //     onRender: (item: IWorkspace) => {
+            //         return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span onClick= {() => window.open(item.teamsSiteUrl, "_blank")} > {item.name} </span> </div> ;
+            //     },
+            // },
               {
-                key: 'column2',
+                key: 'name',
                 name: 'Name',
+                text:'Name',
                 fieldName: 'name',
-                minWidth: 210,
-                maxWidth: 350,
+                minWidth: 190,
+                maxWidth: 210,
                 isResizable: true,
+                dataType: 'string',
+                includeColumnInExport: true,
                 onColumnClick: (ev, columns) =>  this._onColumnClick(columns, this.state.sortItemCheck),
-
-                // onColumnClick: (ev, column) => {
-                //   this.onColumnClick(column, ev);
-                // },
-                // onColumnContextMenu: (column, ev) => {
-                //   this.onColumnClick(column, ev);
-                // },
                 isSorted: true,
                 isSortedDescending: false,
                 sortAscendingAriaLabel: 'Sorted A to Z',
                 sortDescendingAriaLabel: 'Sorted Z to A',
                 data: 'number',
                 onRender: (item: IWorkspace) => {
-                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span > {item.name}</span> </div> ;
+                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span onClick= {() => window.open(item.teamsSiteUrl, "_blank")} > {item.name} </span> </div> ;
                 },
                 isPadded: true,
               },
               {
                 key: "column3",
+                text:'',
                 name: "",
                 fieldName: "Options",
-                minWidth: 10,
-                maxWidth: 10,
+                minWidth: 15,
+                maxWidth: 15,
                 onRender:(item: IWorkspace) => {
                   const plainCardProps: IPlainCardProps = {
                     onRenderPlainCard: this.onRenderPlainCard,
@@ -217,7 +252,7 @@ const classNames = mergeStyleSets({
                   return (
                     // <div className={classNames.controlWrapper}> 
                     <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1"> 
-                    <HoverCard
+                    <HoverCard 
                       plainCardProps={plainCardProps}
                       instantOpenOnClick={true}
                       type={HoverCardType.plain}
@@ -239,108 +274,158 @@ const classNames = mergeStyleSets({
                 },
               },
               {
-                key: 'column4',
-                name: 'Business Department',
-                fieldName: 'businessDepartment',
-                minWidth: 70,
-                maxWidth: 90,
+                key: 'businessDepartment',
+                name: 'businessDepartment',
+                text: 'Business Department',
+                editable: true,
+                dataType: 'string',
+                minWidth: 160,
+                maxWidth: 160,
                 isResizable: true,
-                onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
-                data: 'number',
+                includeColumnInExport: true,
+                includeColumnInSearch: true,
+                applyColumnFilter: true,
                 onRender: (item: IWorkspace) => {
-                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span key={item.key}>{item.businessDepartment}</span> </div>;
-                },
-                isPadded: true,
+                    return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span key={item.key}>{item.businessDepartment}</span> </div>;
+                    },
+            },
+              // {
+              //   key: 'column4',
+              //   name: 'Business Department',
+              //   text:'Business Department',
+              //   fieldName: 'businessDepartment',
+              //   minWidth: 70,
+              //   maxWidth: 90,
+              //   isResizable: true,
+              //   onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
+              //   data: 'number',
+              //   onRender: (item: IWorkspace) => {
+              //     return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span key={item.key}>{item.businessDepartment}</span> </div>;
+              //   },
+              //   isPadded: true,
+              // },
+              {
+                key: 'businessOwner',
+                name: 'businessOwner',
+                text: 'Business Owner',
+                editable: true,
+                dataType: 'string',
+                minWidth: 110,
+                maxWidth: 110,
+                isResizable: true,
+                includeColumnInExport: true,
+                includeColumnInSearch: true,
+                applyColumnFilter: true
+            },
+              // {
+              //   key: 'businessOwner',
+              //   name: 'businessOwner',
+              //   text: 'Business Owner',
+              //   editable: true,
+              //   dataType: 'string',
+              //   minWidth: 100,
+              //   maxWidth: 100,
+              //   isResizable: true,
+              //   includeColumnInExport: true,
+              //   includeColumnInSearch: true,
+              //   //inputType: EditControlType.MultilineTextField,
+              //   applyColumnFilter: true
+              // },
+              {
+                key: 'status',
+                name: 'status',
+                text: 'Status',
+                editable: true,
+                dataType: 'string',
+                minWidth: 110,
+                maxWidth: 110,
+                isResizable: true,
+                includeColumnInExport: true,
+                includeColumnInSearch: true,
+                applyColumnFilter: true
               },
               {
-                key: 'column5',
-                name: 'Business Owner',
-                fieldName: 'businessOwner',
-                minWidth: 70,
-                maxWidth: 90,
+                key: 'type',
+                name: 'type',
+                text: 'Type',
+                editable: true,
+                dataType: 'string',
+                minWidth: 110,
+                maxWidth: 110,
                 isResizable: true,
-                onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
-                data: 'number',
+                includeColumnInExport: true,
+                includeColumnInSearch: true,
                 onRender: (item: IWorkspace) => {
-                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span >{item.businessOwner}</span> </div>;
-                },
-                isPadded: true,
-              },
+                       return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.type}</span> </div>;
+               },
+            },
+              // {
+              //   key: 'column7',
+              //   name: 'Type',
+              //   text:'Type',
+              //   fieldName: 'type',
+              //   minWidth: 70,
+              //   maxWidth: 90,
+              //   isResizable: true,
+              //   isCollapsible: true,
+              //   data: 'number',
+              //   onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
+              //   onRender: (item: IWorkspace) => {
+              //     return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.type}</span> </div>;
+              //   },
+              // },
               {
-                key: 'column6',
-                name: 'Status',
-                fieldName: 'status',
-                minWidth: 70,
-                maxWidth: 90,
+                key: 'classification',
+                name: 'classification',
+                text: 'Classification',
+                editable: true,
+                dataType: 'string',
+                minWidth: 110,
+                maxWidth: 110,
                 isResizable: true,
-                isCollapsible: true,
-                data: 'string',
-                onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
+                includeColumnInExport: true,
+                includeColumnInSearch: true,
                 onRender: (item: IWorkspace) => {
-                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span>{item.status}</span> </div>;
-                },
-                isPadded: true,
-              },
+                       return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.classification}</span> </div>;
+               },
+            },
+              // {
+              //   key: 'column8',
+              //   name: 'Classification',
+              //   text:'Classification',
+              //   fieldName: 'classification',
+              //   minWidth: 70,
+              //   maxWidth: 90,
+              //   isResizable: true,
+              //   isCollapsible: true,
+              //   data: 'number',
+              //   onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
+              //   onRender: (item: IWorkspace) => {
+              //     return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.classification}</span> </div>;
+              //   },
+              // },
               {
-                key: 'column7',
-                name: 'Type',
-                fieldName: 'type',
-                minWidth: 70,
-                maxWidth: 90,
-                isResizable: true,
-                isCollapsible: true,
-                data: 'number',
-                onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
-                onRender: (item: IWorkspace) => {
-                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.type}</span> </div>;
-                },
-              },
-              {
-                key: 'column8',
-                name: 'Classification',
-                fieldName: 'classification',
-                minWidth: 70,
-                maxWidth: 90,
-                isResizable: true,
-                isCollapsible: true,
-                data: 'number',
-                onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
-                onRender: (item: IWorkspace) => {
-                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.classification}</span> </div>;
-                },
+                key: 'column9',
+                name: 'test',
+                text:'',
+                className: classNames.fileIconCell,
+                iconClassName: classNames.fileIconHeaderIcon,
+                ariaLabel: 'Column operations for File type, Press to sort on File type',
+                iconName: 'Page',
+                isIconOnly: true,
+                fieldName: 'name',
+                minWidth: 16,
+                maxWidth: 16,
+                // onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
+                onRender: (item: IWorkspace) => (
+                  <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1"> 
+                    <TooltipHost key={item.key} >
+                      <img onClick = {() => window.open(item.sharePointSiteUrl, "_blank")} src={sharepointImg}  className={classNames.fileIconImg} alt={`${item.test} file icon`} /> 
+                    </TooltipHost>
+                  </div>
+                ),
               },
         ]; 
-        
-
-        const columnsData : IColumnConfig[] = [
-          {
-            key: 'id',
-            name: 'ID',
-            text: 'ID',
-            editable: false,
-            dataType: 'number',
-            minWidth: 100,
-            maxWidth: 100,
-            isResizable: true,
-            includeColumnInExport: true,
-            includeColumnInSearch: true,
-            applyColumnFilter: true,
-            disableSort: true
-        },
-        {
-            key: 'name',
-            name: 'Name',
-            text: 'Name',
-            editable: true,
-            dataType: 'string',
-            minWidth: 100,
-            maxWidth: 100,
-            isResizable: true,
-            includeColumnInExport: true,
-            includeColumnInSearch: true,
-            applyColumnFilter: true
-        },
-        ];
 
         let today = new Date();
         this.state = {
@@ -349,7 +434,6 @@ const classNames = mergeStyleSets({
           itemsList : [],
           sortItemsDetails : [],
           columns: columns,
-          columnsData : columnsData,
           contextualMenuProps:undefined,
           sortItemCheck : true,
           uniqueFilterValues : [],
@@ -357,7 +441,7 @@ const classNames = mergeStyleSets({
           isModalSelection: false,
           isCompactMode: false,
           announcedMessage: undefined,
-          userIsAdmin : false,
+          userIsAdmin : this.props.userIsAdmin,
           hasMore : true,
           today :today ,
           isPanelOpen : false,
@@ -368,6 +452,10 @@ const classNames = mergeStyleSets({
           itemWithNoOwner :0,
           teamsMissingInfo : 0,
           teamsExternalUser : 0,
+          Paginationdata : [],
+          perPage : 8,
+          pages : 0,
+          currentItem : {},
         };
     }
 
@@ -449,7 +537,7 @@ const classNames = mergeStyleSets({
 
     private _onColumnClick = (column: IColumn , checkOrder : boolean): void => {
       const { columns, sortItemsDetails } = this.state;
-      const newColumns: IColumn[] = columns.slice();
+      const newColumns: IColumnConfig[] = columns.slice();
       const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
       newColumns.forEach((newCol: IColumn) => {
         if (newCol === currColumn) {
@@ -484,11 +572,11 @@ const classNames = mergeStyleSets({
 
     public onRenderPlainCard(){
       return(
-        <div>
+        <div className='elliptical-menu'>
           <Button
           text="Edit"
           //className= {styles.createNewButton}
-          //onClick={() => this.setState({ currentItem: item, dialog: "Delete" })}
+          onClick={(event:any) => this.setState({ currentItem: event})}
         />
         <br />
         <Button
@@ -511,12 +599,14 @@ const classNames = mergeStyleSets({
 
       await this._getUserRole().then((teamsUserRoleStatus:boolean)  => {
         if(teamsUserRoleStatus === true){
+          //userRole = teamsUserRoleStatus;
           this.setState({
             userIsAdmin : teamsUserRoleStatus // true
           })
           console.log("Teams User Role status : " + this.state.userIsAdmin );
         }
         else {
+          //userRole = teamsUserRoleStatus;
           this.setState({
             userIsAdmin : teamsUserRoleStatus
           });
@@ -532,12 +622,12 @@ const classNames = mergeStyleSets({
         //if(teamsDetails.status === ''){}
         // this._allItems = teamsDetails;
 
-        let countNumber = teamsDetails.length;
+        let countNumber = 0;
         let countMissiongInformation = 0; 
         let countExternalUser = 0;
         for(let i=0; i< teamsDetails.length ; i++) {
-          if(teamsDetails[i].teamsWithNoOwner > 0){
-            countNumber = countNumber - 1;
+          if(teamsDetails[i].teamsWithNoOwner === 0){
+            countNumber = countNumber + 1;
           }
           if(teamsDetails[i].teamsExternalUser > 0) {
             countExternalUser = countExternalUser + 1;
@@ -556,9 +646,27 @@ const classNames = mergeStyleSets({
           teamsMissingInfo : countMissiongInformation,
           teamsExternalUser : countExternalUser,
         });
+        var exp: any = document.getElementById('export');
+      document.getElementsByClassName('ms-TextField-wrapper')[0].appendChild(exp)
       });
+
+      this.setState({ pages: Math.round(this.state.itemsList.length / this.state.perPage) })
+        let page = 0;
+        let itemsPagination = this.state.itemsList.slice(page * this.state.perPage, (page + 1) * this.state.perPage);
+
+        this.setState({ Paginationdata: itemsPagination});
     }
 
+    public  handlePageClick = (event:any) => {
+      let page = event.selected;
+
+      //Pagination
+
+      let items = this.state.itemsList.slice(page * this.state.perPage, (page + 1) * this.state.perPage);
+
+      this.setState({ Paginationdata: items });
+
+  }
 
     public updateMoreData = () => {
       this.setState({
@@ -608,251 +716,313 @@ const classNames = mergeStyleSets({
     };
     
     render(){
-      
+
       return(
-        <div>
-            {
-              this.state.userIsAdmin ? <div className="ms-Grid" dir="ltr">
-                {/* style= {{ height : '40px' }} */}
-                <div className="ms-Grid-row" style= {{ height : '40px' }}> 
-                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"> 
-                    {/* style = {{ textAlign: 'left', marginLeft:'10px'}} */}
-                        <h3 style = {{ textAlign: 'left', marginLeft:'10px'}}> Manage Teams </h3> 
+        <div className='container-custom'>
+        {
+          this.state.userIsAdmin ? <div className="ms-Grid" dir="ltr">
+            {/* style= {{ height : '40px' }} */}
+            <div className="ms-Grid-row" style={{ height: '40px' }}>
+              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+                {/* style = {{ textAlign: 'left', marginLeft:'10px'}} */}
+                <h3 style={{ textAlign: 'left', marginLeft: '10px' }}> Manage Teams </h3>
+              </div>
+            </div>
+            <div className="ms-Grid-row">
+              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
+                <div className='white-wrapper' style={{
+                  backgroundColor: '#FFFFFF',
+                  margin: '0px 10px 0px 0px ',
+                  padding: 2,
+                }}>
+                  <div className="title_wrapper">
+                    <h6 style={{ textAlign: 'left', margin: '10px 15px 0px 15px', fontFamily: 'Segoe UI' }} > Inactive Teams
+                    </h6>
+                    <div style={{ marginLeft: '0px' }} data-tip="Total Teams With InActive Status">
+                      <img
+                        height="10.0"
+                        width="10.0"
+                        src={InfoIcon}
+                        alt="new"
+                      />
+                      <ReactTooltip></ReactTooltip>
                     </div>
-                </div>
-
-                <div className="ms-Grid-row"> 
-                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3"> 
-                      <div style= {{
-                                backgroundColor: '#FFFFFF',
-                                margin: '0px 10px 0px 0px ' ,
-                                padding:2, 
-                              } }>
-                          <h6 style={{ textAlign: 'left',  margin:'10px 15px 0px 15px', width: '80%' , fontFamily:'Segoe UI' }} > Inactive Teams </h6>
-                          <div className="ms-Grid-row">    
-                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
-                                <h3 style= {{ textAlign:'left', margin:'10px 15px 0px 13px', fontSize: 36 }}> { this.state.inActiveCount } </h3>
-                              </div>
-                              
-                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
-                              <img 
-                                    height = "41.67"
-                                    width = "33.33"
-                                    src= {InactiveIconTeams}
-                                    alt="new"
-                                    />
-                              </div>
-                            </div>
-                      </div>
-                    </div>
-                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
-                      <div style= {{
-                                backgroundColor: '#FFFFFF',
-                                margin: '0px 10px 0px 0px ' ,
-                                padding:2,
-                              } }> 
-                                <h6 style={{ textAlign: 'left', margin:'10px 15px 0px 15px', width: '80%' , fontFamily:'Segoe UI' }}  > Teams With No Owner </h6>
-                              
-                                <div className="ms-Grid-row">    
-                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
-                                <h3 style= {{ textAlign:'left', margin:'10px 15px 0px 13px', fontSize: 36 }}> {this.state.itemWithNoOwner} </h3>
-                              </div>
-                              
-                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
-                              <img 
-                                    height = "41.67"
-                                    width = "33.33"
-                                    src={NoOwnersIcon}
-                                    alt="new"
-                                    />
-                              </div>
-                            </div>
-                      </div>
-                    </div>
-
-                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
-                      <div style= {{
-                                  backgroundColor: '#FFFFFF',
-                                  margin: '0px 10px 0px 0px ' ,
-                                  padding:2,
-                                } }> 
-                      <h6 style={{ textAlign: 'left', margin:'10px 15px 0px 15px', width: '80%' , fontFamily:'Segoe UI' }}> Teams With External User </h6>
-                      <div className="ms-Grid-row">    
-                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
-                                <h3 style= {{ textAlign:'left', margin:'10px 15px 0px 13px', fontSize: 36 }}> {this.state.teamsExternalUser} </h3>
-                              </div>
-                              
-                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
-                              <img 
-                                    height = "41.67"
-                                    width = "33.33"
-                                    src={ExtUsersIcon}
-                                    alt="new"
-                                    />
-                              </div>
-                            </div>
-                      </div>
-                    </div>
-
-                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
-                      <div style= {{
-                                  
-                                  backgroundColor: '#FFFFFF',
-                                  margin: '0px 10px 0px 0px ' ,
-                                  padding:2,
-                                } }> 
-                      <h6  style={{ textAlign: 'left', margin:'10px 15px 0px 15px', width: '80%' , fontFamily:'Segoe UI' }}> Teams Missing Information </h6>
-                      <div className="ms-Grid-row">    
-                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
-                                <h3 style= {{ textAlign:'left', margin:'10px 15px 0px 13px', fontSize: 36 }}> {this.state.teamsMissingInfo} </h3>
-                              </div>
-                              
-                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
-                              <img 
-                                    height = "41.67"
-                                    width = "33.33"
-                                    src={TeamsMissingIcon}
-                                    alt="new"
-                                    />
-                              </div>
-                            </div>
-                      </div>
-                    </div>
-                </div>
-
-                {/* Render table  */}
-                  <div className="ms-Grid" style={{ marginTop:10 ,backgroundColor: '#FFFFFF',}}> 
-                      {/* region Showing the All Teams Section  */}
-                      <div className="ms-Grid-row" style = {{ height: 40,  marginTop:10}}>
-                        <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"> 
-                          <h5 style = {{ textAlign:'left', marginLeft:15}}> All Teams </h5>
-                        </div>
-                      </div>
-
-                      {/* showing the search teams section */}
-                    <div> 
-                        <div className="ms-Grid-row" style = {{ height: 40 }}> 
-                              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"> 
-                                <TextField placeholder="Search For a Team" onScroll  = {this.fetchMoreData} onChange={ (event: any) => this._onChangeText(event)}
-                                styles={controlStyles} />
-                            </div>
-                        </div>
-                    </div>
-                   {/* {this.state.contextualMenuProps && <ContextualMenu {... } />} */}
-                   {this.state.contextualMenuProps && <ContextualMenu {...this.state.contextualMenuProps} />}
-                   
-                   {/* {this.state.uniqueFilterValues.map((value) => {
-                        return <Checkbox
-                          label={value ? value : "(No value)"}
-                          //className={styles.checkbox}
-                          // disabled={this.state.enabledValues.indexOf(value) == -1}
-                          // defaultChecked={this.state.checkedFilterValues.indexOf(value) !== -1}
-                          // onChange={(ev: any, checked: boolean) => {
-                          //   if (checked) {
-                          //     this.state.checkedFilterValues.push(value);
-                          //   } else {
-                          //     let index = this.state.checkedFilterValues.indexOf(value);
-                          //     if (index !== -1) {
-                          //       this.state.checkedFilterValues.splice(index, 1);
-                          //     }
-                          //   }
-                          //   this.setState({ checkedFilterValues: this.state.checkedFilterValues });
-                          // }}
-                           />;
-                      })} */}
-                  
-                  {/* This Renders the Teams Records */}
-                  <div className="ms-Grid-row" > 
-                      <div className= "ms-Grid-col ms-sm6 ms-md4 ms-lg12"> 
-                          <InfiniteScroll
-                                dataLength={this.state.displayItems.length}
-                                next={this.fetchMoreData}
-                                hasMore={this.state.hasMore}
-                                loader={<h4>Loading...</h4>}
-                                // onScroll = { this.updateMoreData }
-                                endMessage={
-                                  <p style={{ textAlign: "center" }}>
-                                    <b>Yay! You have seen it all</b>
-                                  </p>
-                                }
-                          >
-                            <DetailsList
-                                    items= {[ ...this.state.displayItems]}
-                                    compact={this.state.isCompactMode}
-                                    columns={this.state.columns}
-                                    selectionMode={SelectionMode.none}
-                                    getKey={this._getKey}
-                                    setKey="set"
-                                    // layoutMode={DetailsListLayoutMode.justified}
-                                    // isHeaderVisible={true}
-                                    // data-is-scrollable="true"
-                                    // onItemInvoked={this._onItemInvoked}
-                                  />
-
-                              {/* <DetailsList
-                                    items= {[ ...this.state.displayItems]}
-                                    compact={this.state.isCompactMode}
-                                    columns={this.state.columns}
-                                    selectionMode={SelectionMode.none}
-                                    onRenderItemColumn = { (item) => {
-                                        return item
-                                    } }
-                                    // getKey={this._getKey}
-                                    // setKey="set"
-                                    // layoutMode={DetailsListLayoutMode.justified}
-                                    // isHeaderVisible={true}
-                                    // data-is-scrollable="true"
-                                    // onItemInvoked={this._onItemInvoked}
-                                  /> */}
-                          </InfiniteScroll>
-                      </div>
                   </div>
-                    {/* {console.log("Item Count :- " + this.state.items.length)}
-                    <DetailsList
-                        items={this.state.items}
-                        columns={this.state.columns}
-                        getKey={this._getKey}
-                    />  */}
-
-                      <Panel
-                        headerText="Sample panel"
-                        isOpen={this.state.isPanelOpen}
-                        onDismiss={() => { this.setState({ isPanelOpen: false }); }}
-                        // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
-                        closeButtonAriaLabel="Close"
-                      >
-                        <p>Content goes here.</p>
-                      </Panel>
+                  <div className="ms-Grid-row">
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                      <h3 style={{ textAlign: 'left', margin: '10px 15px 0px 13px', fontSize: 36 }}> {this.state.inActiveCount} </h3>
                     </div>
-                </div>   
-                :
-              <div className="ms-Grid" dir="ltr" style={{  }}>
-                <div className="ms-Grid-row" style={{ marginTop : 300 }}> 
-                  <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
-                                <img 
-                                    height = "140"
-                                    width = "140"
-                                    src={LockIcon}
-                                    alt="new"
-                                    /></div>
-                  
-                </div>
-                
-                <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
-                                <h5> Sorry but you don't have access to this feature </h5>
-                                </div>
-                </div>
-
-                <div className="ms-Grid-row">
-                
-                  <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
-                                <p style={{ fontFamily:"Segoe UI" }}> Tellus Admin is only available to administrators </p>
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                      <img
+                        height="41.67"
+                        width="33.33"
+                        src={InactiveIconTeams}
+                        alt="new"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            }
+              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
+                <div className='white-wrapper' style={{
+                  backgroundColor: '#FFFFFF',
+                  margin: '0px 10px 0px 0px ',
+                  padding: 2,
+                }}>
+                  <div className="title_wrapper">
+                    <h6 style={{ textAlign: 'left', margin: '10px 15px 0px 15px', fontFamily: 'Segoe UI' }} > Teams With No Owner</h6>
+                    <div data-tip="Total Teams With No Owner">
+                      <img
+                        height="10.0"
+                        width="10.0"
+                        src={InfoIcon}
+                        alt="new"
+                      />
+                    </div>
+                    <ReactTooltip></ReactTooltip>
+                  </div>
+                  <div className="ms-Grid-row">
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                      <h3 style={{ textAlign: 'left', margin: '10px 15px 0px 13px', fontSize: 36 }}> {this.state.itemWithNoOwner} </h3>
+                    </div>
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                      <img
+                        height="41.67"
+                        width="33.33"
+                        src={NoOwnersIcon}
+                        alt="new"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
+                <div className='white-wrapper' style={{
+                  backgroundColor: '#FFFFFF',
+                  margin: '0px 10px 0px 0px ',
+                  padding: 2,
+                }}>
+                  <div className="title_wrapper">
+                    <h6 style={{ textAlign: 'left', margin: '10px 15px 0px 15px', fontFamily: 'Segoe UI' }}> Teams With External User</h6>
+                    <div data-tip="Total Teams With External User">
+                      <img
+                        height="10.0"
+                        width="10.0"
+                        src={InfoIcon}
+                        alt="new"
+                      />
+                    </div>
+                    <ReactTooltip></ReactTooltip>
+                  </div>
+                  <div className="ms-Grid-row">
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                      <h3 style={{ textAlign: 'left', margin: '10px 15px 0px 13px', fontSize: 36 }}> {this.state.teamsExternalUser} </h3>
+                    </div>
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                      <img
+                        height="41.67"
+                        width="33.33"
+                        src={ExtUsersIcon}
+                        alt="new"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
+                <div className='white-wrapper' style={{
+                  backgroundColor: '#FFFFFF',
+                  margin: '0px 0px 0px 0px ',
+                  padding: 2,
+                }}>
+                  <div className="title_wrapper">
+                    <h6 style={{ textAlign: 'left', margin: '10px 15px 0px 15px', fontFamily: 'Segoe UI' }}> Teams Missing Information</h6>
+                    <div data-tip="Total Teams With Missing Information">
+                      <img
+                        height="10.0"
+                        width="10.0"
+                        src={InfoIcon}
+                        alt="new"
+                      />
+                    </div>
+                    <ReactTooltip></ReactTooltip>
+                  </div>
+                  <div className="ms-Grid-row">
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                      <h3 style={{ textAlign: 'left', margin: '10px 15px 0px 13px', fontSize: 36 }}> {this.state.teamsMissingInfo} </h3>
+                    </div>
+                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
+                      <img
+                        height="41.67"
+                        width="33.33"
+                        src={TeamsMissingIcon}
+                        alt="new"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Render table */}
+            <div className="ms-Grid" style={{ marginTop: 10, backgroundColor: '#FFFFFF', }}>
+              {/* region Showing the All Teams Section */}
+              <div className="ms-Grid-row" style={{ height: 40, marginTop: 10 }}>
+                <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+                  <h5 style={{ textAlign: 'left', marginLeft: 15 }}> All Teams </h5>
+                </div>
+              </div>
+              {/* showing the search teams section */}
+              <div>
+                <div className="ms-Grid-row" style={{ height: 40 }}>
+                  <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+                    <TextField placeholder="Search For a Team" onScroll={this.fetchMoreData} onChange={(event: any) => this._onChangeText(event)}
+                      styles={controlStyles} />
+                  </div>
+                </div>
+              </div>
+              {/* {this.state.contextualMenuProps && <ContextualMenu {... } />} */}
+              {this.state.contextualMenuProps && <ContextualMenu {...this.state.contextualMenuProps} />}
+              {/* {this.state.uniqueFilterValues.map((value) => {
+return <Checkbox
+label={value ? value : "(No value)"}
+//className={styles.checkbox}
+// disabled={this.state.enabledValues.indexOf(value) == -1}
+// defaultChecked={this.state.checkedFilterValues.indexOf(value) !== -1}
+// onChange={(ev: any, checked: boolean) => {
+// if (checked) {
+// this.state.checkedFilterValues.push(value);
+// } else {
+// let index = this.state.checkedFilterValues.indexOf(value);
+// if (index !== -1) {
+// this.state.checkedFilterValues.splice(index, 1);
+// }
+// }
+// this.setState({ checkedFilterValues: this.state.checkedFilterValues });
+// }}
+/>;
+})} */}
+              {/* This Renders the Teams Records */}
+              <div className="ms-Grid-row" >
+                <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+                  {/* <InfiniteScroll
+dataLength={this.state.displayItems.length}
+next={this.fetchMoreData}
+hasMore={this.state.hasMore}
+loader={<h4>Loading...</h4>}
+// onScroll = { this.updateMoreData }
+endMessage={
+<p style={{ textAlign: "center" }}>
+<b>Yay! You have seen it all</b>
+</p>
+}
+> */}
+                  <EditableGrid
+                    id={1}
+                    columns={this.state.columns}
+                    items={this.state.Paginationdata}
+                    //enableCellEdit={true}
+                    enableExport={true}
+                    // enableTextFieldEditMode={true}
+                    // enableTextFieldEditModeCancel={true}
+                    // enableGridRowsDelete={true}
+                    // enableGridRowsAdd={true}
+                    height={'40vh'}
+                    width={'140vh'}
+                    //position={'relative'}
+                    // enableUnsavedEditIndicator={true}
+                    //onGridSave={onGridSave}
+                    //enableGridReset={true}
+                    enableColumnFilters={true}
+                    //enableColumnFilterRules={true}
+                    // enableRowAddWithValues={{enable : true, enableRowsCounterInPanel : true}}
+                    //layoutMode={DetailsListLayoutMode.justified}
+                    selectionMode={SelectionMode.none}
+                  // enableRowEdit={true}
+                  // enableRowEditCancel={true}
+                  // enableBulkEdit={true}
+                  // enableColumnEdit={true}
+                  // enableSave={true}
+                  />
+                   <ReactPaginate
+                      previousLabel={'<'}
+                      nextLabel={'>'}
+                      pageCount={this.state.pages}
+                      onPageChange={this.handlePageClick}
+                      containerClassName="pagination"
+                      activeClassName="active"
+                  />
+
+                  {/* <DetailsList
+items= {[ ...this.state.displayItems]}
+compact={this.state.isCompactMode}
+columns={this.state.columns}
+selectionMode={SelectionMode.none}
+getKey={this._getKey}
+setKey="set"
+// layoutMode={DetailsListLayoutMode.justified}
+// isHeaderVisible={true}
+// data-is-scrollable="true"
+// onItemInvoked={this._onItemInvoked}
+/> */}
+                  {/* <DetailsList
+items= {[ ...this.state.displayItems]}
+compact={this.state.isCompactMode}
+columns={this.state.columns}
+selectionMode={SelectionMode.none}
+onRenderItemColumn = { (item) => {
+return item
+} }
+// getKey={this._getKey}
+// setKey="set"
+// layoutMode={DetailsListLayoutMode.justified}
+// isHeaderVisible={true}
+// data-is-scrollable="true"
+// onItemInvoked={this._onItemInvoked}
+/> */}
+                  {/* </InfiniteScroll> */}
+                </div>
+              </div>
+              {/* {console.log("Item Count :- " + this.state.items.length)}
+<DetailsList
+items={this.state.items}
+columns={this.state.columns}
+getKey={this._getKey}
+/> */}
+              <Panel
+                headerText="Sample panel"
+                isOpen={this.state.isPanelOpen}
+                onDismiss={() => { this.setState({ isPanelOpen: false }); }}
+                // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
+                closeButtonAriaLabel="Close"
+              >
+                <p>Content goes here.</p>
+              </Panel>
+            </div>
           </div>
+            :
+            <div className="ms-Grid" dir="ltr" style={{}}>
+              <div className="ms-Grid-row" style={{ marginTop: 300 }}>
+                <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+                  <img
+                    height="140"
+                    width="140"
+                    src={LockIcon}
+                    alt="new"
+                  /></div>
+              </div>
+              <div className="ms-Grid-row">
+                <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+                  <h5> Sorry but you don't have access to this feature </h5>
+                </div>
+              </div>
+              <div className="ms-Grid-row">
+                <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+                  <p style={{ fontFamily: "Segoe UI" }}> Tellus Admin is only available to administrators </p>
+                </div>
+              </div>
+            </div>
+        }
+      </div>
       )
     }
     
@@ -928,6 +1098,8 @@ const classNames = mergeStyleSets({
                   items.push({
                     test: element.imageBlob,
                     key: element.id.toString(),
+                    teamsSiteUrl : element.urlTeams,
+                    sharePointSiteUrl : element.urlSharePoint,
                     name: element.title,
                     businessDepartment: element.businessDepartment,
                     status: element.status,
@@ -943,6 +1115,8 @@ const classNames = mergeStyleSets({
                     test: element.imageBlob,
                     key: element.id.toString(),
                     name: element.title,
+                    teamsSiteUrl : element.urlTeams,
+                    sharePointSiteUrl : element.urlSharePoint,
                     businessDepartment: element.businessDepartment,
                     status: element.status,
                     type: element.template,
@@ -993,6 +1167,8 @@ const classNames = mergeStyleSets({
                   items.push({
                     test: element.imageBlob,
                     key: element.id.toString(),
+                    teamsSiteUrl : element.UrlTeams,
+                    sharePointSiteUrl : element.UrlSharePoint,
                     name: element.title,
                     businessDepartment: element.businessDepartment,
                     status: element.status,
@@ -1007,6 +1183,8 @@ const classNames = mergeStyleSets({
                   items.push({
                     test: element.imageBlob,
                     key: element.id.toString(),
+                    teamsSiteUrl : element.UrlTeams,
+                    sharePointSiteUrl : element.UrlSharePoint,
                     name: element.title,
                     businessDepartment: element.businessDepartment,
                     status: element.status,
