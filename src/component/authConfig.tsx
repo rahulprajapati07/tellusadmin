@@ -34,8 +34,11 @@ export const getTeams = {
   getAllTeams : "https://tellus-dev-api.azurewebsites.net/api/GetMyTeams?"
 }
 
+// export const getPublicTeams = {
+//   getPublicTeams : "https://ffde-40-88-125-34.ngrok.io/api/GetPublicTeams?"
+// }
 export const getPublicTeams = {
-  getPublicTeams : "https://tellus-dev-api.azurewebsites.net/api/GetPublicTeams?"
+  getPublicTeams : "https://tellus-dev-api.azurewebsites.net/api/GetMyTeams?"
 }
 
 export const canUserRestoreTeam = {
