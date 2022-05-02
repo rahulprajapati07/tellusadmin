@@ -2,7 +2,7 @@ import * as React  from 'react';
 //import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import * as ReactIcons from '@fluentui/react-icons-mdl2';
 import {  IColumn } from '@fluentui/react/lib/DetailsList'; //SelectionMode DetailsList,
-import { TooltipHost } from '@fluentui/react';
+import { TooltipHost , mergeStyles } from '@fluentui/react';
 import { Panel } from '@fluentui/react/lib/Panel';
 //import { useState } from 'react';
 import { mergeStyleSets, SelectionMode, TextField } from '@fluentui/react'; //DetailsListLayoutMode, mergeStyles,DetailsListLayoutMode
@@ -18,7 +18,8 @@ import TeamsMissingIcon from '../Icons/TeamsMissingIcon.png';
 import LockIcon from '../Icons/LockIcon.png';
 import sharepointImg from '../Icons/sharepointImg.png';
 import InfoIcon from '../Icons/InfoIcon.jpg';
-import { EditableGrid } from 'fluentui-editable-grid';
+import { EditableGrid , EventEmitter , EventType } from 'fluentui-editable-grid';
+import {  Dialog } from '@fluentui/react-northstar'
 // import {
 //   Provider as TeamsProvider,
 //   Table,
@@ -52,8 +53,9 @@ import {
   import { loginRequest } from "../component/authConfig";
   import {callGetPublicTeams,canUserRestoreTeams}  from "../component/graph";
 //  import InfiniteScroll from "react-infinite-scroll-component";
-import ReactPaginate from 'react-paginate';
+//import ReactPaginate from 'react-paginate';
 import ReactTooltip from 'react-tooltip';
+//import DialogExample from '../component/DialogBox/OpenDialogBox';
 // import { getTsBuildInfoEmitOutputFilePath } from 'typescript';
 
 
@@ -98,13 +100,13 @@ const classNames = mergeStyleSets({
     },
   });
 
-  const controlStyles = {
-    root: {
-      margin: '0 30px 20px 0',
-      maxWidth: '300px',
-      marginLeft : 10,
-    },
-  };
+  // const controlStyles = {
+  //   root: {
+  //     margin: '0 30px 20px 0',
+  //     maxWidth: '300px',
+  //     marginLeft : 10,
+  //   },
+  // };
   
   const icons = Object.keys(ReactIcons).reduce((acc: React.FC[], exportName) => {
     if ((ReactIcons as any)[exportName]?.displayName) {
@@ -178,254 +180,255 @@ const classNames = mergeStyleSets({
         // }
         
 
-        const columns : IColumnConfig[] = [
-            {
-                key: 'column1',
-                name: 'test',
-                text:'',
-                className: classNames.fileIconCell,
-                iconClassName: classNames.fileIconHeaderIcon,
-                ariaLabel: 'Column operations for File type, Press to sort on File type',
-                iconName: 'Page',
-                isIconOnly: true,
-                fieldName: 'name',
-                minWidth: 20,
-                maxWidth: 20,
-                // onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev), content={`${item.test} file`}
-                onRender: (item: IWorkspace) => (
-                  <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1"> 
-                    <TooltipHost key={item.key} > 
-                      <img src={item.test} className={classNames.fileIconImg} alt={`${item.test} file icon`} /> 
-                    </TooltipHost>
-                  </div>
-                ),
-              },
-            //   {
-            //     key: 'name',
-            //     name: 'Name',
-            //     text: 'Name',
-            //     editable: true,
-            //     dataType: 'string',
-            //     minWidth: 150,
-            //     maxWidth: 150,
-            //     isResizable: true,
-            //     includeColumnInExport: true,
-            //     includeColumnInSearch: true,
-            //     applyColumnFilter: true,
-            //     onRender: (item: IWorkspace) => {
-            //         return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span onClick= {() => window.open(item.teamsSiteUrl, "_blank")} > {item.name} </span> </div> ;
-            //     },
-            // },
-              {
-                key: 'name',
-                name: 'Name',
-                text:'Name',
-                fieldName: 'name',
-                minWidth: 190,
-                maxWidth: 210,
-                isResizable: true,
-                dataType: 'string',
-                includeColumnInExport: true,
-                onColumnClick: (ev, columns) =>  this._onColumnClick(columns, this.state.sortItemCheck),
-                isSorted: true,
-                isSortedDescending: false,
-                sortAscendingAriaLabel: 'Sorted A to Z',
-                sortDescendingAriaLabel: 'Sorted Z to A',
-                data: 'number',
-                onRender: (item: IWorkspace) => {
-                  return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span onClick= {() => window.open(item.teamsSiteUrl, "_blank")} > {item.name} </span> </div> ;
-                },
-                isPadded: true,
-              },
-              {
-                key: "column3",
-                text:'',
-                name: "",
-                fieldName: "Options",
-                minWidth: 15,
-                maxWidth: 15,
-                onRender:(item: IWorkspace) => {
-                  const plainCardProps: IPlainCardProps = {
-                    onRenderPlainCard: this.onRenderPlainCard,
-                    renderData: item,
-                  };
-                  return (
-                    // <div className={classNames.controlWrapper}> 
-                    <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1"> 
-                    <HoverCard 
-                      plainCardProps={plainCardProps}
-                      instantOpenOnClick={true}
-                      type={HoverCardType.plain}
-                    >
-                {icons
-                  .map((Icon: React.FunctionComponent<ReactIcons.ISvgIconProps>)  => (
-                      <Icon key={item.key} aria-label={ 'MoreVertical'?.replace('', '') }  />
-                  ))
-                }
-                   
+        const columns: IColumnConfig[] = [
+          {
+            key: 'column1',
+            name: 'test',
+            text: '',
+            isResizable: false,
+            className: classNames.fileIconCell,
+            iconClassName: classNames.fileIconHeaderIcon,
+            ariaLabel: 'Column operations for File type, Press to sort on File type',
+            iconName: 'Page',
+            isIconOnly: true,
+            fieldName: 'name',
+            minWidth: 5,
+            maxWidth: 5,
+            // onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev), content={`${item.test} file`}
+            onRender: (item: IWorkspace) => (
+              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">
+                <TooltipHost key={item.key} >
+                  <img src={item.test} className={classNames.fileIconImg} alt={`${item.test} file icon`} />
+                </TooltipHost>
+              </div>
+            ),
+          },
+          //   {
+          //     key: 'name',
+          //     name: 'Name',
+          //     text: 'Name',
+          //     editable: true,
+          //     dataType: 'string',
+          //     minWidth: 150,
+          //     maxWidth: 150,
+          //     isResizable: true,
+          //     includeColumnInExport: true,
+          //     includeColumnInSearch: true,
+          //     applyColumnFilter: true,
+          //     onRender: (item: IWorkspace) => {
+          //         return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span onClick= {() => window.open(item.teamsSiteUrl, "_blank")} > {item.name} </span> </div> ;
+          //     },
+          // },
+          {
+            key: 'name',
+            name: 'Name',
+            text: 'Name',
+            fieldName: 'name',
+            minWidth: 90,
+            maxWidth: 90,
+            isResizable: false,
+            dataType: 'string',
+            includeColumnInExport: true,
+            onColumnClick: (ev, columns) => this._onColumnClick(columns, this.state.sortItemCheck),
+            isSorted: true,
+            isSortedDescending: false,
+            sortAscendingAriaLabel: 'Sorted A to Z',
+            sortDescendingAriaLabel: 'Sorted Z to A',
+            data: 'number',
+            onRender: (item: IWorkspace) => {
+              return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span onClick={() => window.open(item.teamsSiteUrl, "_blank")} > {item.name} </span> </div>;
+            },
+            isPadded: true,
+          },
+          {
+            key: "column3",
+            text: '',
+            name: "",
+            fieldName: "Options",
+            minWidth: 5,
+            isResizable: false,
+            maxWidth: 5,
+            onRender: (item: IWorkspace) => {
+              const plainCardProps: IPlainCardProps = {
+                onRenderPlainCard: this.onRenderPlainCard,
+                renderData: item,
+              };
+              return (
+                // <div className={classNames.controlWrapper}> 
+                <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">
+                  <HoverCard
+                    plainCardProps={plainCardProps}
+                    instantOpenOnClick={true}
+                    type={HoverCardType.plain}
+                  >
+                    {icons
+                      .map((Icon: React.FunctionComponent<ReactIcons.ISvgIconProps>) => (
+                        <Icon key={item.key} aria-label={'MoreVertical'?.replace('', '')} />
+                      ))
+                    }
                     {/* <IconButton
-                     // className = { classNames.workspaceImage } //{styles.workspaceImage}
-                      iconProps={{ iconName: "MoreVerticalIcon" }}
-                      aria-label = { iconName 'MoreVerticalIcon'}
-                    /> */}
-                      </HoverCard>
-                      </div>
-                     );
-                },
-              },
-              {
-                key: 'businessDepartment',
-                name: 'businessDepartment',
-                text: 'Business Department',
-                editable: true,
-                dataType: 'string',
-                minWidth: 160,
-                maxWidth: 160,
-                isResizable: true,
-                includeColumnInExport: true,
-                includeColumnInSearch: true,
-                applyColumnFilter: true,
-                onRender: (item: IWorkspace) => {
-                    return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span key={item.key}>{item.businessDepartment}</span> </div>;
-                    },
+                         // className = { classNames.workspaceImage } //{styles.workspaceImage}
+                          iconProps={{ iconName: "MoreVerticalIcon" }}
+                          aria-label = { iconName 'MoreVerticalIcon'}
+                        /> */}
+                  </HoverCard>
+                </div>
+              );
             },
-              // {
-              //   key: 'column4',
-              //   name: 'Business Department',
-              //   text:'Business Department',
-              //   fieldName: 'businessDepartment',
-              //   minWidth: 70,
-              //   maxWidth: 90,
-              //   isResizable: true,
-              //   onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
-              //   data: 'number',
-              //   onRender: (item: IWorkspace) => {
-              //     return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span key={item.key}>{item.businessDepartment}</span> </div>;
-              //   },
-              //   isPadded: true,
-              // },
-              {
-                key: 'businessOwner',
-                name: 'businessOwner',
-                text: 'Business Owner',
-                editable: true,
-                dataType: 'string',
-                minWidth: 110,
-                maxWidth: 110,
-                isResizable: true,
-                includeColumnInExport: true,
-                includeColumnInSearch: true,
-                applyColumnFilter: true
+          },
+          {
+            key: 'businessDepartment',
+            name: 'businessDepartment',
+            text: 'Business Department',
+            editable: true,
+            dataType: 'string',
+            minWidth: 160,
+            maxWidth: 180,
+            isResizable: true,
+            includeColumnInExport: true,
+            includeColumnInSearch: true,
+            applyColumnFilter: true,
+            onRender: (item: IWorkspace) => {
+              return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span key={item.key}>{item.businessDepartment}</span> </div>;
             },
-              // {
-              //   key: 'businessOwner',
-              //   name: 'businessOwner',
-              //   text: 'Business Owner',
-              //   editable: true,
-              //   dataType: 'string',
-              //   minWidth: 100,
-              //   maxWidth: 100,
-              //   isResizable: true,
-              //   includeColumnInExport: true,
-              //   includeColumnInSearch: true,
-              //   //inputType: EditControlType.MultilineTextField,
-              //   applyColumnFilter: true
-              // },
-              {
-                key: 'status',
-                name: 'status',
-                text: 'Status',
-                editable: true,
-                dataType: 'string',
-                minWidth: 110,
-                maxWidth: 110,
-                isResizable: true,
-                includeColumnInExport: true,
-                includeColumnInSearch: true,
-                applyColumnFilter: true
-              },
-              {
-                key: 'type',
-                name: 'type',
-                text: 'Type',
-                editable: true,
-                dataType: 'string',
-                minWidth: 110,
-                maxWidth: 110,
-                isResizable: true,
-                includeColumnInExport: true,
-                includeColumnInSearch: true,
-                onRender: (item: IWorkspace) => {
-                       return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.type}</span> </div>;
-               },
+          },
+          // {
+          //   key: 'column4',
+          //   name: 'Business Department',
+          //   text:'Business Department',
+          //   fieldName: 'businessDepartment',
+          //   minWidth: 70,
+          //   maxWidth: 90,
+          //   isResizable: true,
+          //   onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
+          //   data: 'number',
+          //   onRender: (item: IWorkspace) => {
+          //     return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span key={item.key}>{item.businessDepartment}</span> </div>;
+          //   },
+          //   isPadded: true,
+          // },
+          {
+            key: 'businessOwner',
+            name: 'businessOwner',
+            text: 'Business Owner',
+            editable: true,
+            dataType: 'string',
+            minWidth: 140,
+            maxWidth: 140,
+            isResizable: true,
+            includeColumnInExport: true,
+            includeColumnInSearch: true,
+            applyColumnFilter: true
+          },
+          // {
+          //   key: 'businessOwner',
+          //   name: 'businessOwner',
+          //   text: 'Business Owner',
+          //   editable: true,
+          //   dataType: 'string',
+          //   minWidth: 100,
+          //   maxWidth: 100,
+          //   isResizable: true,
+          //   includeColumnInExport: true,
+          //   includeColumnInSearch: true,
+          //   //inputType: EditControlType.MultilineTextField,
+          //   applyColumnFilter: true
+          // },
+          {
+            key: 'status',
+            name: 'status',
+            text: 'Status',
+            editable: true,
+            dataType: 'string',
+            minWidth: 110,
+            maxWidth: 110,
+            isResizable: true,
+            includeColumnInExport: true,
+            includeColumnInSearch: true,
+            applyColumnFilter: true
+          },
+          {
+            key: 'type',
+            name: 'type',
+            text: 'Type',
+            editable: true,
+            dataType: 'string',
+            minWidth: 110,
+            maxWidth: 110,
+            isResizable: true,
+            includeColumnInExport: true,
+            includeColumnInSearch: true,
+            onRender: (item: IWorkspace) => {
+              return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.type}</span> </div>;
             },
-              // {
-              //   key: 'column7',
-              //   name: 'Type',
-              //   text:'Type',
-              //   fieldName: 'type',
-              //   minWidth: 70,
-              //   maxWidth: 90,
-              //   isResizable: true,
-              //   isCollapsible: true,
-              //   data: 'number',
-              //   onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
-              //   onRender: (item: IWorkspace) => {
-              //     return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.type}</span> </div>;
-              //   },
-              // },
-              {
-                key: 'classification',
-                name: 'classification',
-                text: 'Classification',
-                editable: true,
-                dataType: 'string',
-                minWidth: 110,
-                maxWidth: 110,
-                isResizable: true,
-                includeColumnInExport: true,
-                includeColumnInSearch: true,
-                onRender: (item: IWorkspace) => {
-                       return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.classification}</span> </div>;
-               },
+          },
+          // {
+          //   key: 'column7',
+          //   name: 'Type',
+          //   text:'Type',
+          //   fieldName: 'type',
+          //   minWidth: 70,
+          //   maxWidth: 90,
+          //   isResizable: true,
+          //   isCollapsible: true,
+          //   data: 'number',
+          //   onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
+          //   onRender: (item: IWorkspace) => {
+          //     return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.type}</span> </div>;
+          //   },
+          // },
+          {
+            key: 'classification',
+            name: 'classification',
+            text: 'Classification',
+            editable: true,
+            dataType: 'string',
+            minWidth: 150,
+            maxWidth: 150,
+            isResizable: true,
+            includeColumnInExport: true,
+            includeColumnInSearch: true,
+            onRender: (item: IWorkspace) => {
+              return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.classification}</span> </div>;
             },
-              // {
-              //   key: 'column8',
-              //   name: 'Classification',
-              //   text:'Classification',
-              //   fieldName: 'classification',
-              //   minWidth: 70,
-              //   maxWidth: 90,
-              //   isResizable: true,
-              //   isCollapsible: true,
-              //   data: 'number',
-              //   onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
-              //   onRender: (item: IWorkspace) => {
-              //     return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.classification}</span> </div>;
-              //   },
-              // },
-              {
-                key: 'column9',
-                name: 'test',
-                text:'',
-                className: classNames.fileIconCell,
-                iconClassName: classNames.fileIconHeaderIcon,
-                ariaLabel: 'Column operations for File type, Press to sort on File type',
-                iconName: 'Page',
-                isIconOnly: true,
-                fieldName: 'name',
-                minWidth: 16,
-                maxWidth: 16,
-                // onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
-                onRender: (item: IWorkspace) => (
-                  <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1"> 
-                    <TooltipHost key={item.key} >
-                      <img onClick = {() => window.open(item.sharePointSiteUrl, "_blank")} src={sharepointImg}  className={classNames.fileIconImg} alt={`${item.test} file icon`} /> 
-                    </TooltipHost>
-                  </div>
-                ),
-              },
-        ]; 
+          },
+          // {
+          //   key: 'column8',
+          //   name: 'Classification',
+          //   text:'Classification',
+          //   fieldName: 'classification',
+          //   minWidth: 70,
+          //   maxWidth: 90,
+          //   isResizable: true,
+          //   isCollapsible: true,
+          //   data: 'number',
+          //   onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
+          //   onRender: (item: IWorkspace) => {
+          //     return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.classification}</span> </div>;
+          //   },
+          // },
+          {
+            key: 'column9',
+            name: 'test',
+            text: '',
+            className: classNames.fileIconCell,
+            iconClassName: classNames.fileIconHeaderIcon,
+            ariaLabel: 'Column operations for File type, Press to sort on File type',
+            iconName: 'Page',
+            isIconOnly: true,
+            fieldName: 'name',
+            minWidth: 16,
+            maxWidth: 16,
+            // onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
+            onRender: (item: IWorkspace) => (
+              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">
+                <TooltipHost key={item.key} >
+                  <img onClick={() => window.open(item.sharePointSiteUrl, "_blank")} src={sharepointImg} className={classNames.fileIconImg} alt={`${item.test} file icon`} />
+                </TooltipHost>
+              </div>
+            ),
+          },
+        ];
 
         let today = new Date();
         this.state = {
@@ -573,10 +576,13 @@ const classNames = mergeStyleSets({
     public onRenderPlainCard(){
       return(
         <div className='elliptical-menu'>
-          <Button
-          text="Edit"
-          //className= {styles.createNewButton}
-          onClick={(event:any) => this.setState({ currentItem: event})}
+          <Dialog
+          cancelButton="Program protocol"
+          confirmButton="Hack matrix"
+          content="Quantify array"
+          header="Back up application"
+          headerAction="Reboot port"
+          trigger={<Button text="Edit" />}
         />
         <br />
         <Button
@@ -592,6 +598,19 @@ const classNames = mergeStyleSets({
         />
         <br />
         </div>
+      );
+    }
+
+    public OpenDialogBox(){
+      return (
+        <Dialog
+          cancelButton="Program protocol"
+          confirmButton="Hack matrix"
+          content="Quantify array"
+          header="Back up application"
+          headerAction="Reboot port"
+          trigger={<Button content="A trigger" />}
+        />
       );
     }
 
@@ -649,6 +668,9 @@ const classNames = mergeStyleSets({
         var exp: any = document.getElementById('export');
       document.getElementsByClassName('ms-TextField-wrapper')[0].appendChild(exp)
       });
+      document.getElementsByClassName('ms-TextField-field')[1].setAttribute('placeholder', 'Search');
+
+
 
       this.setState({ pages: Math.round(this.state.itemsList.length / this.state.perPage) })
         let page = 0;
@@ -732,7 +754,7 @@ const classNames = mergeStyleSets({
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
                 <div className='white-wrapper' style={{
                   backgroundColor: '#FFFFFF',
-                  margin: '0px 10px 0px 0px ',
+                  //margin: '0px 10px 0px 0px ',
                   padding: 2,
                 }}>
                   <div className="title_wrapper">
@@ -864,9 +886,9 @@ const classNames = mergeStyleSets({
               </div>
             </div>
             {/* Render table */}
-            <div className="ms-Grid" style={{ marginTop: 10, backgroundColor: '#FFFFFF', }}>
+            <div className="ms-Grid" style={{ margin: '15px 0', backgroundColor: '#FFFFFF', boxShadow: '1px 2px 7px #0000000f', borderRadius: '5px' }}>
               {/* region Showing the All Teams Section */}
-              <div className="ms-Grid-row" style={{ height: 40, marginTop: 10 }}>
+              <div className="ms-Grid-row" style={{  marginTop: 10 }}>
                 <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
                   <h5 style={{ textAlign: 'left', marginLeft: 15 }}> All Teams </h5>
                 </div>
@@ -875,8 +897,9 @@ const classNames = mergeStyleSets({
               <div>
                 <div className="ms-Grid-row" style={{ height: 40 }}>
                   <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
-                    <TextField placeholder="Search For a Team" onScroll={this.fetchMoreData} onChange={(event: any) => this._onChangeText(event)}
-                      styles={controlStyles} />
+                  
+                    {/* <TextField placeholder="Search For a Team" onScroll={this.fetchMoreData} onChange={(event: any) => this._onChangeText(event)}
+                      styles={controlStyles} /> */}
                   </div>
                 </div>
               </div>
@@ -903,7 +926,7 @@ label={value ? value : "(No value)"}
 })} */}
               {/* This Renders the Teams Records */}
               <div className="ms-Grid-row" >
-                <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+                <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12" style ={{ padding: '0px' }}>
                   {/* <InfiniteScroll
 dataLength={this.state.displayItems.length}
 next={this.fetchMoreData}
@@ -916,17 +939,20 @@ endMessage={
 </p>
 }
 > */}
+                  <div className={classNames.controlWrapper}>
+                      <TextField placeholder='Search For a Team' className={mergeStyles({ width: '60vh', paddingBottom:'10px' })} onChange={(event) => EventEmitter.dispatch(EventType.onSearch, event)}/>
+                  </div>
                   <EditableGrid
                     id={1}
                     columns={this.state.columns}
-                    items={this.state.Paginationdata}
+                    items={this.state.itemsList}
                     //enableCellEdit={true}
                     enableExport={true}
                     // enableTextFieldEditMode={true}
                     // enableTextFieldEditModeCancel={true}
                     // enableGridRowsDelete={true}
                     // enableGridRowsAdd={true}
-                    height={'40vh'}
+                    //height={'40vh'}
                     width={'140vh'}
                     //position={'relative'}
                     // enableUnsavedEditIndicator={true}
@@ -943,14 +969,14 @@ endMessage={
                   // enableColumnEdit={true}
                   // enableSave={true}
                   />
-                   <ReactPaginate
+                   {/* <ReactPaginate
                       previousLabel={'<'}
                       nextLabel={'>'}
                       pageCount={this.state.pages}
                       onPageChange={this.handlePageClick}
                       containerClassName="pagination"
                       activeClassName="active"
-                  />
+                  /> */}
 
                   {/* <DetailsList
 items= {[ ...this.state.displayItems]}
@@ -1000,7 +1026,13 @@ getKey={this._getKey}
             </div>
           </div>
             :
-            <div className="ms-Grid" dir="ltr" style={{}}>
+            <div className="ms-Grid" dir="ltr" style={{display: 'flex', justifyContent: 'center',
+
+            flexDirection: 'column',
+
+            alignItems: 'center',
+
+            height: '100vh'}}>
               <div className="ms-Grid-row" style={{ marginTop: 300 }}>
                 <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
                   <img
@@ -1225,6 +1257,19 @@ getKey={this._getKey}
     );
     return sortedItems;
   }
+
+  // const DialogExample = () => {
+  //   return (
+  //     <>
+  //         <Dialog
+  //           cancelButton="Cancel"
+  //           confirmButton="Confirm"
+  //           header="Action confirmation"
+  //           trigger={<Button content="Open a dialog" />}
+  //         />
+  //     </>
+  //   )
+  // }
 
 
 
