@@ -642,7 +642,7 @@ const classNames = mergeStyleSets({
             onClick={() =>
               this.setState({
                 currentItem: item,
-                dialog: item.status == "Archived" ? "Unarchive" : "Archive",
+                dialog: item.status === "Archived" ? "Unarchive" : "Archive",
               })
             }
           />
