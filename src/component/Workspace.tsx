@@ -359,10 +359,23 @@ const classNames = mergeStyleSets({
             isResizable: true,
             includeColumnInExport: true,
             includeColumnInSearch: true,
-            onRender: (item: IWorkspace) => {
-              return <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">  <span key={item.key}>{item.type}</span> </div>;
-            },
+            applyColumnFilter: true
           },
+          // {
+          //   key: 'type',
+          //   name: 'type',
+          //   text: 'Type',
+          //   editable: true,
+          //   dataType: 'string',
+          //   minWidth: 110,
+          //   maxWidth: 110,
+          //   isResizable: true,
+          //   includeColumnInExport: true,
+          //   includeColumnInSearch: true,
+          //   onRender: (item: IWorkspace) => {
+          //     return <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">  <span key={item.key}>{item.type}</span> </div>;
+          //   },
+          // },
           // {
           //   key: 'column7',
           //   name: 'Type',
@@ -389,10 +402,23 @@ const classNames = mergeStyleSets({
             isResizable: true,
             includeColumnInExport: true,
             includeColumnInSearch: true,
-            onRender: (item: IWorkspace) => {
-              return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.classification}</span> </div>;
-            },
+            applyColumnFilter: true
           },
+          // {
+          //   key: 'classification',
+          //   name: 'classification',
+          //   text: 'Classification',
+          //   editable: true,
+          //   dataType: 'string',
+          //   minWidth: 150,
+          //   maxWidth: 150,
+          //   isResizable: true,
+          //   includeColumnInExport: true,
+          //   includeColumnInSearch: true,
+          //   onRender: (item: IWorkspace) => {
+          //     return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.classification}</span> </div>;
+          //   },
+          // },
           // {
           //   key: 'column8',
           //   name: 'Classification',
