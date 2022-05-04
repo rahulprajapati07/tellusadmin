@@ -26,7 +26,7 @@ import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dia
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { getId } from 'office-ui-fabric-react/lib/Utilities';
 import { hiddenContentStyle } from 'office-ui-fabric-react/lib/Styling';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+//import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 
 
 // import {
@@ -637,7 +637,7 @@ const classNames = mergeStyleSets({
   
           {/* archive */}
           <Button
-            text={item.status == "Archived" ? "Unarchive" : "Archive"}
+            text={item.status === "Archived" ? "Unarchive" : "Archive"}
             className={styles.createNewButton}
             onClick={() =>
               this.setState({
@@ -1135,7 +1135,7 @@ getKey={this._getKey}
     private renderDialog(): JSX.Element {
       return (
         <Dialog
-          hidden={this.state.dialog == "none"}
+          hidden={this.state.dialog === "none"}
           onDismiss={() => this.closeDialog(false)}
           dialogContentProps={{
             type: DialogType.normal,
