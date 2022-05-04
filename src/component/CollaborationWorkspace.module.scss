@@ -1,0 +1,430 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+  .pagination{
+    justify-content: center;
+    display: flex;
+    padding-top: 20px;
+  }
+
+  .panel{
+    padding: 15px;
+  }
+
+  .formTitle{
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .formSubTitle{
+    padding-left: 5px;
+    color: #a7a7a7;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .formSubText{
+    font-size: 12px;
+    //color: 	#333333;
+    opacity: 0.8;
+  }
+
+  .formHeader{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 28px;
+    color: "[theme: themePrimary, default: #0078d7]";
+  }
+
+  .feedbackText {
+    padding-top: 10px;
+    justify-content: center;
+    display: flex;
+
+    .completeTitle {
+      font-size: 28px;
+      color: "[theme: themePrimary, default: #0078d7]"
+    }
+  }
+
+  .sucessIcon{
+    justify-content: center;
+    display: flex;
+    color: "[theme: themePrimary, default: #0078d7]";
+    font-size: 180px;
+    margin-top: 40px;
+  }
+
+  .successLink{
+    padding: 5px;
+    margin: 10px;
+    width: 180px;
+    justify-content: center;
+    text-decoration: none;
+    color: #0078d7;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  /*
+      padding: 5px;
+      margin: 10px;
+      width: 180px;
+      justify-content: center;
+      text-decoration: none;
+      color: $ms-color-themePrimary;
+      text-align: center;
+      font-size: 14px;
+  */
+  .glimmer {
+    color: "[theme: themePrimary, default: #0078d7]";
+    font-size: 10px;
+    margin-top: -4px;
+    vertical-align: text-top;
+  }
+
+  .contact {
+    padding-left: 15px;
+  }
+
+  .teamsLink {
+    color: #0078d7;
+    font-size: 24px;
+    vertical-align: middle;
+    padding: 5px;
+  }
+
+  .spLink {
+    color: #0078d7;
+    font-size: 24px;
+    vertical-align: middle;
+    padding: 5px;
+    cursor: pointer;
+  }
+
+  .workspaceImage {
+    width: 36px;
+    height: 36px;
+  }
+
+  .requestImage {
+    background-color: #515BC2;
+    color: white;
+  }
+
+  .requestImage:hover {
+    color: white;
+  }
+
+  .detailsList{
+    margin-top: 10px;
+  }
+
+  .detailsListTitle{
+    font-weight: 500;
+    vertical-align: -webkit-baseline-middle;
+    font-size: 15px;
+    text-decoration: none;
+    color: "[theme: neutralDark, default: #212121]";
+    text-indent: -10px;
+    margin-left: 10px;
+  }
+
+  .detailsListTitleApproval{
+    font-weight: 500;
+    vertical-align: -webkit-baseline-middle;
+    font-size: 15px;
+    text-decoration: none;
+    color: "[theme: neutralDark, default: #212121]";
+    text-indent: -10px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+
+  .none {
+    display: none;
+  }
+
+  .block {
+    display: block;
+  }
+
+  .flex {
+    display: flex;
+  }
+
+  .detailsListText{
+    vertical-align: -webkit-baseline-middle;
+  }
+
+  .textField{
+    //padding-bottom: 10px;
+    padding-top: 15px;
+    font-size: 15px;
+  }
+
+  .searchBoxContainer {
+    display: inline-flex;
+    width: 100%;
+  }
+
+  .searchBoxAdmin {
+    margin-bottom: 15px;
+    margin-right: 15px;
+    width: 850px;
+  }
+
+  .searchBoxUser {
+    margin-bottom: 15px;
+    margin-right: 15px;
+    width: 850px;
+  }
+
+  .createNewButton{
+    padding-right: 10px;
+    border: 0px;
+    color: "[theme: themePrimary, default: #0078d7]";
+    background-color: transparent;
+  }
+  .createNewButton:hover{
+    color: "[theme: themeDarker, default: #0058a7]";
+  }
+  .createNewButton:active{
+    color: "[theme: themePrimary, default: #0078d7]";
+  }
+
+  .deletedWorkspacesPivot{
+    margin-left: 100px !important;
+  }
+
+  .approvalDialogText {
+    margin-top: 0px;
+  }
+
+  // .headerTextPanel {
+  //   padding-top: 10px;
+  //   padding-bottom: 10px;
+  //   padding-left: 15px;
+  //   height: 30px;
+  //   color: #ffffff !important;
+  //   background-color: $ms-color-themePrimary;
+
+  //   .headerText {
+  //     font-size: 20px;
+
+  //   }
+  // }
+
+  .buttonGroup{
+    display: inline;
+  }
+
+  .createWorkspaceButton {
+    float: right;
+  }
+
+  .closePanelButton {
+    float: right;
+    margin-right: 250px;
+    margin-top: 20px;
+  }
+
+
+  .updateWorkspaceButton {
+    margin-right: 15px;
+  }
+
+  .checkbox {
+    margin-bottom: 10px;
+  }
+
+  .spinner {
+    padding-top: 30px;
+    font-size: 16px;
+    font-weight: 500 !important;
+    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+  }
+
+  .completionText {
+    left:25%;
+    font-size: 14px;
+  }
+
+
+  // fixing taxonomy picker
+  [class^="termFieldButton"] {
+    margin-left: -32px !important;
+    width: 30px !important;
+  }
+
+  [class^="termFieldInput"] {
+    width: 100% !important;
+  }
+
+
+  // donut chart
+
+  .donutchartTrack{
+    fill: transparent;
+    stroke: #E5E5E5;
+    stroke-width: 16;
+  }
+  .donutchartIndicator{
+    fill: transparent;
+    stroke: "[theme: themePrimary, default: #0078d7]";
+    stroke-width: 16;
+    transition: stroke-dasharray .3s ease;
+  }
+
+  .donutchart{
+    margin: 0 auto;
+    border-radius: 50%;
+    display: block;
+    margin-top: 40px;
+  }
+
+  .donutchartText{
+    //font-family: 'Roboto';
+    fill: "[theme: themePrimary, default: #0078d7]";
+  }
+  .donutchartTextVal{
+    font-size:40px;
+  }
+  .donutchartTextPercent{
+    font-size:30px;
+  }
+
+
+  .nextButton {
+    font-size: 16px;
+    margin-top: 20px;
+    border: 0px;
+    color: "[theme: themePrimary, default: #0078d7]";
+    float: right;
+  }
+  .nextButton:hover{
+    color: "[theme: themeDarker, default: #0058a7]";
+  }
+  .nextButton:active{
+    color: "[theme: themePrimary, default: #0078d7]";
+  }
+
+  .backButton {
+    font-size: 16px;
+    margin-top: 20px;
+    border: 0px;
+    color: "[theme: themePrimary, default: #0078d7]";
+  }
+  .backButton:hover{
+    color: "[theme: themeDarker, default: #0058a7]";
+  }
+  .backButton:active{
+    color: "[theme: themePrimary, default: #0078d7]";
+  }
+
+
+  .textContainer {
+    display: inline-block;
+    color: #808080;
+    padding-left: 20px;
+
+  //   :hover {
+  //   background-color: #a7a7a7;
+  //   color: $ms-color-themePrimary;
+  // }
+
+  }
+
+  .templateCell{
+    display: inline-flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid lightgray;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .templateCellActive{
+    display: inline-flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid lightgray;
+    cursor: pointer;
+    width: 100%;
+  // background-color: darkgray;
+  }
+
+  .templateIcon {
+    color: inherit;
+    font-size: 55px;
+    margin-top: 10px;
+  }
+
+  .templateIconActive {
+    color: "[theme: themePrimary, default: #0078d7]";
+    font-size: 55px;
+    margin-top: 10px;
+  }
+
+  .classificationIcon {
+    font-size: 20px;
+    margin-top: 2px;
+  }
+
+  .classificationIconActive {
+    color: "[theme: themePrimary, default: #0078d7]";
+    font-size: 20px;
+    margin-top: 2px;
+  }
+
+  .teamType {
+    font-size: 16px;
+    font-style: italic;
+  }
+
+  .templateTitleActive {
+    color: "[theme: themePrimary, default: #0078d7]";
+    font-weight: 500;
+    font-size: 16px;
+    padding-right: 10px;
+  }
+
+  .templateTitle {
+    color: "#000";
+    font-weight: 500;
+    font-size: 16px;
+    padding-right: 10px;
+
+  }
+
+  // input {
+  //   background-color: "[theme: neutralDark, default: #212121]";
+  // }
+
+  .spanMouseOver {
+    cursor:pointer;
+  }
+
+  // .textContainer:hover {
+  //   background-color: #a7a7a7;
+  //   color: $ms-color-themePrimary;
+  // }
+
+  // fixing choice group
+  // .ms-ChoiceField {
+  //   flex: 1;
+  // }
+
+  // .ms-ChoiceFieldGroup-flexContainer {
+  //   display: flex;
+  //   flex-wrap: wrap;
+  //   flex-direction: row;
+  // }
+  // .ms-ChoiceField-wrapper {
+  //   min-width: 20em;
+  // }
+
+  .permissionErrorMessage{
+    text-align: center;
+    color: "[theme: themePrimary, default: #0078d7]";
+  }

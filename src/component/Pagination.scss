@@ -1,4 +1,29 @@
 :root {
+  .ms-Overlay{background-color: rgba(0, 0, 0, 0.4);}
+  .ms-Dialog-inner{
+    .ms-Button{background-color: #6c7ac9;
+      border-color: #6c7ac9;
+    color: #fff;
+  border-radius: 4px;
+}
+.ms-Button--default{
+  border-color:#D1D1D1;
+  border-radius: 4px;
+  background-color: #fff;
+  color:#212121
+}
+.ms-Dialog-subText{ 
+font-family: Segoe UI;
+font-size: 14px;
+margin-top:0;
+font-weight: 400;
+line-height: 16px;
+letter-spacing: 0em;
+text-align: center;
+
+
+}
+  }
   .container-custom {
     max-width: 85%;
     margin: 0 auto;

@@ -4,6 +4,7 @@ import * as ReactIcons from '@fluentui/react-icons-mdl2';
 import {  IColumn } from '@fluentui/react/lib/DetailsList'; //SelectionMode DetailsList,
 import { TooltipHost , mergeStyles } from '@fluentui/react';
 import { Panel } from '@fluentui/react/lib/Panel';
+import styles from "./CollaborationWorkspace.module.scss";
 //import { useState } from 'react';
 import { mergeStyleSets, SelectionMode, TextField } from '@fluentui/react'; //DetailsListLayoutMode, mergeStyles,DetailsListLayoutMode
 import { IColumnConfig } from 'fluentui-editable-grid'; //, EventEmitter, EventType, NumberAndDateOperators, EditableGrid, EditControlType,
@@ -19,7 +20,15 @@ import LockIcon from '../Icons/LockIcon.png';
 import sharepointImg from '../Icons/sharepointImg.png';
 import InfoIcon from '../Icons/InfoIcon.jpg';
 import { EditableGrid , EventEmitter , EventType } from 'fluentui-editable-grid';
-import {  Dialog } from '@fluentui/react-northstar'
+//import {  Dialog } from '@fluentui/react-northstar';
+
+import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { getId } from 'office-ui-fabric-react/lib/Utilities';
+import { hiddenContentStyle } from 'office-ui-fabric-react/lib/Styling';
+import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+
+
 // import {
 //   Provider as TeamsProvider,
 //   Table,
@@ -58,7 +67,7 @@ import ReactTooltip from 'react-tooltip';
 //import DialogExample from '../component/DialogBox/OpenDialogBox';
 // import { getTsBuildInfoEmitOutputFilePath } from 'typescript';
 
-
+const screenReaderOnly = mergeStyles(hiddenContentStyle);
 const classNames = mergeStyleSets({
     fileIconHeaderIcon: {
       padding: 0,
@@ -146,6 +155,9 @@ const classNames = mergeStyleSets({
     perPage: number;
     pages: number;
     currentItem : any;
+    hideDialog: boolean;
+    isDraggable: boolean;
+    dialog : any;
   }
 
   export interface IWorkspace {
@@ -175,6 +187,7 @@ const classNames = mergeStyleSets({
     constructor(props: IWorkspaceProps, state: IWorkspaceExampleState){
         super(props);
         this.fetchMoreData = this.fetchMoreData.bind(this);
+        this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
         // onscroll = (event) => {
         //   console.log(event);
         // }
@@ -473,6 +486,7 @@ const classNames = mergeStyleSets({
           announcedMessage: undefined,
           userIsAdmin : this.props.userIsAdmin,
           hasMore : true,
+          dialog: "none",
           today :today ,
           isPanelOpen : false,
           isPanelClose : true,
@@ -486,8 +500,18 @@ const classNames = mergeStyleSets({
           perPage : 8,
           pages : 0,
           currentItem : {},
+          hideDialog: true,
+          isDraggable: false,
         };
     }
+
+    private _labelId: string = getId('dialogLabel');
+    private _subTextId: string = getId('subTextLabel');
+    private _dragOptions = {
+      moveMenuItemText: 'Move',
+      closeMenuItemText: 'Close',
+      menu: ContextualMenu
+    };
 
     private _onColumnContextMenu = (column: IColumn, ev: React.MouseEvent<HTMLElement>): void => {
       this.setState({
@@ -600,44 +624,40 @@ const classNames = mergeStyleSets({
     };
     
 
-    public onRenderPlainCard(){
-      return(
-        <div className='elliptical-menu'>
-          <Dialog
-          cancelButton="Program protocol"
-          confirmButton="Hack matrix"
-          content="Quantify array"
-          header="Back up application"
-          headerAction="Reboot port"
-          trigger={<Button text="Edit" />}
-        />
-        <br />
-        <Button
-          text="Archived"
-          //className= {styles.createNewButton}
-          //onClick={() => this.setState({ currentItem: item, dialog: "Delete" })}
-        />
-        <br />
-        <Button
-          text="Delete"
-          //className= {styles.createNewButton}
-          //onClick={() => this.setState({ currentItem: item, dialog: "Delete" })}
-        />
-        <br />
-        </div>
-      );
-    }
-
-    public OpenDialogBox(){
+    private onRenderPlainCard(item: any): JSX.Element {
       return (
-        <Dialog
-          cancelButton="Program protocol"
-          confirmButton="Hack matrix"
-          content="Quantify array"
-          header="Back up application"
-          headerAction="Reboot port"
-          trigger={<Button content="A trigger" />}
-        />
+        <div className={styles.block} >
+          {/* edit */}
+          <Button
+            text="Edit"
+            className={styles.createNewButton}
+            //onClick={() => this.editWorkspace(item)}
+          />
+          <br />
+  
+          {/* archive */}
+          <Button
+            text={item.status == "Archived" ? "Unarchive" : "Archive"}
+            className={styles.createNewButton}
+            onClick={() =>
+              this.setState({
+                currentItem: item,
+                dialog: item.status == "Archived" ? "Unarchive" : "Archive",
+              })
+            }
+          />
+          <br />
+  
+          {/* delete */}
+          <Button
+            text="Delete"
+            className={styles.createNewButton}
+            onClick={() => this.setState({ currentItem: item, dialog: "Delete" })}
+          />
+  
+          {/* Dialog popup for both archive and delete (e.g. are you sure you want to delete?) */}
+          {this.renderDialog()}
+        </div>
       );
     }
 
@@ -963,6 +983,7 @@ endMessage={
                   <div className={classNames.controlWrapper}>
                       <TextField placeholder='Search For a Team' className={mergeStyles({ width: '60vh', paddingBottom:'10px' })} onChange={(event) => EventEmitter.dispatch(EventType.onSearch, event)}/>
                   </div>
+
                   <EditableGrid
                     id={1}
                     columns={this.state.columns}
@@ -990,6 +1011,38 @@ endMessage={
                   // enableColumnEdit={true}
                   // enableSave={true}
                   />
+                  <label id={this._labelId} className={screenReaderOnly}>
+                    My sample Label
+                  </label>
+                      <label id={this._labelId} className={screenReaderOnly}>
+                        My sample Label
+                      </label>
+                      <label id={this._subTextId} className={screenReaderOnly}>
+                        My Sample description
+                      </label>
+
+                      <Dialog
+                        hidden={this.state.hideDialog}
+                        //onDismiss={this._closeDialog}
+                        dialogContentProps={{
+                          type: DialogType.normal,
+                          title: 'All emails together',
+                          subText: 'Your Inbox has changed. No longer does it include favorites, it is a singular destination for your emails.'
+                        }}
+                        modalProps={{
+                          titleAriaId: this._labelId,
+                          subtitleAriaId: this._subTextId,
+                          isBlocking: false,
+                          styles: { main: { maxWidth: 450 } },
+                          dragOptions: this.state.isDraggable ? this._dragOptions : undefined
+                        }}
+                      >
+                        <DialogFooter>
+                          <PrimaryButton onClick={this._closeDialog} text="Save" />
+                          {/* <DefaultButton onClick={this._closeDialog} text="Cancel" /> */}
+                        </DialogFooter>
+                      </Dialog>
+                  
                    {/* <ReactPaginate
                       previousLabel={'<'}
                       nextLabel={'>'}
@@ -1078,6 +1131,47 @@ getKey={this._getKey}
       </div>
       )
     }
+
+    private renderDialog(): JSX.Element {
+      return (
+        <Dialog
+          hidden={this.state.dialog == "none"}
+          onDismiss={() => this.closeDialog(false)}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: this.state.dialog + " Team",
+            subText: `Are you sure you want to ${this.state.dialog.toLocaleLowerCase()} this Team?`,
+          }}
+        >
+          <DialogFooter>
+            <PrimaryButton
+              onClick={() => this.closeDialog(true)}
+              text={this.state.dialog}
+            />
+            <DefaultButton
+              onClick={() => this.closeDialog(false)}
+              text="Cancel"
+            />
+          </DialogFooter>
+        </Dialog>
+      );
+    }
+
+    private closeDialog = (confirm: boolean): void => {
+        this.setState({ dialog: "none" });
+    }
+
+    private _showDialog = (): void => {
+      this.setState({ hideDialog: false });
+    };
+  
+    private _closeDialog = (): void => {
+      this.setState({ hideDialog: true });
+    };
+  
+    private _toggleDraggable = (): void => {
+      this.setState({ isDraggable: !this.state.isDraggable });
+    };
     
     public _closePanel(){
       this.setState({
