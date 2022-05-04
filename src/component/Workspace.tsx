@@ -192,8 +192,8 @@ const classNames = mergeStyleSets({
             iconName: 'Page',
             isIconOnly: true,
             fieldName: 'name',
-            minWidth: 5,
-            maxWidth: 5,
+            minWidth: 1,
+            maxWidth: 1,
             // onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev), content={`${item.test} file`}
             onRender: (item: IWorkspace) => (
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">
@@ -224,19 +224,20 @@ const classNames = mergeStyleSets({
             name: 'Name',
             text: 'Name',
             fieldName: 'name',
-            minWidth: 90,
-            maxWidth: 90,
+            minWidth: 120,
+            maxWidth: 120,
             isResizable: false,
             dataType: 'string',
             includeColumnInExport: true,
+            includeColumnInSearch: true,
             onColumnClick: (ev, columns) => this._onColumnClick(columns, this.state.sortItemCheck),
             isSorted: true,
             isSortedDescending: false,
             sortAscendingAriaLabel: 'Sorted A to Z',
             sortDescendingAriaLabel: 'Sorted Z to A',
-            data: 'number',
+            data: 'string',
             onRender: (item: IWorkspace) => {
-              return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">  <span onClick={() => window.open(item.teamsSiteUrl, "_blank")} > {item.name} </span> </div>;
+              return <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">  <span onClick={() => window.open(item.teamsSiteUrl, "_blank")} > {item.name} </span> </div>;
             },
             isPadded: true,
           },
@@ -245,9 +246,9 @@ const classNames = mergeStyleSets({
             text: '',
             name: "",
             fieldName: "Options",
-            minWidth: 5,
+            minWidth: 35,
             isResizable: false,
-            maxWidth: 5,
+            maxWidth: 35,
             onRender: (item: IWorkspace) => {
               const plainCardProps: IPlainCardProps = {
                 onRenderPlainCard: this.onRenderPlainCard,
@@ -255,7 +256,7 @@ const classNames = mergeStyleSets({
               };
               return (
                 // <div className={classNames.controlWrapper}> 
-                <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">
+                <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
                   <HoverCard
                     plainCardProps={plainCardProps}
                     instantOpenOnClick={true}
@@ -359,7 +360,7 @@ const classNames = mergeStyleSets({
             includeColumnInExport: true,
             includeColumnInSearch: true,
             onRender: (item: IWorkspace) => {
-              return <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg1">  <span key={item.key}>{item.type}</span> </div>;
+              return <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">  <span key={item.key}>{item.type}</span> </div>;
             },
           },
           // {
@@ -762,8 +763,8 @@ const classNames = mergeStyleSets({
                     </h6>
                     <div style={{ marginLeft: '0px' }} data-tip="Total Teams With InActive Status">
                       <img
-                        height="10.0"
-                        width="10.0"
+                      height="10.0"
+                      width="10.0"
                         src={InfoIcon}
                         alt="new"
                       />
@@ -776,8 +777,6 @@ const classNames = mergeStyleSets({
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
                       <img
-                        height="41.67"
-                        width="33.33"
                         src={InactiveIconTeams}
                         alt="new"
                       />
@@ -809,8 +808,7 @@ const classNames = mergeStyleSets({
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
                       <img
-                        height="41.67"
-                        width="33.33"
+                        
                         src={NoOwnersIcon}
                         alt="new"
                       />
@@ -842,8 +840,7 @@ const classNames = mergeStyleSets({
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
                       <img
-                        height="41.67"
-                        width="33.33"
+                       
                         src={ExtUsersIcon}
                         alt="new"
                       />
@@ -875,8 +872,6 @@ const classNames = mergeStyleSets({
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
                       <img
-                        height="41.67"
-                        width="33.33"
                         src={TeamsMissingIcon}
                         alt="new"
                       />
@@ -888,14 +883,14 @@ const classNames = mergeStyleSets({
             {/* Render table */}
             <div className="ms-Grid" style={{ margin: '15px 0', backgroundColor: '#FFFFFF', boxShadow: '1px 2px 7px #0000000f', borderRadius: '5px' }}>
               {/* region Showing the All Teams Section */}
-              <div className="ms-Grid-row" style={{  marginTop: 10 }}>
-                <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
-                  <h5 style={{ textAlign: 'left', marginLeft: 15 }}> All Teams </h5>
-                </div>
+              <div className="ms-Grid-row" style={{ marginTop: 20 }}>
+                {/* <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+                <h5 className='section-heading' style={{ textAlign: 'left', marginLeft: 15 }}> All Teams </h5>
+                </div> */}
               </div>
               {/* showing the search teams section */}
               <div>
-                <div className="ms-Grid-row" style={{ height: 40 }}>
+                <div className="ms-Grid-row" >
                   <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
                   
                     {/* <TextField placeholder="Search For a Team" onScroll={this.fetchMoreData} onChange={(event: any) => this._onChangeText(event)}

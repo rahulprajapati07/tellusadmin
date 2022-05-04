@@ -2,6 +2,7 @@
   .container-custom {
     max-width: 85%;
     margin: 0 auto;
+
     .main-title {
       font-family: Segoe UI;
       font-size: 30px;
@@ -43,9 +44,9 @@
       display: flex;
       align-items: center;
       margin-bottom: 5px;
+
       h6 {
         margin: 10px 5px 0px 15px !important;
-        // padding: 10px;
         font-family: Segoe UI;
         font-size: 12px;
         font-weight: 700;
@@ -65,6 +66,7 @@
       padding-left: 10px;
     }
   }
+
   .ms-FocusZone,
   .ms-Fabric {
     background-color: #ffffff;
@@ -77,14 +79,13 @@
     }
     .ms-ScrollablePane {
       .ms-ScrollablePane--contentContainer {
-        overflow-y: unset;
+        // overflow-y: unset;
         .ms-List-page {
           height: unset !important;
         }
       }
     }
     .ms-Callout {
-      // padding: 20px 25px 10px;
       .ms-Stack {
         display: flex;
         justify-content: space-between;
@@ -113,6 +114,7 @@
               max-height: 400px;
               height: auto;
             }
+
             .ms-Checkbox {
               &:hover .ms-Checkbox-checkbox {
                 background-color: rgb(98, 100, 167);
@@ -149,10 +151,12 @@
     .ms-CommandBar {
       display: none;
     }
+
     .ms-Fabric,
     .ms-FocusZone {
       width: 100%;
     }
+
     .ms-TextField {
       padding: 0;
       max-width: unset;
@@ -172,17 +176,6 @@
       }
     }
     .ms-DetailsHeader {
-      // .ms-DetailsHeader-cellIsCheck {
-      //   width: 85px;
-      //   display: inline-block;
-      //   padding: 0 20px;
-      // }
-      .ms-DetailsHeader-cellTitle {
-        padding: 0 20px;
-      }
-      .ms-DetailsHeader-cell:not(:first-child) {
-        max-width: calc(100 / 6) !important;
-      }
       .ms-DetailsHeader-cell {
         &:hover {
           background: transparent !important;
@@ -194,6 +187,7 @@
     }
     div[class^="css-"] {
       width: 100% !important;
+
       .ms-SelectionZone {
         .is-selected {
           background-color: #f5f5f5;
@@ -211,29 +205,9 @@
             padding: 12px 20px;
             display: flex;
             align-items: center;
+            justify-content: center;
             font-size: 14px;
-            &:first-child {
-              width: 50px !important;
-            }
-            &:last-child {
-              width: 50px !important;
-            }
-          }
-          .ms-DetailsRow-fields {
-            width: 100%;
-            //.ms-DetailsRow-cell:not(:first-child, :nth-child(3)) {
-              // width: 350px !important;
-            //}
-            .ms-DetailsRow-cell {
-              &:nth-child(6) {
-                span {
-                  margin-left: 6px;
-                  display: block;
-                  width: 100%;
-                  text-align: center;
-                }
-              }
-            }
+            color: #252525;
           }
         }
       }
@@ -250,6 +224,7 @@
         }
       }
     }
+
     // filter
     .ms-Callout-main {
       .ms-Stack {
@@ -260,6 +235,7 @@
     }
   }
 }
+
 //Pagination
 .pagination {
   display: flex;
@@ -280,20 +256,24 @@
     font-weight: 500;
     margin-left: 10px;
   }
+
   li:not(.disabled) a:hover {
     background-color: #6c7ac9;
     color: #fff;
     cursor: pointer;
   }
+
   li.active a {
     color: #fff;
     background: #6c7ac9;
   }
+
   li.disabled a {
     pointer-events: none;
     color: #252525;
   }
 }
+
 .ms-Grid-col {
   .ms-TextField {
     .ms-TextField-fieldGroup {
@@ -313,6 +293,7 @@
         border: 1px solid transparent !important;
         border-radius: 3px;
         // width: 300px !important;
+
         &:focus {
           &::after {
             content: none !important;
@@ -344,6 +325,7 @@
     font-weight: 600;
   }
 }
+
 .ms-Grid-col {
   .ms-TextField {
     width: 100% !important;
