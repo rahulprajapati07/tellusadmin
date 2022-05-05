@@ -1,6 +1,6 @@
 import { graphConfig } from "./authConfig";
 import { getAllGroups, getTeams,getPublicTeams, canUserRestoreTeam } from "./authConfig";
-
+import { deleteWorkspace as deleteWorkspaceAPI } from "../component/authConfig"
 /**
  * Attaches a given access token to a MS Graph API call. Returns information about the user
  * @param accessToken 
@@ -112,5 +112,34 @@ export async function canUserRestoreTeams(accessToken : string, userMail:string)
         })
         .catch(error => console.log(error));
     })
-
 }
+
+export async function deleteWorkspace(accessToken : string, item:any) : Promise<any> {
+    const headers = new Headers();
+    const bearer = `Bearer ${accessToken}`;
+
+    headers.append("Authorization", bearer);
+    headers.append("Content-Type","application/json");
+    headers.append("API-Key","");
+
+
+    // const config = {
+    //     headers: {'content-type': 'application/x-www-form-urlencoded'}
+    // };
+    const options = {
+        method: "DELETE",
+        headers: headers,
+        body : JSON.stringify({
+            id: item.teamsGroupId,
+        })
+    };
+    return new Promise<any>((resolve, reject) => {
+        fetch(deleteWorkspaceAPI.deleteWorkspace, options)
+        .then(response => response.json())
+        .then((data:any) => {
+            resolve(data);
+        })
+        .catch(error => console.log(error));
+    })
+}
+

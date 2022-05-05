@@ -66,10 +66,11 @@ import {
 //import { TextField } from '@fluentui/react/lib/TextField';
 //  import { Label } from '@fluentui/react/lib/Label';
 import { loginRequest } from "../component/authConfig";
-import { callGetPublicTeams, canUserRestoreTeams } from "../component/graph";
+import { callGetPublicTeams, canUserRestoreTeams , deleteWorkspace } from "../component/graph";
 //  import InfiniteScroll from "react-infinite-scroll-component";
 //import ReactPaginate from 'react-paginate';
 import ReactTooltip from "react-tooltip";
+
 //import DialogExample from '../component/DialogBox/OpenDialogBox';
 // import { getTsBuildInfoEmitOutputFilePath } from 'typescript';
 
@@ -178,6 +179,7 @@ export interface IWorkspace {
   teamsExternalUser: number;
   teamsSiteUrl: string;
   sharePointSiteUrl: string;
+  teamsGroupId : string;
 }
 
 interface IWorkspaceProps {
@@ -194,6 +196,7 @@ class WorkspaceDetails extends React.Component<
     super(props);
     this.fetchMoreData = this.fetchMoreData.bind(this);
     this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
+    this.renderEditDialog = this.renderEditDialog.bind(this);
     // onscroll = (event) => {
     //   console.log(event);
     // }
@@ -673,7 +676,10 @@ class WorkspaceDetails extends React.Component<
         <Button
           text="Edit"
           className={styles.createNewButton}
-          //onClick={() => this.editWorkspace(item)}
+          onClick={() => this.setState({
+            currentItem: item,
+            dialog: "Update",
+          })}
         />
         <br />
 
@@ -698,7 +704,8 @@ class WorkspaceDetails extends React.Component<
         />
 
         {/* Dialog popup for both archive and delete (e.g. are you sure you want to delete?) */}
-        {this.renderDialog()}
+        {this.state.dialog === "Update" ? this.renderEditDialog(item) : this.renderDialog(item)}
+        
       </div>
     );
   }
@@ -1294,8 +1301,63 @@ getKey={this._getKey}
       </div>
     );
   }
+  private renderEditDialog(item:any) : JSX.Element {
+      return (
+        <div className="dialogboxedit">
+        <Dialog
+  
+          hidden={this.state.dialog === "none"}
+          onDismiss={() => this.closeDialog(false)}
+          dialogContentProps={{
+          type: DialogType.normal,
+          title: this.state.dialog + " Team",
+      //  subText: `Are you sure you want to ${this.state.dialog.toLocaleLowerCase()} this Team?`,
+    }}
+  
+        >
+          {/* <div className='close-wrapper'>
+          <button id="closeButton"><span aria-hidden="true">×</span></button>
+          </div> */}
+        <div className="dialogboxtext" >
+      
+          <label>Business Department</label>
+             <TextField
+               id="textTitle"
+               name="Title"
+               placeholder="Enter Name"
+            // value={}
+             //onChange={(e) => { this.setState({  }) }}
+            />
+        </div>
+        <div className="dialogboxtextfield dialogboxtext" >
+            <label>Business Owner</label>
+               <TextField
+                 id="textTitle"
+                 name="Title"
+                 placeholder="Enter Description"
+              // value={}
+               //onChange={(e) => { this.setState({  }) }}
+               />
+        </div>
+         
+          <DialogFooter>  
+            <PrimaryButton
+              // onClick={() => this.closeDialog(true)}
+              text={this.state.dialog}
+            />
+  
+            <DefaultButton
+              onClick={() => this.closeDialog(false)}
+              text="Cancel"
+            />
+          </DialogFooter>
+  
+        </Dialog>
+        </div>
+      );
+  }
 
-  private renderDialog(): JSX.Element {
+  private renderDialog(item : any): JSX.Element {
     return (
       <Dialog
         hidden={this.state.dialog === "none"}
@@ -1308,7 +1370,7 @@ getKey={this._getKey}
       >
         <DialogFooter>
           <PrimaryButton
-            onClick={() => this.closeDialog(true)}
+            onClick={() => this._deleteWorkspace(item)}
             text={this.state.dialog}
           />
           <DefaultButton
@@ -1424,6 +1486,7 @@ getKey={this._getKey}
                     businessOwner: element.ownerName,
                     teamsExternalUser: element.teamsExternalUser,
                     teamsWithNoOwner: element.teamsOwner,
+                    teamsGroupId : element.groupId,
                   });
                 } else {
                   items.push({
@@ -1439,6 +1502,7 @@ getKey={this._getKey}
                     businessOwner: element.ownerName,
                     teamsExternalUser: element.teamsExternalUser,
                     teamsWithNoOwner: element.teamsOwner,
+                    teamsGroupId : element.groupId,
                   });
                 }
               });
@@ -1491,6 +1555,7 @@ getKey={this._getKey}
                     businessOwner: element.ownerName,
                     teamsExternalUser: element.teamsExternalUser,
                     teamsWithNoOwner: element.teamsOwner,
+                    teamsGroupId : element.groupId,
                   });
                 } else {
                   items.push({
@@ -1506,6 +1571,7 @@ getKey={this._getKey}
                     businessOwner: element.ownerName,
                     teamsExternalUser: element.teamsExternalUser,
                     teamsWithNoOwner: element.teamsOwner,
+                    teamsGroupId : element.groupId,
                   });
                 }
               });
@@ -1514,6 +1580,22 @@ getKey={this._getKey}
         });
     });
   };
+
+  public _deleteWorkspace = async (item:any) : Promise<any> => {
+    return new Promise<any>((resolve, reject) => {
+      this.props.instance
+      .acquireTokenSilent({
+        ...loginRequest,
+        account: this.props.accounts[0],
+      })
+      .then((response: any) => {
+        deleteWorkspace(response.accessToken,item).then((response:any) => response)
+        .then((data:any) => {
+          resolve(data);
+        })
+      });
+    });
+}
 
   public _getUserRole = async (): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {

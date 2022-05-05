@@ -28,19 +28,23 @@ export const graphConfig = {
 
 export const getAllGroups = {
   getGroups: "https://graph.microsoft.com/v1.0/groups/"
-}
+};
 
 export const getTeams = {
   getAllTeams : "https://tellus-dev-api.azurewebsites.net/api/GetMyTeams?"
-}
+};
 
 // export const getPublicTeams = {
 //   getPublicTeams : "https://ffde-40-88-125-34.ngrok.io/api/GetPublicTeams?"
 // }
 export const getPublicTeams = {
   getPublicTeams : "https://tellus-dev-api.azurewebsites.net/api/GetMyTeams?"
-}
+};
+
+export const deleteWorkspace = {
+  deleteWorkspace : "https://tellus-dev-api.azurewebsites.net/api/DeleteGroup?"
+};
 
 export const canUserRestoreTeam = {
-  canUserRestoreTeam :"https://tellus-dev-api.azurewebsites.net/api/CanUserRestoreTeams?"
-}
+  canUserRestoreTeam : "https://tellus-dev-api.azurewebsites.net/api/CanUserRestoreTeams?"
+};
