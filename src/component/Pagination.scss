@@ -20,65 +20,70 @@ font-weight: 400;
 line-height: 16px;
 letter-spacing: 0em;
 text-align: center;
-}
 
 
 }
-// .close-wrapper{
-//   width: 100%;
-//   text-align: right;
-// }
-.dialogboxedit{
-  .ms-Dialog-content{
-    border-bottom:2px solid #252423 ;
-    padding-bottom: 50px;
   }
-}
-.dialogboxtext{
-  label{
-    font-family: Segoe UI;
-font-size: 14px;
-font-weight: 400;
-line-height: 16px;
-letter-spacing: 0px;
-text-align: left;
-color: #484644;
-margin-bottom: 9px;
-display: block;
-  }
-  .ms-TextField-fieldGroup{
-    background-color: #f5f5f5;
-    border-radius: 3px;
-    margin-bottom: 10px;
-    border-color: transparent !important;
-    padding: 5px ;
-    input{
-      padding: 5px 0;
+
+  .dialogboxedit{
+    .ms-Dialog-content{
+      border-bottom:2px solid #252423 ;
+      padding-bottom: 50px;
     }
+  }
+  .dialogboxtext{
+    label{
+      font-family: Segoe UI;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: #484644;
+  margin-bottom: 9px;
+  display: block;
+    }
+    .ms-TextField-fieldGroup{
+      background-color: #f5f5f5;
+      border-radius: 3px;
+      margin-bottom: 10px;
+      border-color: transparent !important;
+      padding: 5px ;
+      input{
+        padding: 5px 0;
+        &:focus{
+          border: 0 !important;
+          outline: 0;
+        }
+      }
+      }
+    
+  }
+  .dialogboxtextfield{
+    .ms-TextField-fieldGroup{
+      width: 100%;   
+        margin-bottom: 70px;
+        display: block;
+      input{
+        padding: 5px 0;
+        width: 100%;
+        &:focus{
+          border: 0;
+          outline: 0;
+        }
+      }
+  
     }
   
-}
-.dialogboxtextfield{
-  .ms-TextField-fieldGroup{
-    width: 100%;   
-      margin-bottom: 70px;
-      display: block;
-    input{
-      padding: 5px 0;
-      width: 100%;
-      &:focus{
-        border: 0;
-        outline: 0;
-      }
-    }
-
   }
 
-}
+
+
 
   .container-custom {
     max-width: 85%;
     margin: 0 auto;
+
     .main-title {
       font-family: Segoe UI;
       font-size: 30px;
@@ -120,9 +125,9 @@ display: block;
       display: flex;
       align-items: center;
       margin-bottom: 5px;
+
       h6 {
         margin: 10px 5px 0px 15px !important;
-        // padding: 10px;
         font-family: Segoe UI;
         font-size: 12px;
         font-weight: 700;
@@ -142,10 +147,11 @@ display: block;
       padding-left: 10px;
     }
   }
+
   .ms-FocusZone,
   .ms-Fabric {
     background-color: #ffffff;
-    width: 100%;
+    // width: 100%;
     margin: 0 auto;
     .ms-ContextualMenu-list {
       .ms-ContextualMenu-icon {
@@ -154,14 +160,13 @@ display: block;
     }
     .ms-ScrollablePane {
       .ms-ScrollablePane--contentContainer {
-        overflow-y: unset;
+        // overflow-y: unset;
         .ms-List-page {
           height: unset !important;
         }
       }
     }
     .ms-Callout {
-      // padding: 20px 25px 10px;
       .ms-Stack {
         display: flex;
         justify-content: space-between;
@@ -190,6 +195,7 @@ display: block;
               max-height: 400px;
               height: auto;
             }
+
             .ms-Checkbox {
               &:hover .ms-Checkbox-checkbox {
                 background-color: rgb(98, 100, 167);
@@ -226,40 +232,31 @@ display: block;
     .ms-CommandBar {
       display: none;
     }
-    .ms-Fabric,
-    .ms-FocusZone {
-      width: 100%;
-    }
+
+    // .ms-Fabric,
+    // .ms-FocusZone {
+    //   // width: 100%;
+    // }
+
     .ms-TextField {
       padding: 0;
       max-width: unset;
       .ms-TextField-wrapper {
         width: 100%;
         .ms-TextField-fieldGroup {
-          border: 1px solid rgba(0, 0, 0, 0.507);
+          border: 1px solid rgba(0, 0, 0, 0.507) ;
           border-radius: 4px;
           .ms-TextField-field {
-            border: 1px solid transparent !important;
+            border: 1px solid transparent ;
             width: 300px !important;
-            &:focus {
-              border: 1px solid rgb(98, 100, 167) ;
-            }
+            // &:focus {
+            //   // border: 1px solid rgb(98, 100, 167) !important;
+            // }
           }
         }
       }
     }
     .ms-DetailsHeader {
-      // .ms-DetailsHeader-cellIsCheck {
-      //   width: 85px;
-      //   display: inline-block;
-      //   padding: 0 20px;
-      // }
-      .ms-DetailsHeader-cellTitle {
-        padding: 0 20px;
-      }
-      .ms-DetailsHeader-cell:not(:first-child) {
-        max-width: calc(100 / 6) !important;
-      }
       .ms-DetailsHeader-cell {
         &:hover {
           background: transparent !important;
@@ -271,6 +268,7 @@ display: block;
     }
     div[class^="css-"] {
       width: 100% !important;
+
       .ms-SelectionZone {
         .is-selected {
           background-color: #f5f5f5;
@@ -279,36 +277,19 @@ display: block;
       .ms-List-cell {
         .ms-DetailsRow {
           border-bottom: 1px solid rgb(224, 224, 224);
-          min-width: 100% !important;
+          // min-width: 100% !important;
           &:hover {
             background-color: rgb(235, 235, 235) !important;
             color: #252525;
           }
-          .ms-DetailsRow-cell {
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            &:first-child {
-              width: 50px !important;
-            }
-            &:last-child {
-              width: 50px !important;
-            }
-          }
-          .ms-DetailsRow-fields {
-            width: 100%;
-            .ms-DetailsRow-cell {
-              &:nth-child(6) {
-                span {
-                  margin-left: 6px;
-                  display: block;
-                  width: 100%;
-                  text-align: center;
-                }
-              }
-            }
-          }
+          // .ms-DetailsRow-cell {
+          //   padding: 12px 20px;
+          //   display: flex;
+          //   align-items: center;
+          //   justify-content: center;
+          //   font-size: 14px;
+          //   color: #252525;
+          // }
         }
       }
     }
@@ -324,6 +305,7 @@ display: block;
         }
       }
     }
+
     // filter
     .ms-Callout-main {
       .ms-Stack {
@@ -334,6 +316,7 @@ display: block;
     }
   }
 }
+
 //Pagination
 .pagination {
   display: flex;
@@ -354,20 +337,24 @@ display: block;
     font-weight: 500;
     margin-left: 10px;
   }
+
   li:not(.disabled) a:hover {
     background-color: #6c7ac9;
     color: #fff;
     cursor: pointer;
   }
+
   li.active a {
     color: #fff;
     background: #6c7ac9;
   }
+
   li.disabled a {
     pointer-events: none;
     color: #252525;
   }
 }
+
 .ms-Grid-col {
   .ms-TextField {
     .ms-TextField-fieldGroup {
@@ -387,6 +374,7 @@ display: block;
         border: 1px solid transparent !important;
         border-radius: 3px;
         // width: 300px !important;
+
         &:focus {
           &::after {
             content: none !important;
@@ -418,6 +406,7 @@ display: block;
     font-weight: 600;
   }
 }
+
 .ms-Grid-col {
   .ms-TextField {
     width: 100% !important;
@@ -432,3 +421,5 @@ display: block;
     }
   }
 }
+
+
