@@ -66,7 +66,7 @@ import {
 //import { TextField } from '@fluentui/react/lib/TextField';
 //  import { Label } from '@fluentui/react/lib/Label';
 import { loginRequest } from "../component/authConfig";
-import { callGetPublicTeams, canUserRestoreTeams , deleteWorkspace } from "../component/graph";
+import { callGetPublicTeams, canUserRestoreTeams , deleteWorkspace , archiveWorkspace } from "../component/graph";
 //  import InfiniteScroll from "react-infinite-scroll-component";
 //import ReactPaginate from 'react-paginate';
 import ReactTooltip from "react-tooltip";
@@ -1370,7 +1370,7 @@ getKey={this._getKey}
       >
         <DialogFooter>
           <PrimaryButton
-            onClick={() => this._deleteWorkspace(item)}
+            onClick={() => this.state.dialog === "Delete" ? this._deleteWorkspace(item) : this._archiveWorkspace(item)}
             text={this.state.dialog}
           />
           <DefaultButton
@@ -1440,6 +1440,14 @@ getKey={this._getKey}
       );
     }
   };
+
+  public _updatedWorkspace = async() => {
+    await this._getAllPublicTeams().then((teamsDetails: any[]) => {      
+      this.setState({
+        itemsList: teamsDetails
+      });
+    });
+  }
 
   public _getAllPublicTeams = async (): Promise<IWorkspace[]> => {
     return new Promise<any>((resolve, reject) => {
@@ -1589,13 +1597,43 @@ getKey={this._getKey}
         account: this.props.accounts[0],
       })
       .then((response: any) => {
-        deleteWorkspace(response.accessToken,item).then((response:any) => response)
-        .then((data:any) => {
-          resolve(data);
+        deleteWorkspace(response.accessToken,item)
+        .then( async (response:any) => {
+          if(response.ok === true){
+            await this._updatedWorkspace();
+            await this.closeDialog(false);
+          }
         })
       });
     });
 }
+
+        public _archiveWorkspace = async (item:any) : Promise<any> => {
+          return new Promise<any>((resolve, reject) => {
+            this.props.instance
+            .acquireTokenSilent({
+              ...loginRequest,
+              account: this.props.accounts[0],
+            })
+            .then((response: any) => {
+              archiveWorkspace(response.accessToken,item)
+              .then(
+                async (response:any)  => 
+              {
+                console.log("Archived API Response");
+                console.log(response);
+                if(response.ok === true){
+                  await this._updatedWorkspace();
+                  await this.closeDialog(false);
+                }
+              }
+              )
+              .then((data:any) => {
+                resolve(data);
+              })
+            });
+          });
+        }
 
   public _getUserRole = async (): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {

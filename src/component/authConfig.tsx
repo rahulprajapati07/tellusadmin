@@ -48,3 +48,7 @@ export const deleteWorkspace = {
 export const canUserRestoreTeam = {
   canUserRestoreTeam : "https://tellus-dev-api.azurewebsites.net/api/CanUserRestoreTeams?"
 };
+
+export const archiveTeam = {
+  archiveTeam : "https://tellus-dev-api.azurewebsites.net/api/ArchiveTeam?"
+}

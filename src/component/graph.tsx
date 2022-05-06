@@ -1,5 +1,5 @@
 import { graphConfig } from "./authConfig";
-import { getAllGroups, getTeams,getPublicTeams, canUserRestoreTeam } from "./authConfig";
+import { getAllGroups, getTeams,getPublicTeams, canUserRestoreTeam , archiveTeam } from "./authConfig";
 import { deleteWorkspace as deleteWorkspaceAPI } from "../component/authConfig"
 /**
  * Attaches a given access token to a MS Graph API call. Returns information about the user
@@ -121,11 +121,6 @@ export async function deleteWorkspace(accessToken : string, item:any) : Promise<
     headers.append("Authorization", bearer);
     headers.append("Content-Type","application/json");
     headers.append("API-Key","");
-
-
-    // const config = {
-    //     headers: {'content-type': 'application/x-www-form-urlencoded'}
-    // };
     const options = {
         method: "DELETE",
         headers: headers,
@@ -135,11 +130,33 @@ export async function deleteWorkspace(accessToken : string, item:any) : Promise<
     };
     return new Promise<any>((resolve, reject) => {
         fetch(deleteWorkspaceAPI.deleteWorkspace, options)
-        .then(response => response.json())
-        .then((data:any) => {
-            resolve(data);
-        })
+        .then(response => resolve(response))
         .catch(error => console.log(error));
     })
 }
 
+export async function archiveWorkspace(accessToken : string, item:any) : Promise<any> {
+    const headers = new Headers();
+    const bearer = `Bearer ${accessToken}`;
+
+    headers.append("Authorization", bearer);
+    headers.append("Content-Type","application/json");
+    headers.append("API-Key","");
+    const options = {
+        method: "POST",
+        headers: headers,
+        body : JSON.stringify({
+            id: item.teamsGroupId,
+            option: item.status === "Archived" ? "unarchive" : "archive"
+        })
+    };
+    return new Promise<any>((resolve, reject) => {
+        fetch(archiveTeam.archiveTeam, options)
+        .then(response => {
+            console.log("Archived API Response");
+            console.log(response);
+            resolve(response);
+    })
+        .catch(error => console.log(error));
+    })
+}
