@@ -1,8 +1,8 @@
-import * as React  from 'react';
+import * as React from 'react';
 //import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import * as ReactIcons from '@fluentui/react-icons-mdl2';
-import {  IColumn } from '@fluentui/react/lib/DetailsList'; //SelectionMode DetailsList,
-import { TooltipHost , mergeStyles } from '@fluentui/react';
+import { IColumn } from '@fluentui/react/lib/DetailsList'; //SelectionMode DetailsList,
+import { TooltipHost, mergeStyles } from '@fluentui/react';
 import { Panel } from '@fluentui/react/lib/Panel';
 import styles from "./CollaborationWorkspace.module.scss";
 //import { useState } from 'react';
@@ -66,7 +66,7 @@ import {
 //import { TextField } from '@fluentui/react/lib/TextField';
 //  import { Label } from '@fluentui/react/lib/Label';
 import { loginRequest } from "../component/authConfig";
-import { callGetPublicTeams, canUserRestoreTeams , deleteWorkspace , archiveWorkspace } from "../component/graph";
+import { callGetPublicTeams, canUserRestoreTeams, deleteWorkspace, archiveWorkspace } from "../component/graph";
 //  import InfiniteScroll from "react-infinite-scroll-component";
 //import ReactPaginate from 'react-paginate';
 import ReactTooltip from "react-tooltip";
@@ -75,7 +75,7 @@ import ReactTooltip from "react-tooltip";
 //import DialogExample from '../component/DialogBox/OpenDialogBox';
 // import { getTsBuildInfoEmitOutputFilePath } from 'typescript';
 
-const peopleDetails : any = [
+const peopleDetails: any = [
   {
     key: 1,
     imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
@@ -234,7 +234,7 @@ export interface IWorkspace {
   teamsExternalUser: number;
   teamsSiteUrl: string;
   sharePointSiteUrl: string;
-  teamsGroupId : string;
+  teamsGroupId: string;
 }
 
 interface IWorkspaceProps {
@@ -246,7 +246,7 @@ interface IWorkspaceProps {
 class WorkspaceDetails extends React.Component<
   IWorkspaceProps,
   IWorkspaceExampleState
-> {
+  > {
   constructor(props: IWorkspaceProps, state: IWorkspaceExampleState) {
     super(props);
     this.fetchMoreData = this.fetchMoreData.bind(this);
@@ -585,7 +585,7 @@ class WorkspaceDetails extends React.Component<
       currentItem: {},
       hideDialog: true,
       isDraggable: false,
-      people:peopleDetails,
+      people: peopleDetails,
     };
   }
 
@@ -696,9 +696,8 @@ class WorkspaceDetails extends React.Component<
         currColumn.isSortedDescending = !currColumn.isSortedDescending;
         currColumn.isSorted = true;
         this.setState({
-          announcedMessage: `${currColumn.name} is sorted ${
-            currColumn.isSortedDescending ? "descending" : "ascending"
-          }`,
+          announcedMessage: `${currColumn.name} is sorted ${currColumn.isSortedDescending ? "descending" : "ascending"
+            }`,
         });
       } else {
         newCol.isSorted = false;
@@ -727,7 +726,7 @@ class WorkspaceDetails extends React.Component<
 
   private onRenderPlainCard(item: any): JSX.Element {
     return (
-      <div className={styles.block}>
+      <div className={styles.block + ' elliptical-menu'}>
         {/* edit */}
         <Button
           text="Edit"
@@ -761,7 +760,7 @@ class WorkspaceDetails extends React.Component<
 
         {/* Dialog popup for both archive and delete (e.g. are you sure you want to delete?) */}
         {this.state.dialog === "Update" ? this.renderEditDialog(item) : this.renderDialog(item)}
-        
+
       </div>
     );
   }
@@ -824,7 +823,11 @@ class WorkspaceDetails extends React.Component<
       document
         .getElementsByClassName("ms-TextField-wrapper")[0]
         .appendChild(exp);
+      document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1].innerHTML = "Clear";
+      var filterPadding: any = document.querySelectorAll('div[role="filtercallout"]')[0].closest('.ms-Callout');
+      filterPadding.style.padding = '13px'
     });
+
     document
       .getElementsByClassName("ms-TextField-field")[1]
       .setAttribute("placeholder", "Search");
@@ -922,7 +925,7 @@ class WorkspaceDetails extends React.Component<
                   className="white-wrapper"
                   style={{
                     backgroundColor: "#FFFFFF",
-                    //margin: '0px 10px 0px 0px ',
+                    margin: '0px 0px 0px 0px ',
                     padding: 2,
                   }}
                 >
@@ -942,7 +945,6 @@ class WorkspaceDetails extends React.Component<
                       data-tip="Total Teams With InActive Status"
                     >
                       <img
-                        height="10.0"
                         width="10.0"
                         src={InfoIcon}
                         alt="new"
@@ -974,7 +976,7 @@ class WorkspaceDetails extends React.Component<
                   className="white-wrapper"
                   style={{
                     backgroundColor: "#FFFFFF",
-                    margin: "0px 10px 0px 0px ",
+                    margin: "0px 0px 0px 0px ",
                     padding: 2,
                   }}
                 >
@@ -991,7 +993,6 @@ class WorkspaceDetails extends React.Component<
                     </h6>
                     <div data-tip="Total Teams With No Owner">
                       <img
-                        height="10.0"
                         width="10.0"
                         src={InfoIcon}
                         alt="new"
@@ -1023,7 +1024,7 @@ class WorkspaceDetails extends React.Component<
                   className="white-wrapper"
                   style={{
                     backgroundColor: "#FFFFFF",
-                    margin: "0px 10px 0px 0px ",
+                    margin: "0px 0px 0px 0px ",
                     padding: 2,
                   }}
                 >
@@ -1040,7 +1041,6 @@ class WorkspaceDetails extends React.Component<
                     </h6>
                     <div data-tip="Total Teams With External User">
                       <img
-                        height="10.0"
                         width="10.0"
                         src={InfoIcon}
                         alt="new"
@@ -1089,7 +1089,6 @@ class WorkspaceDetails extends React.Component<
                     </h6>
                     <div data-tip="Total Teams With Missing Information">
                       <img
-                        height="10.0"
                         width="10.0"
                         src={InfoIcon}
                         alt="new"
@@ -1185,7 +1184,7 @@ endMessage={
 > */}
                   <div className={classNames.controlWrapper}>
                     <TextField
-                      placeholder="Search For a Team"
+                      placeholder="Search Teams"
                       className={mergeStyles({
                         width: "60vh",
                         paddingBottom: "10px",
@@ -1217,11 +1216,11 @@ endMessage={
                     // enableRowAddWithValues={{enable : true, enableRowsCounterInPanel : true}}
                     //layoutMode={DetailsListLayoutMode.justified}
                     selectionMode={SelectionMode.none}
-                    // enableRowEdit={true}
-                    // enableRowEditCancel={true}
-                    // enableBulkEdit={true}
-                    // enableColumnEdit={true}
-                    // enableSave={true}
+                  // enableRowEdit={true}
+                  // enableRowEditCancel={true}
+                  // enableBulkEdit={true}
+                  // enableColumnEdit={true}
+                  // enableSave={true}
                   />
                   <label id={this._labelId} className={screenReaderOnly}>
                     My sample Label
@@ -1319,7 +1318,7 @@ getKey={this._getKey}
               </Panel>
             </div>
           </div>
-        )  :  this.state.userIsAdmin === "false" ? (
+        ) : this.state.userIsAdmin === "false" ? (
           <div
             className="ms-Grid"
             dir="ltr"
@@ -1334,15 +1333,24 @@ getKey={this._getKey}
               height: "100vh",
             }}
           >
-            <div className="ms-Grid-row" style={{ marginTop: 300 }}>
+            <div className="ms-Grid-row" style={{ marginTop: 0 }}>
+
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+
                 <img height="140" width="140" src={LockIcon} alt="new" />
+
               </div>
+
             </div>
+
             <div className="ms-Grid-row">
+
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
-                <h5> Sorry but you don't have access to this feature </h5>
+
+                <h5 style={{ margin: '0' }}> Sorry but you don't have access to this feature </h5>
+
               </div>
+
             </div>
             <div className="ms-Grid-row">
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
@@ -1353,12 +1361,12 @@ getKey={this._getKey}
               </div>
             </div>
           </div>
-        ) : <div> </div> }
+        ) : <div> </div>}
       </div>
     );
   }
 
-  private renderEditDialog(item:any) : JSX.Element  {
+  private renderEditDialog(item: any): JSX.Element {
     <script src="https://unpkg.com/@microsoft/mgt/dist/bundle/mgt-loader.js"></script>
     //const [people, setPeople] = useState([]);
     // const personDetails = {
@@ -1367,63 +1375,63 @@ getKey={this._getKey}
     // const handleSelectionChanged = (e:any) => {
     //   this.setState ({ people : peopleDetails});
     // };
-      return (
-        <div className="dialogboxedit">
-          
+    return (
+      <div className="dialogboxedit">
+
         <Dialog
           hidden={this.state.dialog === "none"}
           onDismiss={() => this.closeDialog(false)}
           dialogContentProps={{
-          type: DialogType.normal,
-          title: this.state.dialog + " Team",
-      //  subText: `Are you sure you want to ${this.state.dialog.toLocaleLowerCase()} this Team?`,
+            type: DialogType.normal,
+            title: this.state.dialog + " Team",
+            //  subText: `Are you sure you want to ${this.state.dialog.toLocaleLowerCase()} this Team?`,
           }}
         >
           {/* <div className='close-wrapper'>
           <button id="closeButton"><span aria-hidden="true">×</span></button>
           </div> */}
-        <div className="dialogboxtext" >
-          
-          <label>Business Department</label>
-          {/* <PeoplePicker people={this.state.people}  selectionChanged={handleSelectionChanged} />
+          <div className="dialogboxtext" >
+
+            <label>Business Department</label>
+            {/* <PeoplePicker people={this.state.people}  selectionChanged={handleSelectionChanged} />
           Selected People: <People people={this.state.people} /> */}
-             <TextField
-               id="textTitle"
-               name="Title"
-               placeholder="Enter Name"
+            <TextField
+              id="textTitle"
+              name="Title"
+              placeholder="Enter Name"
             // value={}
-             //onChange={(e) => { this.setState({  }) }}
+            //onChange={(e) => { this.setState({  }) }}
             />
-        </div>
-        <div className="dialogboxtextfield dialogboxtext" >
+          </div>
+          <div className="dialogboxtextfield dialogboxtext" >
             <label>Business Owner</label>
-               <TextField
-                 id="textTitle"
-                 name="Title"
-                 placeholder="Enter Description"
-              // value={}
-               //onChange={(e) => { this.setState({  }) }}
-               />
-        </div>
-         
-          <DialogFooter>  
+            <TextField
+              id="textTitle"
+              name="Title"
+              placeholder="Enter Description"
+            // value={}
+            //onChange={(e) => { this.setState({  }) }}
+            />
+          </div>
+
+          <DialogFooter>
             <PrimaryButton
               // onClick={() => this.closeDialog(true)}
               text={this.state.dialog}
             />
-  
+
             <DefaultButton
               onClick={() => this.closeDialog(false)}
               text="Cancel"
             />
           </DialogFooter>
-  
+
         </Dialog>
-        </div>
-      );
+      </div>
+    );
   }
 
-  private renderDialog(item : any): JSX.Element {
+  private renderDialog(item: any): JSX.Element {
     return (
       <Dialog
         hidden={this.state.dialog === "none"}
@@ -1480,8 +1488,8 @@ getKey={this._getKey}
     let searchData =
       ev.target.value !== ""
         ? testData.filter((i) =>
-            i.name.toLowerCase().startsWith(ev.target.value.toLowerCase())
-          )
+          i.name.toLowerCase().startsWith(ev.target.value.toLowerCase())
+        )
         : testData;
 
     if (searchData.length < 20) {
@@ -1507,8 +1515,8 @@ getKey={this._getKey}
     }
   };
 
-  public _updatedWorkspace = async() => {
-    await this._getAllPublicTeams().then((teamsDetails: any[]) => {      
+  public _updatedWorkspace = async () => {
+    await this._getAllPublicTeams().then((teamsDetails: any[]) => {
       this.setState({
         itemsList: teamsDetails
       });
@@ -1560,7 +1568,7 @@ getKey={this._getKey}
                     businessOwner: element.ownerName,
                     teamsExternalUser: element.teamsExternalUser,
                     teamsWithNoOwner: element.teamsOwner,
-                    teamsGroupId : element.groupId,
+                    teamsGroupId: element.groupId,
                   });
                 } else {
                   items.push({
@@ -1576,7 +1584,7 @@ getKey={this._getKey}
                     businessOwner: element.ownerName,
                     teamsExternalUser: element.teamsExternalUser,
                     teamsWithNoOwner: element.teamsOwner,
-                    teamsGroupId : element.groupId,
+                    teamsGroupId: element.groupId,
                   });
                 }
               });
@@ -1629,7 +1637,7 @@ getKey={this._getKey}
                     businessOwner: element.ownerName,
                     teamsExternalUser: element.teamsExternalUser,
                     teamsWithNoOwner: element.teamsOwner,
-                    teamsGroupId : element.groupId,
+                    teamsGroupId: element.groupId,
                   });
                 } else {
                   items.push({
@@ -1645,7 +1653,7 @@ getKey={this._getKey}
                     businessOwner: element.ownerName,
                     teamsExternalUser: element.teamsExternalUser,
                     teamsWithNoOwner: element.teamsOwner,
-                    teamsGroupId : element.groupId,
+                    teamsGroupId: element.groupId,
                   });
                 }
               });
@@ -1655,51 +1663,50 @@ getKey={this._getKey}
     });
   };
 
-  public _deleteWorkspace = async (item:any) : Promise<any> => {
+  public _deleteWorkspace = async (item: any): Promise<any> => {
     return new Promise<any>((resolve, reject) => {
       this.props.instance
-      .acquireTokenSilent({
-        ...loginRequest,
-        account: this.props.accounts[0],
-      })
-      .then((response: any) => {
-        deleteWorkspace(response.accessToken,item)
-        .then( async (response:any) => {
-          if(response.ok === true){
-            await this._updatedWorkspace();
-            await this.closeDialog(false);
-          }
+        .acquireTokenSilent({
+          ...loginRequest,
+          account: this.props.accounts[0],
         })
-      });
-    });
-}
-
-        public _archiveWorkspace = async (item:any) : Promise<any> => {
-          return new Promise<any>((resolve, reject) => {
-            this.props.instance
-            .acquireTokenSilent({
-              ...loginRequest,
-              account: this.props.accounts[0],
+        .then((response: any) => {
+          deleteWorkspace(response.accessToken, item)
+            .then(async (response: any) => {
+              if (response.ok === true) {
+                await this._updatedWorkspace();
+                await this.closeDialog(false);
+              }
             })
-            .then((response: any) => {
-              archiveWorkspace(response.accessToken,item)
-              .then(
-                async (response:any)  => 
-              {
+        });
+    });
+  }
+
+  public _archiveWorkspace = async (item: any): Promise<any> => {
+    return new Promise<any>((resolve, reject) => {
+      this.props.instance
+        .acquireTokenSilent({
+          ...loginRequest,
+          account: this.props.accounts[0],
+        })
+        .then((response: any) => {
+          archiveWorkspace(response.accessToken, item)
+            .then(
+              async (response: any) => {
                 console.log("Archived API Response");
                 console.log(response);
-                if(response.ok === true){
+                if (response.ok === true) {
                   await this._updatedWorkspace();
                   await this.closeDialog(false);
                 }
               }
-              )
-              .then((data:any) => {
-                resolve(data);
-              })
-            });
-          });
-        }
+            )
+            .then((data: any) => {
+              resolve(data);
+            })
+        });
+    });
+  }
 
   public _getUserRole = async (): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {
@@ -1722,44 +1729,43 @@ getKey={this._getKey}
   };
 }
 
-  function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
-    
-    let key = columnKey as keyof T;
-    let sortedItems = items.slice(0).sort((a :any , b:any) => ( //a[key] === null ? 1 : b[key] === null ? -1 :
-      (a[key].toString().toLowerCase() === b[key].toString().toLowerCase() ? 0 : isSortedDescending ? a[key].toString().toLowerCase() < b[key].toString().toLowerCase() : a[key].toString().toLowerCase() > b[key].toString().toLowerCase()) ? 1 : -1)
-    );
-    return sortedItems;
-  }
+function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
 
-  // const DialogExample = () => {
-  //   return (
-  //     <>
-  //         <Dialog
-  //           cancelButton="Cancel"
-  //           confirmButton="Confirm"
-  //           header="Action confirmation"
-  //           trigger={<Button content="Open a dialog" />}
-  //         />
-  //     </>
-  //   )
-  // }
+  let key = columnKey as keyof T;
+  let sortedItems = items.slice(0).sort((a: any, b: any) => ( //a[key] === null ? 1 : b[key] === null ? -1 :
+    (a[key].toString().toLowerCase() === b[key].toString().toLowerCase() ? 0 : isSortedDescending ? a[key].toString().toLowerCase() < b[key].toString().toLowerCase() : a[key].toString().toLowerCase() > b[key].toString().toLowerCase()) ? 1 : -1)
+  );
+  return sortedItems;
+}
+
+// const DialogExample = () => {
+//   return (
+//     <>
+//         <Dialog
+//           cancelButton="Cancel"
+//           confirmButton="Confirm"
+//           header="Action confirmation"
+//           trigger={<Button content="Open a dialog" />}
+//         />
+//     </>
+//   )
+// }
 
 
 
-  // function getContextualMenuDetails(){
-  //   const [Selection, SetSelection] = React.useState<{ [key: string]: boolean }>({});
-  //   // const menuProps: IContextualMenuProps = React.useMemo(
-  //   //   () => ({
-  //   //     shouldFocusOnMount: true,
-  //   //     items: [
-  //   //       { key: "HR", text: 'New', canCheck: true, isChecked: selection["HR"] },
-  //   //       { key: "Developer", text: 'Share', canCheck: true, isChecked: selection["Developer"]},
-  //   //       { key: "Infra", text: 'Mobile', canCheck: true, isChecked: selection["Infra"]},
-  //   //     ],
-  //   //   }),
-  //   //   [selection],
-  //   // );
-  // }
+// function getContextualMenuDetails(){
+//   const [Selection, SetSelection] = React.useState<{ [key: string]: boolean }>({});
+//   // const menuProps: IContextualMenuProps = React.useMemo(
+//   //   () => ({
+//   //     shouldFocusOnMount: true,
+//   //     items: [
+//   //       { key: "HR", text: 'New', canCheck: true, isChecked: selection["HR"] },
+//   //       { key: "Developer", text: 'Share', canCheck: true, isChecked: selection["Developer"]},
+//   //       { key: "Infra", text: 'Mobile', canCheck: true, isChecked: selection["Infra"]},
+//   //     ],
+//   //   }),
+//   //   [selection],
+//   // );
+// }
 
-  export default WorkspaceDetails;
-  
+export default WorkspaceDetails;
