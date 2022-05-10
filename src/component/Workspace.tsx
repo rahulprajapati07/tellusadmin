@@ -942,7 +942,7 @@ class WorkspaceDetails extends React.Component<
                     </h6>
                     <div
                       style={{ marginLeft: "0px" }}
-                      data-tip="Total Teams With InActive Status"
+                      data-tip="Total Teams With Inactive Status"
                     >
                       <img
                         width="10.0"
@@ -989,9 +989,9 @@ class WorkspaceDetails extends React.Component<
                       }}
                     >
                       {" "}
-                      Teams With No Owner
+                      Teams with no Owner
                     </h6>
-                    <div data-tip="Total Teams With No Owner">
+                    <div data-tip="Total Teams with no owner">
                       <img
                         width="10.0"
                         src={InfoIcon}
@@ -1037,9 +1037,9 @@ class WorkspaceDetails extends React.Component<
                       }}
                     >
                       {" "}
-                      Teams With External User
+                      Teams with external user
                     </h6>
-                    <div data-tip="Total Teams With External User">
+                    <div data-tip="Total Teams with external user">
                       <img
                         width="10.0"
                         src={InfoIcon}
@@ -1085,9 +1085,9 @@ class WorkspaceDetails extends React.Component<
                       }}
                     >
                       {" "}
-                      Teams Missing Information
+                      Teams missing information
                     </h6>
-                    <div data-tip="Total Teams With Missing Information">
+                    <div data-tip="Total Teams missing information">
                       <img
                         width="10.0"
                         src={InfoIcon}
