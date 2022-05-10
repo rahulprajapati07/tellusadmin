@@ -70,9 +70,63 @@ import { callGetPublicTeams, canUserRestoreTeams , deleteWorkspace , archiveWork
 //  import InfiniteScroll from "react-infinite-scroll-component";
 //import ReactPaginate from 'react-paginate';
 import ReactTooltip from "react-tooltip";
-
+//import {PeoplePicker, Person, People } from '@microsoft/mgt-react';
+//import { IPersonaProps, PersonaPresence } from 'office-ui-fabric-react/lib/Persona';``
 //import DialogExample from '../component/DialogBox/OpenDialogBox';
 // import { getTsBuildInfoEmitOutputFilePath } from 'typescript';
+
+const peopleDetails : any = [
+  {
+    key: 1,
+    imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
+    imageInitials: 'PV',
+    primaryText: 'Annie Lindqvist',
+    secondaryText: 'Designer',
+    tertiaryText: 'In a meeting',
+    optionalText: 'Available at 4:00pm',
+    //presence: PersonaPresence.online
+  },
+  {
+    key: 2,
+    imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
+    imageInitials: 'AR',
+    primaryText: 'Aaron Reid',
+    secondaryText: 'Designer',
+    tertiaryText: 'In a meeting',
+    optionalText: 'Available at 4:00pm',
+    //presence: PersonaPresence.busy
+  },
+  {
+    key: 3,
+    imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
+    imageInitials: 'AL',
+    primaryText: 'Alex Lundberg',
+    secondaryText: 'Software Developer',
+    tertiaryText: 'In a meeting',
+    optionalText: 'Available at 4:00pm',
+    //presence: PersonaPresence.dnd
+  },
+  {
+    key: 4,
+    imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
+    imageInitials: 'RK',
+    primaryText: 'Roko Kolar',
+    secondaryText: 'Financial Analyst',
+    tertiaryText: 'In a meeting',
+    optionalText: 'Available at 4:00pm',
+    //presence: PersonaPresence.offline
+  },
+  {
+    key: 5,
+    imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
+    imageInitials: 'CB',
+    primaryText: 'Christian Bergqvist',
+    secondaryText: 'Sr. Designer',
+    tertiaryText: 'In a meeting',
+    optionalText: 'Available at 4:00pm',
+    //presence: PersonaPresence.online
+  }
+];
 
 const screenReaderOnly = mergeStyles(hiddenContentStyle);
 const classNames = mergeStyleSets({
@@ -145,7 +199,7 @@ export interface IWorkspaceExampleState {
   isModalSelection: boolean;
   isCompactMode: boolean;
   announcedMessage?: string;
-  userIsAdmin: boolean;
+  userIsAdmin: string;
   hasMore: boolean;
   isPanelOpen: boolean;
   isPanelClose: boolean;
@@ -164,6 +218,7 @@ export interface IWorkspaceExampleState {
   hideDialog: boolean;
   isDraggable: boolean;
   dialog: any;
+  people: any;
 }
 
 export interface IWorkspace {
@@ -512,7 +567,7 @@ class WorkspaceDetails extends React.Component<
       isModalSelection: false,
       isCompactMode: false,
       announcedMessage: undefined,
-      userIsAdmin: this.props.userIsAdmin,
+      userIsAdmin: '',
       hasMore: true,
       dialog: "none",
       today: today,
@@ -530,6 +585,7 @@ class WorkspaceDetails extends React.Component<
       currentItem: {},
       hideDialog: true,
       isDraggable: false,
+      people:peopleDetails,
     };
   }
 
@@ -715,13 +771,13 @@ class WorkspaceDetails extends React.Component<
       if (teamsUserRoleStatus === true) {
         //userRole = teamsUserRoleStatus;
         this.setState({
-          userIsAdmin: teamsUserRoleStatus, // true
+          userIsAdmin: 'true', // true
         });
         console.log("Teams User Role status : " + this.state.userIsAdmin);
       } else {
         //userRole = teamsUserRoleStatus;
         this.setState({
-          userIsAdmin: teamsUserRoleStatus,
+          userIsAdmin: 'false',
         });
       }
     });
@@ -848,7 +904,7 @@ class WorkspaceDetails extends React.Component<
   render() {
     return (
       <div className="container-custom">
-        {this.state.userIsAdmin ? (
+        {this.state.userIsAdmin === "true" ? (
           <div className="ms-Grid" dir="ltr">
             {/* style= {{ height : '40px' }} */}
             <div className="ms-Grid-row" style={{ height: "40px" }}>
@@ -1263,7 +1319,7 @@ getKey={this._getKey}
               </Panel>
             </div>
           </div>
-        ) : (
+        )  :  this.state.userIsAdmin === "false" ? (
           <div
             className="ms-Grid"
             dir="ltr"
@@ -1297,30 +1353,40 @@ getKey={this._getKey}
               </div>
             </div>
           </div>
-        )}
+        ) : <div> </div> }
       </div>
     );
   }
-  private renderEditDialog(item:any) : JSX.Element {
+
+  private renderEditDialog(item:any) : JSX.Element  {
+    <script src="https://unpkg.com/@microsoft/mgt/dist/bundle/mgt-loader.js"></script>
+    //const [people, setPeople] = useState([]);
+    // const personDetails = {
+    //   displayName: 'Bill Gates',
+    // };
+    // const handleSelectionChanged = (e:any) => {
+    //   this.setState ({ people : peopleDetails});
+    // };
       return (
         <div className="dialogboxedit">
+          
         <Dialog
-  
           hidden={this.state.dialog === "none"}
           onDismiss={() => this.closeDialog(false)}
           dialogContentProps={{
           type: DialogType.normal,
           title: this.state.dialog + " Team",
       //  subText: `Are you sure you want to ${this.state.dialog.toLocaleLowerCase()} this Team?`,
-    }}
-  
+          }}
         >
           {/* <div className='close-wrapper'>
           <button id="closeButton"><span aria-hidden="true">×</span></button>
           </div> */}
         <div className="dialogboxtext" >
-      
+          
           <label>Business Department</label>
+          {/* <PeoplePicker people={this.state.people}  selectionChanged={handleSelectionChanged} />
+          Selected People: <People people={this.state.people} /> */}
              <TextField
                id="textTitle"
                name="Title"
