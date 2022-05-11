@@ -337,34 +337,36 @@ class WorkspaceDetails extends React.Component<
         minWidth: 20,
         maxWidth: 20,
         onRender: (item: IWorkspace) => {
-          const plainCardProps: IPlainCardProps = {
-            onRenderPlainCard: this.onRenderPlainCard,
-            renderData: item,
-          };
-          return (
-            // <div className={classNames.controlWrapper}>
-            <div className="test">
-              <HoverCard
-                plainCardProps={plainCardProps}
-                instantOpenOnClick={true}
-                type={HoverCardType.plain}
-              >
-                {icons.map(
-                  (Icon: React.FunctionComponent<ReactIcons.ISvgIconProps>) => (
-                    <Icon
-                      key={item.key}
-                      aria-label={"MoreVertical"?.replace("", "")}
-                    />
-                  )
-                )}
-                {/* <IconButton
-                         // className = { classNames.workspaceImage } //{styles.workspaceImage}
-                          iconProps={{ iconName: "MoreVerticalIcon" }}
-                          aria-label = { iconName 'MoreVerticalIcon'}
-                        /> */}
-              </HoverCard>
-            </div>
-          );
+          if(item.status !== "Awaiting Approval" ){
+            const plainCardProps: IPlainCardProps = {
+              onRenderPlainCard: this.onRenderPlainCard,
+              renderData: item,
+            };
+            return (
+              // <div className={classNames.controlWrapper}>
+              <div className="test">
+                <HoverCard
+                  plainCardProps={plainCardProps}
+                  instantOpenOnClick={true}
+                  type={HoverCardType.plain}
+                >
+                  {icons.map(
+                    (Icon: React.FunctionComponent<ReactIcons.ISvgIconProps>) => (
+                      <Icon
+                        key={item.key}
+                        aria-label={"MoreVertical"?.replace("", "")}
+                      />
+                    )
+                  )}
+                  {/* <IconButton
+                           // className = { classNames.workspaceImage } //{styles.workspaceImage}
+                            iconProps={{ iconName: "MoreVerticalIcon" }}
+                            aria-label = { iconName 'MoreVerticalIcon'}
+                          /> */}
+                </HoverCard>
+              </div>
+            );
+          }
         },
       },
       {
@@ -942,7 +944,7 @@ class WorkspaceDetails extends React.Component<
                     </h6>
                     <div
                       style={{ marginLeft: "0px" }}
-                      data-tip="Total Teams With Inactive Status"
+                      data-tip="Total Teams with Inactive Status"
                     >
                       <img
                         width="10.0"
@@ -1664,6 +1666,9 @@ getKey={this._getKey}
   };
 
   public _deleteWorkspace = async (item: any): Promise<any> => {
+    this.setState({
+      dialog : "none"
+    });
     return new Promise<any>((resolve, reject) => {
       this.props.instance
         .acquireTokenSilent({
@@ -1674,8 +1679,13 @@ getKey={this._getKey}
           deleteWorkspace(response.accessToken, item)
             .then(async (response: any) => {
               if (response.ok === true) {
-                await this._updatedWorkspace();
-                await this.closeDialog(false);
+                await this._getAllPublicTeams().then((teamsDetails: any[]) => {
+                  this.setState({
+                    itemsList: teamsDetails,
+                    dialog : "none"
+                  });
+                  this.componentDidMount();
+                });
               }
             })
         });
@@ -1696,8 +1706,11 @@ getKey={this._getKey}
                 console.log("Archived API Response");
                 console.log(response);
                 if (response.ok === true) {
-                  await this._updatedWorkspace();
-                  await this.closeDialog(false);
+                  await this._getAllPublicTeams().then((teamsDetails: any[]) => {
+                    this.setState({
+                      itemsList: teamsDetails
+                    });
+                  });
                 }
               }
             )
