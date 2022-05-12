@@ -18,73 +18,12 @@ import {canUserRestoreTeams}  from "../src/component/graph";
 let checkuserIsAdmin : any;
 
 function handleLogin(instance :any,accounts:any) {
-    instance.loginRedirect(loginRequest).catch((e :any)  => {
+    instance.loginPopup(loginRequest).catch((e :any)  => {
         console.error(e);
     });
-  }
-
-  // function CheckUserAdmin(instance:any,accounts:any) {
-  //         instance.acquireTokenSilent({
-  //           ...loginRequest,
-  //           account: accounts[0]
-  //       }).then((response:any)  => {
-  //         canUserRestoreTeams(response.accessToken,accounts[0].username).then((response :boolean )=> response).then((data:boolean) =>
-  //           {
-  //             console.log("UserAdmin 0 :- " + userIsAdmin);
-  //             if(data == true){
-  //               userIsAdmin = true;
-  //               console.log("UserAdmin :- " + userIsAdmin);
-  //             }
-  //             console.log("userIsAdmin status :" + userIsAdmin);
-  //           });
-  //       });
-  // }
-
+}
 const ProfileContent = () => {
-
   const { instance, accounts } = useMsal();
-  
-  
-
-  //CheckUserAdmin(instance, accounts);
-  //const [graphData, setGraphData] = useState(null);
-
-//   function RequestAllTeams() {
-//     // Silently acquires an access token which is then attached to a request for MS Graph data
-//     ProfileContentBackendService(instance,accounts);
-//     // GetAllPublicTeams().then((data:any[]) =>
-//     // {
-//     //     console.log("Request all Teams data 1 :",data);
-//     // });
-//     // instance.acquireTokenSilent({
-//     //     ...loginRequest,
-//     //     account: accounts[0]
-//     // }).then((response) => {
-//     //     callAllTeamsRequest(response.accessToken).then(response => response).then((data:any[]) =>
-//     //     {
-//     //         console.log("Request all Teams data",data);
-//     //     });;
-//     // });
-// }
-
-// function GetUser() {
-//     // Silently acquires an access token which is then attached to a request for MS Graph data
-
-//     instance.acquireTokenSilent({
-//         ...loginRequest,
-//         account: accounts[0]
-//     }).then((response) => {
-//       canUserRestoreTeams(response.accessToken,accounts[0].username).then((response :boolean )=> response).then((data:boolean) =>
-//         {
-//           console.log("UserAdmin 0 :- " + userIsAdmin);
-//           if(data == true){
-//             userIsAdmin = true;
-//             console.log("UserAdmin :- " + userIsAdmin);
-//           }
-//           console.log("userIsAdmin status :" + userIsAdmin);
-//         });
-//     });
-// }
       return (
         <> 
             <WorkspaceDetails instance = {instance} accounts = {accounts} userIsAdmin = {checkuserIsAdmin}  />
@@ -96,7 +35,7 @@ const ProfileContent = () => {
  */
 const MainContent = () => {
   const { instance , accounts } = useMsal();
-  //CheckUserAdmin();
+  
   var loginSuccess = 1;
   for (let index = 0; index <= loginSuccess; index++) {
     if(instance.getAllAccounts()[0] === undefined)

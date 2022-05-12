@@ -851,14 +851,19 @@ class WorkspaceDetails extends React.Component<
 
   public addClickEvent() {
     const that = this;
-    let testArr: any = document.querySelectorAll('.ms-DetailsHeader-cell');
+    let testArr: any = document.querySelectorAll('.ms-DetailsHeader-cell')
     testArr.forEach((element: any) => {
-      element.addEventListener("click", function (ev: Event) {
-        // alert('column')
-        that.applyCustomCSS();
-        // ev.stopPropagation();
+      element.addEventListener('click', function (ev: Event) {
+        let checkPopup = () => {
+          if (document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label") &&
+            document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1]) {
+            that.applyCustomCSS();
+            clearInterval(test1);
+          }
+        };
+        let test1 = setInterval(() => { checkPopup(); }, 100);
       });
-    });
+    })
   }
 
   public applyCustomCSS() {
