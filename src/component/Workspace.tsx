@@ -337,7 +337,7 @@ class WorkspaceDetails extends React.Component<
         minWidth: 20,
         maxWidth: 20,
         onRender: (item: IWorkspace) => {
-          if(item.status !== "Awaiting Approval" ){
+          if (item.status !== "Awaiting Approval") {
             const plainCardProps: IPlainCardProps = {
               onRenderPlainCard: this.onRenderPlainCard,
               renderData: item,
@@ -768,6 +768,7 @@ class WorkspaceDetails extends React.Component<
   }
 
   public async componentDidMount() {
+    
     await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
       if (teamsUserRoleStatus === true) {
         //userRole = teamsUserRoleStatus;
@@ -786,7 +787,7 @@ class WorkspaceDetails extends React.Component<
     await this._getInActiveTeams().then((ActiveTeams: any[]) => {
       console.log("Component Teams Log =-=-=-=-= " + ActiveTeams);
     });
-
+    
     await this._getAllPublicTeams().then((teamsDetails: any[]) => {
       console.log("Component Teams Log" + teamsDetails);
       //if(teamsDetails.status === ''){}
@@ -812,6 +813,7 @@ class WorkspaceDetails extends React.Component<
         }
       }
 
+
       this.setState({
         displayItems: teamsDetails.slice(0, this.state.itemArrayAppend),
         serachItem: teamsDetails,
@@ -825,14 +827,15 @@ class WorkspaceDetails extends React.Component<
       document
         .getElementsByClassName("ms-TextField-wrapper")[0]
         .appendChild(exp);
-      document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1].innerHTML = "Clear";
-      var filterPadding: any = document.querySelectorAll('div[role="filtercallout"]')[0].closest('.ms-Callout');
-      filterPadding.style.padding = '13px'
+        this.addClickEvent();
+      //   document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1].innerHTML = "Clear";
+      // var filterPadding: any = document.querySelectorAll('div[role="filtercallout"]')[0].closest('.ms-Callout');
+      // filterPadding.style.padding = '13px'
     });
 
-    document
-      .getElementsByClassName("ms-TextField-field")[1]
-      .setAttribute("placeholder", "Search");
+    // document
+    //   .getElementsByClassName("ms-TextField-field")[1]
+    //   .setAttribute("placeholder", "Search");
 
     this.setState({
       pages: Math.round(this.state.itemsList.length / this.state.perPage),
@@ -846,16 +849,47 @@ class WorkspaceDetails extends React.Component<
     this.setState({ Paginationdata: itemsPagination });
   }
 
+  public addClickEvent() {
+    const that = this;
+    let testArr: any = document.querySelectorAll('.ms-DetailsHeader-cell');
+    testArr.forEach((element: any) => {
+      element.addEventListener("click", function (ev: Event) {
+        // alert('column')
+        that.applyCustomCSS();
+        // ev.stopPropagation();
+      });
+    });
+  }
+
+  public applyCustomCSS() {
+    // change text clear All to clear
+    if (document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label") && document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1]) {
+
+      document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1].textContent = "Clear";
+
+    }
+    //descrease Padding of filter box
+
+    if (document.querySelectorAll('div[role="filtercallout"]') && document.querySelectorAll('div[role="filtercallout"]')[0]) {
+      var filterPadding: any = document.querySelectorAll('div[role="filtercallout"]')[0].closest('.ms-Callout');
+      filterPadding.style.padding = '13px';
+    }
+
+    //change filter search textbox placeholder
+
+    if (document.querySelectorAll(".ms-TextField-field") && document.querySelectorAll(".ms-TextField-field")[1]) {
+      var placeHolderSearch: any = document.querySelectorAll(".ms-TextField-field")[1];
+      placeHolderSearch.setAttribute("placeholder", "Search");
+    }
+  }
+
   public handlePageClick = (event: any) => {
     let page = event.selected;
-
     //Pagination
-
     let items = this.state.itemsList.slice(
       page * this.state.perPage,
       (page + 1) * this.state.perPage
     );
-
     this.setState({ Paginationdata: items });
   };
 
@@ -1667,7 +1701,7 @@ getKey={this._getKey}
 
   public _deleteWorkspace = async (item: any): Promise<any> => {
     this.setState({
-      dialog : "none"
+      dialog:"none"
     });
     return new Promise<any>((resolve, reject) => {
       this.props.instance
@@ -1682,9 +1716,8 @@ getKey={this._getKey}
                 await this._getAllPublicTeams().then((teamsDetails: any[]) => {
                   this.setState({
                     itemsList: teamsDetails,
-                    dialog : "none"
+                    dialog: "none"
                   });
-                  this.componentDidMount();
                 });
               }
             })

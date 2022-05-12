@@ -1,6 +1,7 @@
 :root {
   .ms-Overlay{background-color: rgba(0, 0, 0, 0.4);}
   .ms-Dialog-inner{
+    padding: 0px 26px 20px;
     .ms-Button{background-color: #6c7ac9;
       border-color: #6c7ac9;
     color: #fff;
@@ -81,7 +82,7 @@ text-align: center;
 
 
   .container-custom {
-    max-width: 85%;
+    max-width: 1150px;
     margin: 0 auto;
 
     .main-title {
@@ -198,6 +199,7 @@ text-align: center;
               min-height: 90px;
               max-height: 400px;
               height: auto;
+              overflow-y: auto;
             }
 
             .ms-Checkbox {
@@ -211,7 +213,7 @@ text-align: center;
               .ms-Checkbox-checkbox {
                 border-color: rgb(98, 100, 167);
                 &::after {
-                  border-color: rgb(98, 100, 167);
+                  border-color: rgba(98, 100, 167, 0);
                 }
               }
             }
