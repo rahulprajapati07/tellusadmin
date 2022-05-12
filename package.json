@@ -21,6 +21,7 @@
     "fluentui-editable-grid": "^1.11.2",
     "office-ui-fabric-react": "6.189.2",
     "react": "^17.0.2",
+    "react-aad-msal": "^2.3.5",
     "react-bootstrap": "^2.2.0",
     "react-dom": "^17.0.2",
     "react-infinite-scroll-component": "^6.1.0",

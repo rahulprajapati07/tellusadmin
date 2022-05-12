@@ -2,7 +2,7 @@ import React  from 'react'; //, {useState}
 import './App.css';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import { loginRequest } from "./component/authConfig";
-import  Button from "react-bootstrap/Button";
+//import  Button from "react-bootstrap/Button";
 //import  DetailsListDemo  from './DataListDemo';
 import WorkspaceDetails from './component/Workspace';
 //import { promises } from 'fs';
@@ -18,7 +18,7 @@ import {canUserRestoreTeams}  from "../src/component/graph";
 let checkuserIsAdmin : any;
 
 function handleLogin(instance :any,accounts:any) {
-    instance.loginPopup(loginRequest).catch((e :any)  => {
+    instance.loginRedirect(loginRequest).catch((e :any)  => {
         console.error(e);
     });
   }
@@ -128,7 +128,7 @@ const MainContent = () => {
           </AuthenticatedTemplate>
 
           <UnauthenticatedTemplate>
-          <Button variant="secondary" className="ml-auto" onClick={() => handleLogin(instance,accounts)}>Sign in using Popup</Button>
+          {/* <Button variant="secondary" className="ml-auto" onClick={() => handleLogin(instance,accounts)}>Sign in using Popup</Button> */}
           </UnauthenticatedTemplate>
       </div>
   );
