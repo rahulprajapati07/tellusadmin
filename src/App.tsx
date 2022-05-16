@@ -7,6 +7,7 @@ import { loginRequest } from "./component/authConfig";
 import WorkspaceDetails from './component/Workspace';
 //import { promises } from 'fs';
 import {canUserRestoreTeams}  from "../src/component/graph";
+import * as microsoftTeams from "@microsoft/teams-js";
 //import UnAuthorizeduser from "../src/component/UnAuthorizedUser"
 
 //import { ProfileContentBackendService } from './component/BackendService';
@@ -79,34 +80,39 @@ const MainContent = () => {
 // const { instance , accounts } = useMsal();
 class App extends React.Component {
 
-  // constructor(props : ILoginConfig){
-  //   super(props);
-  //   this.checkUserLogin();
-  //   this.state = {
-  //     instance : undefined,
-  //     accounts : undefined,
-  //     userIsAdmin : false,
-  //   }
-  // }
-
-  // public async checkUserLogin(){
-
-
-  //   for (let index = 0; index <= 1; index++) {
-  //     if(instance.getAllAccounts()[0] === undefined)
-  //         {
-  //           handleLogin(instance,accounts);
-  //         }
-  //   }
-  // }
-
+  constructor(props:any){
+    super(props);
+    microsoftTeams.initialize();
+    this.state = {
+      instance : undefined,
+      accounts : undefined,
+      userIsAdmin : false,
+      name : '', 
+    }
+  }
 
   componentDidMount(){
+    
   }
 
   render(){
+
+    let accessToken : string = '' ; 
+
+    microsoftTeams.authentication.getAuthToken({
+
+    successCallback: (token: string) => {
+      accessToken = token;
+      console.log("Access Token Teams Contex : ", token);
+    },
+    failureCallback: (message: string) => {
+      accessToken = message;
+      console.log("Failurecall back Access Token Teams Contex : ", message);
+    }
+  });
     return (
       <div className="App">
+       Token :-  { accessToken }
         <MainContent />
         {/* <AuthenticatedTemplate>
                <ProfileContent />
@@ -120,6 +126,7 @@ class App extends React.Component {
 //   instance : any,
 //   accounts : any,
 //   userIsAdmin : boolean,
+//   name : string
 // }
 
 export default App;

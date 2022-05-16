@@ -18,28 +18,46 @@
   .ms-Overlay {
     background-color: rgba(0, 0, 0, 0.4);
   }
-  .ms-Dialog-inner {
-    padding: 0px 26px 20px;
-    .ms-Button {
-      background-color: #6c7ac9;
-      border-color: #6c7ac9;
-      color: #fff;
-      border-radius: 4px;
-    }
-    .ms-Button--default {
-      border-color: #d1d1d1;
-      border-radius: 4px;
-      background-color: #fff;
-      color: #212121;
-    }
-    .ms-Dialog-subText {
-      font-family: Segoe UI;
-      font-size: 14px;
-      margin-top: 0;
-      font-weight: 400;
-      line-height: 16px;
-      letter-spacing: 0em;
-      text-align: center;
+  .ms-Dialog-main {
+    border-radius: 4px;
+    .ms-Modal-scrollableContent {
+      .ms-Dialog-title {
+        padding: 20px 16px 13px 17px;
+        font-family: Segoe UI;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 20px;
+        letter-spacing: 0em;
+        text-align: left;
+      }
+      .ms-Dialog-inner {
+        padding: 0px 26px 20px;
+        .ms-Dialog-actionsRight {
+          text-align: center;
+          .ms-Button {
+            background-color: #6c7ac9;
+            border-color: #6c7ac9;
+            color: #fff;
+            border-radius: 4px;
+          }
+          .ms-Button--default {
+            border-color: #d1d1d1;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #212121;
+          }
+        }
+
+        .ms-Dialog-subText {
+          font-family: Segoe UI;
+          font-size: 14px;
+          margin-top: 0;
+          font-weight: 400;
+          line-height: 16px;
+          letter-spacing: 0em;
+          text-align: center;
+        }
+      }
     }
   }
 
@@ -116,7 +134,7 @@
     }
   }
   ::-webkit-scrollbar {
-    width: 5px; /* width of the entire scrollbar */
+    width: 7px; /* width of the entire scrollbar */
   }
   ::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0); /* color of the tracking area */
@@ -173,16 +191,25 @@
     }
     .ms-ScrollablePane {
       .ms-ScrollablePane--contentContainer {
-        overflow: hidden;
+        // overflow-x: hidden;
         padding: 0 5px;
-        .ms-DetailsList-contentWrapper {
-          overflow: auto;
-          height: 400px;
-
-          .ms-List-page {
-            height: unset !important;
-          }
+        &::-webkit-scrollbar-track {
+          margin: 50px;
+          background: rgba(255, 255, 255, 0); /* color of the tracking area */
         }
+        &::-webkit-scrollbar-thumb {
+          background-color: #b6b5b5a2; /* color of the scroll thumb */
+          border-radius: 20px; /* roundness of the scroll thumb */
+          // border: 3px solid #b6b5b5a2; /* creates padding around scroll thumb */
+        }
+        // .ms-DetailsList-contentWrapper {
+        //   // overflow: auto;
+        //   // height: 379px;
+
+        //   // .ms-List-page {
+        //   //   // height: fit-content !important;
+        //   // }
+        // }
       }
     }
     .ms-Callout {
@@ -387,6 +414,17 @@
       }
 
       div[role="filtercallout"] {
+        .ms-ScrollablePane--contentContainer {
+          &::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0); /* color of the tracking area */
+            margin: 0;
+          }
+          &::-webkit-scrollbar-thumb {
+            background-color: #b6b5b5a2; /* color of the scroll thumb */
+            border-radius: 20px; /* roundness of the scroll thumb */
+            // border: 3px solid #b6b5b5a2; /* creates padding around scroll thumb */
+          }
+        }
         .ms-Stack {
           .ms-Stack {
             display: flex;

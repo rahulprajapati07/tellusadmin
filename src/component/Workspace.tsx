@@ -1431,7 +1431,6 @@ getKey={this._getKey}
                 <img height="140" width="140" src={LockIcon} alt="new" />
 
               </div>
-
             </div>
 
             <div className="ms-Grid-row">

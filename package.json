@@ -11,6 +11,7 @@
     "@fluentui/react-teams": "^6.0.0",
     "@microsoft/mgt-react": "^2.4.0",
     "@microsoft/sp-office-ui-fabric-core": "^1.14.0",
+    "@microsoft/teams-js": "^1.12.1",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
