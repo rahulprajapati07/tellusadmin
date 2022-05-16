@@ -346,6 +346,7 @@ class WorkspaceDetails extends React.Component<
               // <div className={classNames.controlWrapper}>
               <div className="test">
                 <HoverCard
+                sticky
                   plainCardProps={plainCardProps}
                   instantOpenOnClick={true}
                   type={HoverCardType.plain}
