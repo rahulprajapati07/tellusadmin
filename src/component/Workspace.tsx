@@ -349,6 +349,7 @@ class WorkspaceDetails extends React.Component<
                   plainCardProps={plainCardProps}
                   instantOpenOnClick={true}
                   type={HoverCardType.plain}
+                  shouldBlockHoverCard={() => true}
                 >
                   {icons.map(
                     (Icon: React.FunctionComponent<ReactIcons.ISvgIconProps>) => (

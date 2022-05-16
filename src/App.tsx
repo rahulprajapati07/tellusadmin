@@ -107,11 +107,10 @@ class App extends React.Component {
 
   render(){
 
-    let accessToken : string = '' ; 
+ //   let accessToken : string = '' ; 
 
     return (
       <div className="App">
-       Token :-  { accessToken }
         <MainContent />
         {/* <AuthenticatedTemplate>
                <ProfileContent />
