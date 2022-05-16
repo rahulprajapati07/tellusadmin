@@ -2,6 +2,7 @@ import React  from 'react'; //, {useState}
 import './App.css';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import { loginRequest } from "./component/authConfig";
+//import { useJwt } from "react-jwt";
 //import  Button from "react-bootstrap/Button";
 //import  DetailsListDemo  from './DataListDemo';
 import WorkspaceDetails from './component/Workspace';
@@ -98,18 +99,23 @@ class App extends React.Component {
   render(){
 
     let accessToken : string = '' ; 
+    const authTokenRequest: microsoftTeams.authentication.AuthTokenRequest = {
+      successCallback: function (token: string) {
+        //const decoded: { [key: string]: any; } = jwt.decode(token);
+        //localStorage.setItem("name", decoded.name);
+        //localStorage.setItem("token", token);
+        console.log("Teams Token :- ", token);
+      },
+      failureCallback: function (error: any) {
+        console.log("Failure on getAuthToken: " + error);
+      }
+    };
+    microsoftTeams.initialize(() => {
+      microsoftTeams.getContext((r) => {
+        microsoftTeams.authentication.getAuthToken(authTokenRequest);
+      });
+    });
 
-    microsoftTeams.authentication.getAuthToken({
-
-    successCallback: (token: string) => {
-      accessToken = token;
-      console.log("Access Token Teams Contex : ", token);
-    },
-    failureCallback: (message: string) => {
-      accessToken = message;
-      console.log("Failurecall back Access Token Teams Contex : ", message);
-    }
-  });
     return (
       <div className="App">
        Token :-  { accessToken }
