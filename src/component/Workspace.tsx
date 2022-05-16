@@ -1421,7 +1421,7 @@ getKey={this._getKey}
 
               alignItems: "center",
 
-              height: "100vh",
+              height: "78vh",
             }}
           >
             <div className="ms-Grid-row" style={{ marginTop: 0 }}>
@@ -1438,14 +1438,14 @@ getKey={this._getKey}
 
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
 
-                <h5 style={{ margin: '0' }}> Sorry but you don't have access to this feature </h5>
+                <h5 className="splash_title" style={{ margin: '0' }}> Sorry but you don't have access to this feature </h5>
 
               </div>
 
             </div>
             <div className="ms-Grid-row">
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
-                <p style={{ fontFamily: "Segoe UI" }}>
+                <p className="splce_subtitle" style={{ fontFamily: "Segoe UI" }}>
                   {" "}
                   Tellus Admin is only available to administrators{" "}
                 </p>
