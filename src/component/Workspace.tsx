@@ -149,8 +149,7 @@ const classNames = mergeStyleSets({
   },
   fileIconImg: {
     verticalAlign: "middle",
-    maxHeight: "16px",
-    maxWidth: "16px",
+    maxWidth: "24px",
   },
   controlWrapper: {
     display: "flex",
@@ -252,6 +251,7 @@ class WorkspaceDetails extends React.Component<
     this.fetchMoreData = this.fetchMoreData.bind(this);
     this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
     this.renderEditDialog = this.renderEditDialog.bind(this);
+    this.addClickEvent = this.addClickEvent.bind(this);
     // onscroll = (event) => {
     //   console.log(event);
     // }
@@ -769,6 +769,7 @@ class WorkspaceDetails extends React.Component<
 
   public async componentDidMount() {
     
+    
     await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
       if (teamsUserRoleStatus === true) {
         //userRole = teamsUserRoleStatus;
@@ -784,6 +785,7 @@ class WorkspaceDetails extends React.Component<
       }
     });
 
+    this.addClickEvent();
     await this._getInActiveTeams().then((ActiveTeams: any[]) => {
       console.log("Component Teams Log =-=-=-=-= " + ActiveTeams);
     });
@@ -827,7 +829,7 @@ class WorkspaceDetails extends React.Component<
       document
         .getElementsByClassName("ms-TextField-wrapper")[0]
         .appendChild(exp);
-        this.addClickEvent();
+        
       //   document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1].innerHTML = "Clear";
       // var filterPadding: any = document.querySelectorAll('div[role="filtercallout"]')[0].closest('.ms-Callout');
       // filterPadding.style.padding = '13px'
@@ -850,41 +852,89 @@ class WorkspaceDetails extends React.Component<
   }
 
   public addClickEvent() {
+
     const that = this;
+
     let testArr: any = document.querySelectorAll('.ms-DetailsHeader-cell')
+
     testArr.forEach((element: any) => {
+
       element.addEventListener('click', function (ev: Event) {
+
+        // alert('column')
+
         let checkPopup = () => {
+
           if (document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label") &&
+
             document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1]) {
+
             that.applyCustomCSS();
+
             clearInterval(test1);
+
           }
         };
         let test1 = setInterval(() => { checkPopup(); }, 100);
       });
     })
+
   }
 
   public applyCustomCSS() {
-    // change text clear All to clear
-    if (document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label") && document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1]) {
 
-      document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1].textContent = "Clear";
+    // change text clear All to clear
+
+    if (document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label") &&
+
+      document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1]) {
+
+      document.querySelectorAll(
+
+        "div[role='filtercallout'] .ms-Button .ms-Button-label"
+
+      )[1].textContent = 'Clear';
 
     }
+
+
+
     //descrease Padding of filter box
 
-    if (document.querySelectorAll('div[role="filtercallout"]') && document.querySelectorAll('div[role="filtercallout"]')[0]) {
-      var filterPadding: any = document.querySelectorAll('div[role="filtercallout"]')[0].closest('.ms-Callout');
-      filterPadding.style.padding = '13px';
+    if (
+
+      document.querySelectorAll('div[role="filtercallout"]') &&
+
+      document.querySelectorAll('div[role="filtercallout"]')[0]
+
+    ) {
+
+      var filterPadding: any = document
+
+        .querySelectorAll('div[role="filtercallout"]')[0]
+
+        .closest('.ms-Callout')
+
+      filterPadding.style.padding = '13px'
+
     }
+
+
 
     //change filter search textbox placeholder
 
-    if (document.querySelectorAll(".ms-TextField-field") && document.querySelectorAll(".ms-TextField-field")[1]) {
-      var placeHolderSearch: any = document.querySelectorAll(".ms-TextField-field")[1];
-      placeHolderSearch.setAttribute("placeholder", "Search");
+    if (
+
+      document.querySelectorAll('.ms-TextField-field') &&
+
+      document.querySelectorAll('.ms-TextField-field')[1]
+
+    ) {
+
+      var placeHolderSearch: any = document.querySelectorAll(
+        '.ms-TextField-field'
+      )[1]
+      placeHolderSearch.setAttribute('placeholder', 'Search')
     }
   }
 
@@ -1439,7 +1489,7 @@ getKey={this._getKey}
             <TextField
               id="textTitle"
               name="Title"
-              placeholder="Enter Name"
+              placeholder=""
             // value={}
             //onChange={(e) => { this.setState({  }) }}
             />
@@ -1449,7 +1499,7 @@ getKey={this._getKey}
             <TextField
               id="textTitle"
               name="Title"
-              placeholder="Enter Description"
+              placeholder=""
             // value={}
             //onChange={(e) => { this.setState({  }) }}
             />

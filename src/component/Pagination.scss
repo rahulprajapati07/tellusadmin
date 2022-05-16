@@ -1,85 +1,96 @@
 :root {
-  .ms-Overlay{background-color: rgba(0, 0, 0, 0.4);}
-  .ms-Dialog-inner{
+  .splash_title {
+    font-family: Segoe UI;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 26px;
+    letter-spacing: 0px;
+    text-align: center;
+  }
+  .splce_subtitle {
+    font-family: Segoe UI;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 26px;
+    letter-spacing: 0px;
+    text-align: center;
+  }
+  .ms-Overlay {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  .ms-Dialog-inner {
     padding: 0px 26px 20px;
-    .ms-Button{background-color: #6c7ac9;
+    .ms-Button {
+      background-color: #6c7ac9;
       border-color: #6c7ac9;
-    color: #fff;
-  border-radius: 4px;
-}
-.ms-Button--default{
-  border-color:#D1D1D1;
-  border-radius: 4px;
-  background-color: #fff;
-  color:#212121
-}
-.ms-Dialog-subText{ 
-font-family: Segoe UI;
-font-size: 14px;
-margin-top:0;
-font-weight: 400;
-line-height: 16px;
-letter-spacing: 0em;
-text-align: center;
-
-
-}
+      color: #fff;
+      border-radius: 4px;
+    }
+    .ms-Button--default {
+      border-color: #d1d1d1;
+      border-radius: 4px;
+      background-color: #fff;
+      color: #212121;
+    }
+    .ms-Dialog-subText {
+      font-family: Segoe UI;
+      font-size: 14px;
+      margin-top: 0;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: 0em;
+      text-align: center;
+    }
   }
 
-  .dialogboxedit{
-    .ms-Dialog-content{
-      border-bottom:2px solid #252423 ;
+  .dialogboxedit {
+    .ms-Dialog-content {
+      border-bottom: 2px solid #252423;
       padding-bottom: 50px;
     }
   }
-  .dialogboxtext{
-    label{
+  .dialogboxtext {
+    label {
       font-family: Segoe UI;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 16px;
-  letter-spacing: 0px;
-  text-align: left;
-  color: #484644;
-  margin-bottom: 9px;
-  display: block;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: 0px;
+      text-align: left;
+      color: #484644;
+      margin-bottom: 9px;
+      display: block;
     }
-    .ms-TextField-fieldGroup{
+    .ms-TextField-fieldGroup {
       background-color: #f5f5f5;
       border-radius: 3px;
       margin-bottom: 10px;
       border-color: transparent !important;
-      padding: 5px ;
-      input{
+      padding: 0 5px;
+      input {
         padding: 5px 0;
-        &:focus{
+        &:focus {
           border: 0 !important;
           outline: 0;
         }
       }
-      }
-    
+    }
   }
-  .dialogboxtextfield{
-    .ms-TextField-fieldGroup{
-      width: 100%;   
-        margin-bottom: 70px;
-        display: block;
-      input{
+  .dialogboxtextfield {
+    .ms-TextField-fieldGroup {
+      width: 100%;
+      margin-bottom: 70px;
+      display: block;
+      input {
         padding: 5px 0;
         width: 100%;
-        &:focus{
+        &:focus {
           border: 0;
           outline: 0;
         }
       }
-  
     }
-  
   }
-
-
-
 
   .container-custom {
     max-width: 1150px;
@@ -105,16 +116,16 @@ text-align: center;
     }
   }
   ::-webkit-scrollbar {
-    width: 7px; /* width of the entire scrollbar */
+    width: 5px; /* width of the entire scrollbar */
   }
   ::-webkit-scrollbar-track {
-    background: rgb(255, 255, 255); /* color of the tracking area */
-    }
-    ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0); /* color of the tracking area */
+  }
+  ::-webkit-scrollbar-thumb {
     background-color: #b6b5b5a2; /* color of the scroll thumb */
     border-radius: 20px; /* roundness of the scroll thumb */
-    border: 3px solid #b6b5b5a2; /* creates padding around scroll thumb */
-    }
+    // border: 3px solid #b6b5b5a2; /* creates padding around scroll thumb */
+  }
   font-family: "Segoe UI", sans-serif;
   font-size: 16px;
   background-color: #f5f5f5;
@@ -162,20 +173,23 @@ text-align: center;
     }
     .ms-ScrollablePane {
       .ms-ScrollablePane--contentContainer {
-      overflow-y: hidden;
-      .ms-DetailsList-contentWrapper {
-      overflow-y: auto;
-      height: 400px;
-      .ms-List-page {
-      height: unset !important;
+        overflow: hidden;
+        padding: 0 5px;
+        .ms-DetailsList-contentWrapper {
+          overflow: auto;
+          height: 400px;
+
+          .ms-List-page {
+            height: unset !important;
+          }
+        }
       }
-      }
-      }
-      }
+    }
     .ms-Callout {
       .ms-Stack {
         display: flex;
         justify-content: space-between;
+
         button {
           height: 25px;
           margin: 0;
@@ -184,9 +198,11 @@ text-align: center;
       .ms-Callout-beak {
         display: none;
       }
-      max-width: 320px;
+      max-width: 350px;
+      border-radius: 5px;
       .ms-Callout-main {
         // min-height: 44px;
+        border-radius: 5px;
         max-height: fit-content !important;
         .ms-Stack {
           div[class^="css-"] {
@@ -206,14 +222,17 @@ text-align: center;
             .ms-Checkbox {
               &:hover .ms-Checkbox-checkbox {
                 background-color: rgb(98, 100, 167);
-                border-color: rgb(98, 100, 167);
+                border-color: #484644;
               }
-              &:hover .ms-Checkbox-checkmark {
-                color: #fff;
+              .ms-Checkbox-checkmark {
+                display: none;
+              }
+              .ms-Checkbox-text {
+                font-size: 13px;
               }
               .ms-Checkbox-checkbox {
-                border-color: rgb(98, 100, 167);
-                &::after {
+                border-color: #484644;
+                &:after {
                   border-color: rgba(98, 100, 167, 0);
                 }
               }
@@ -221,7 +240,7 @@ text-align: center;
             .ms-Checkbox.is-checked {
               .ms-Checkbox-checkbox {
                 background-color: rgb(98, 100, 167);
-                border-color: rgb(98, 100, 167);
+                border-color: #484644;
               }
               &:hover .ms-Checkbox-checkmark {
                 color: #fff;
@@ -245,34 +264,31 @@ text-align: center;
     //   // width: 100%;
     // }
 
-    // .ms-TextField {
-    //   padding: 0;
-    //   max-width: unset;
-    //   .ms-TextField-wrapper {
-    //     width: 100%;
-    //     .ms-TextField-fieldGroup {
-    //       border: 1px solid rgba(0, 0, 0, 0.507) ;
-    //       border-radius: 4px;
-    //       .ms-TextField-field {
-    //         border: 1px solid transparent ;
-    //         width: 300px !important;
-    //         // &:focus {
-    //         //   // border: 1px solid rgb(98, 100, 167) !important;
-    //         // }
-    //       }
-    //     }
-    //   }
-    // }
     .ms-DetailsHeader {
       .ms-DetailsHeader-cell {
         &:hover {
           background: transparent !important;
         }
+        .ms-DetailsHeader-cellTitle {
+          display: flex;
+          justify-content: center;
+        }
+        // i[data-icon-name="SortUp"] {
+        //   background: url(../Icons/SortIcon.png);
+        //   background-repeat: no-repeat;
+        //   background-position: center;
+        //   width: 20px;
+        // }
+        // i[data-icon-name="SortDown"] {
+        //   background: url(../Icons/SortIcon.png);
+        //   background-repeat: no-repeat;
+        //   background-position: center;
+        //   transform: rotate(180deg);
+        //   width: 20px;
+        // }
         .ms-DetailsHeader-cellName {
-
           font-weight: 500;
           font-size: 13px;
-
         }
       }
     }
@@ -285,28 +301,30 @@ text-align: center;
         }
       }
       .ms-List-cell {
-
-        border-bottom: 1px solid rgb(224, 224, 224);
-
-        &:hover {
-
-          background-color: rgb(235, 235, 235) !important;
-
-          color: #252525;
-
-        }
-
         .ms-DetailsRow {
+          border-bottom: 1px solid rgb(224, 224, 224);
           &:hover {
             background-color: rgb(235, 235, 235) !important;
             color: #252525;
           }
-
+          .ms-DetailsRow-cell:not(:nth-child(2)) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
           .ms-DetailsRow-cell {
+            display: flex;
+            align-items: center;
+            img {
+              border-radius: 3px;
+              image-rendering: auto;
+            }
             &:nth-child(2) {
               cursor: pointer;
             }
-
+            &:nth-child(3) {
+              cursor: pointer;
+            }
             &:last-child {
               cursor: pointer;
             }
@@ -319,37 +337,36 @@ text-align: center;
       border-radius: 4px;
       padding: 7px 0;
       button {
-      border: 0;
-      text-align: left;
-      width: 100%;
-      padding: 5px 20px;
-      .ms-Button-label {
-      font-weight: 400 !important;
+        border: 0;
+        text-align: left;
+        width: 100%;
+        padding: 5px 20px;
+        &:hover {
+          background-color: #f5f5f5;
+        }
+        .ms-Button-label {
+          font-weight: 400 !important;
+          color: #242424;
+          font-size: 14px;
+        }
       }
-      }
-      }
+    }
 
     // filter
     .ms-Callout {
-
       .ms-Callout-main {
-
         .ms-TextField-fieldGroup {
-
           border-color: #f3f2f1;
 
           border-radius: 3px;
 
           &::after {
-
             border-color: #6c7ac9;
 
             border-radius: 3px;
-
           }
 
           input {
-
             background: url(../Icons/Search.png), #f3f2f1;
 
             background-position: 97%;
@@ -359,37 +376,33 @@ text-align: center;
             border: none;
 
             border-radius: 3px;
-
           }
-
         }
 
         .ms-Stack {
-
           div[class^="css-"] {
-
             width: 100%;
-
           }
-
         }
-
       }
 
       div[role="filtercallout"] {
-
-        .ms-Button {
-
-          &:hover {
-
-            color: #6c7ac9;
-
+        .ms-Stack {
+          .ms-Stack {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: 1px solid #dbdbdb80;
+            .ms-Button {
+              color: #6264a7;
+              &:hover {
+                color: #6471b9;
+              }
+            }
           }
-
         }
-
       }
-
     }
   }
 }
@@ -433,60 +446,34 @@ text-align: center;
 }
 
 .ms-Grid-col {
-
   .ms-TextField {
-
     .ms-TextField-fieldGroup {
-
-      border: 0.5px solid rgba(0, 0, 0, 0.5) !important;
+      border: 0.5px solid rgb(224, 224, 224) !important;
       height: 35px;
       border-radius: 5px;
     }
 
     .ms-TextField-wrapper {
-
       width: 100%;
-
       display: flex;
-
       justify-content: space-between;
-
-
-
       .ms-TextField-fieldGroup {
-
         &:after {
-
           border-color: rgb(98, 100, 167) !important;
-
           border-radius: 5px;
-
         }
-
         input[placeholder="Search Teams"] {
-
           background: url(../Icons/Search.png);
-
           background-position: 97%;
-
           background-repeat: no-repeat;
-
-          width: 300px;
-
+          width: 380px;
           border: 0px solid transparent !important;
-
           border-radius: 3px;
-
           // width: 300px !important;
-
         }
-
       }
-
     }
-
   }
-
 }
 #export {
   padding: 7px;
@@ -520,5 +507,3 @@ text-align: center;
     }
   }
 }
-
-
