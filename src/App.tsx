@@ -101,7 +101,7 @@ class App extends React.Component {
       failureCallback: (message: string) => {
           console.log("Teams Error FailureCallback :- " ,message);
       },
-      resources:["https://ambitious-pebble-0b2637f10.1.azurestaticapps.net"]
+      resources:["api://ambitious-pebble-0b2637f10.1.azurestaticapps.net/b0785c01-bd69-4a12-bfe1-e558e7a4b7d1"]
     });
   }
 
