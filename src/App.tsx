@@ -81,25 +81,9 @@ const MainContent = () => {
 // const { instance , accounts } = useMsal();
 class App extends React.Component {
 
-  readonly authTokenRequest: microsoftTeams.authentication.AuthTokenRequest = {
-    successCallback: function (token: string) {
-      //const decoded: { [key: string]: any; } = jwt.decode(token);
-      //localStorage.setItem("name", decoded.name);
-      //localStorage.setItem("token", token);
-      console.log("Teams Token :- ", token);
-    },
-    failureCallback: function (error: any) {
-      console.log("Failure on getAuthToken: " + error);
-    }
-  };
-
   constructor(props:any){
     super(props);
-    microsoftTeams.initialize(() => {
-      microsoftTeams.getContext((r) => {
-        microsoftTeams.authentication.getAuthToken(this.authTokenRequest);
-      });
-    });
+    microsoftTeams.initialize();
     this.state = {
       instance : undefined,
       accounts : undefined,
@@ -109,7 +93,16 @@ class App extends React.Component {
   }
 
   componentDidMount(){
-    
+    microsoftTeams.authentication.getAuthToken({
+      successCallback: (token: string) => {
+        console.log("Access Token :- ", token);
+      },
+
+      failureCallback: (message: string) => {
+          console.log("Teams Error FailureCallback :- " ,message);
+      },
+      resources:["https://ambitious-pebble-0b2637f10.1.azurestaticapps.net"]
+    });
   }
 
   render(){
