@@ -81,9 +81,25 @@ const MainContent = () => {
 // const { instance , accounts } = useMsal();
 class App extends React.Component {
 
+  readonly authTokenRequest: microsoftTeams.authentication.AuthTokenRequest = {
+    successCallback: function (token: string) {
+      //const decoded: { [key: string]: any; } = jwt.decode(token);
+      //localStorage.setItem("name", decoded.name);
+      //localStorage.setItem("token", token);
+      console.log("Teams Token :- ", token);
+    },
+    failureCallback: function (error: any) {
+      console.log("Failure on getAuthToken: " + error);
+    }
+  };
+
   constructor(props:any){
     super(props);
-    microsoftTeams.initialize();
+    microsoftTeams.initialize(() => {
+      microsoftTeams.getContext((r) => {
+        microsoftTeams.authentication.getAuthToken(this.authTokenRequest);
+      });
+    });
     this.state = {
       instance : undefined,
       accounts : undefined,
@@ -99,22 +115,6 @@ class App extends React.Component {
   render(){
 
     let accessToken : string = '' ; 
-    const authTokenRequest: microsoftTeams.authentication.AuthTokenRequest = {
-      successCallback: function (token: string) {
-        //const decoded: { [key: string]: any; } = jwt.decode(token);
-        //localStorage.setItem("name", decoded.name);
-        //localStorage.setItem("token", token);
-        console.log("Teams Token :- ", token);
-      },
-      failureCallback: function (error: any) {
-        console.log("Failure on getAuthToken: " + error);
-      }
-    };
-    microsoftTeams.initialize(() => {
-      microsoftTeams.getContext((r) => {
-        microsoftTeams.authentication.getAuthToken(authTokenRequest);
-      });
-    });
 
     return (
       <div className="App">
