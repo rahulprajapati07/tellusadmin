@@ -70,6 +70,7 @@ import { callGetPublicTeams, canUserRestoreTeams, deleteWorkspace, archiveWorksp
 //  import InfiniteScroll from "react-infinite-scroll-component";
 //import ReactPaginate from 'react-paginate';
 import ReactTooltip from "react-tooltip";
+//import { ListItemMedia } from '@fluentui/react-northstar';
 //import {PeoplePicker, Person, People } from '@microsoft/mgt-react';
 //import { IPersonaProps, PersonaPresence } from 'office-ui-fabric-react/lib/Persona';``
 //import DialogExample from '../component/DialogBox/OpenDialogBox';
@@ -151,6 +152,10 @@ const classNames = mergeStyleSets({
     verticalAlign: "middle",
     maxWidth: "24px",
   },
+  fileIconImgSharepoint: {
+    verticalAlign: 'middle',
+    maxWidth: '22px'
+    },
   controlWrapper: {
     display: "flex",
     flexWrap: "wrap",
@@ -191,6 +196,7 @@ export interface IWorkspaceExampleState {
   displayItems: IWorkspace[];
   serachItem: IWorkspace[];
   itemsList: IWorkspace[];
+  workspaceItemList : IWorkspace[];
   sortItemsDetails: IWorkspace[];
   uniqueFilterValues: string[];
   //selectionDetails: string;
@@ -548,7 +554,7 @@ class WorkspaceDetails extends React.Component<
               <img
                 onClick={() => window.open(item.sharePointSiteUrl, "_blank")}
                 src={sharepointImg}
-                className={classNames.fileIconImg}
+                className={classNames.fileIconImgSharepoint}
                 alt={`${item.test} file icon`}
               />
             </TooltipHost>
@@ -562,6 +568,7 @@ class WorkspaceDetails extends React.Component<
       displayItems: [],
       serachItem: [],
       itemsList: [],
+      workspaceItemList : [],
       sortItemsDetails: [],
       columns: columns,
       contextualMenuProps: undefined,
@@ -595,6 +602,7 @@ class WorkspaceDetails extends React.Component<
 
   private _labelId: string = getId("dialogLabel");
   private _subTextId: string = getId("subTextLabel");
+
   private _dragOptions = {
     moveMenuItemText: "Move",
     closeMenuItemText: "Close",
@@ -822,6 +830,7 @@ class WorkspaceDetails extends React.Component<
         displayItems: teamsDetails.slice(0, this.state.itemArrayAppend),
         serachItem: teamsDetails,
         itemsList: teamsDetails,
+        workspaceItemList : teamsDetails,
         sortItemsDetails: teamsDetails,
         itemWithNoOwner: countNumber,
         teamsMissingInfo: countMissiongInformation,
@@ -1291,7 +1300,7 @@ endMessage={
                   <EditableGrid
                     id={1}
                     columns={this.state.columns}
-                    items={this.state.itemsList}
+                    items={this.state.workspaceItemList}
                     //enableCellEdit={true}
                     enableExport={true}
                     // enableTextFieldEditMode={true}
@@ -1769,16 +1778,49 @@ getKey={this._getKey}
           deleteWorkspace(response.accessToken, item)
             .then(async (response: any) => {
               if (response.ok === true) {
-                await this._getAllPublicTeams().then((teamsDetails: any[]) => {
-                  this.setState({
-                    itemsList: teamsDetails,
-                    dialog: "none"
-                  });
-                });
+                this._updateWorkspaces(item);
+                // await this._getAllPublicTeams().then((teamsDetails: any[]) => {
+                //   this.setState({
+                //     itemsList: teamsDetails,
+                //     dialog: "none"
+                //   });
+                // });
               }
             })
         });
     });
+  }
+
+  public _updateWorkspaces = async (item : any) : Promise<any> => {
+
+    let inactiveTeamsCountTemp = this.state.inActiveCount;
+    // let teamsWithNoOwnerCountTemp = this.state.itemWithNoOwner;
+    // let teamsWithExternalUserCountTemp = this.state.teamsExternalUser;
+    let teamsMissingInfoCountTemp = this.state.teamsMissingInfo;
+
+    if(item.status === "Inactive"){
+      inactiveTeamsCountTemp = inactiveTeamsCountTemp - 1; 
+    }
+
+    if(item.businessOwner.trim() !== "" || item.businessDepartment.trim() !== "" || item.classification.trim() !== "" || item.type.trim() !== "" ){
+      teamsMissingInfoCountTemp = teamsMissingInfoCountTemp - 1;
+    }
+
+
+    var currentItemList = this.state.workspaceItemList;
+    currentItemList.splice(currentItemList.indexOf(item),1);
+    let updatedWorkspces = currentItemList;
+
+    this.setState({
+      workspaceItemList : []
+    });
+
+    this.setState({
+            workspaceItemList: updatedWorkspces,
+            dialog: "none",
+            inActiveCount : inactiveTeamsCountTemp,
+            teamsMissingInfo : teamsMissingInfoCountTemp
+        });
   }
 
   public _archiveWorkspace = async (item: any): Promise<any> => {

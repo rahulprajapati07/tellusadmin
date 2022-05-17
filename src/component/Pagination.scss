@@ -193,8 +193,11 @@
       .ms-ScrollablePane--contentContainer {
         // overflow-x: hidden;
         //padding: 0 5px;
+        &::-webkit-scrollbar {
+          height: 6px;
+          }
         &::-webkit-scrollbar-track {
-          margin: 50px;
+          margin-top: 50px;
           background: rgba(255, 255, 255, 0); /* color of the tracking area */
         }
         &::-webkit-scrollbar-thumb {
