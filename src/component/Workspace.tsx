@@ -22,7 +22,7 @@ import InfoIcon from "../Icons/InfoIcon.jpg";
 import { EditableGrid, EventEmitter, EventType } from "fluentui-editable-grid";
 
 //import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+//import 'react-loading-skeleton/dist/skeleton.css'
 
 //import {  Dialog } from '@fluentui/react-northstar';
 
