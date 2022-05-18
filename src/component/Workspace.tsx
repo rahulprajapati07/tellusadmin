@@ -1010,17 +1010,17 @@ class WorkspaceDetails extends React.Component<
     return (
       <div className="container-custom">
         {this.state.userIsAdmin === "true" ? (
-          <div className="ms-Grid" dir="ltr">
+          <div className="ms-Grid" style={{marginTop:'30px'}} dir="ltr">
             {/* style= {{ height : '40px' }} */}
-            <div className="ms-Grid-row" style={{ height: "40px" }}>
-              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12">
+            {/* <div className="ms-Grid-row" style={{ height: "40px" }}>
+              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"> */}
                 {/* style = {{ textAlign: 'left', marginLeft:'10px'}} */}
-                <h3 style={{ textAlign: "left", marginLeft: "10px" }}>
+                {/* <h3 style={{ textAlign: "left", marginLeft: "10px" }}>
                   {" "}
                   Manage Teams{" "}
                 </h3>
               </div>
-            </div>
+            </div> */}
             <div className="ms-Grid-row">
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
                 <div
