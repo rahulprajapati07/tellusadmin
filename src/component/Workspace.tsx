@@ -258,6 +258,7 @@ class WorkspaceDetails extends React.Component<
     this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
     this.renderEditDialog = this.renderEditDialog.bind(this);
     this.addClickEvent = this.addClickEvent.bind(this);
+    this._updateWorkspaces = this._updateWorkspaces.bind(this);
     // onscroll = (event) => {
     //   console.log(event);
     // }
@@ -1791,21 +1792,27 @@ getKey={this._getKey}
     });
   }
 
-  public _updateWorkspaces = async (item : any) : Promise<any> => {
+  public _updateWorkspaces = async (item : any) => {
 
     let inactiveTeamsCountTemp = this.state.inActiveCount;
-    // let teamsWithNoOwnerCountTemp = this.state.itemWithNoOwner;
-    // let teamsWithExternalUserCountTemp = this.state.teamsExternalUser;
+    let teamsWithNoOwnerCountTemp = this.state.itemWithNoOwner;
+    let teamsWithExternalUserCountTemp = this.state.teamsExternalUser;
     let teamsMissingInfoCountTemp = this.state.teamsMissingInfo;
 
     if(item.status === "Inactive"){
       inactiveTeamsCountTemp = inactiveTeamsCountTemp - 1; 
     }
 
-    if(item.businessOwner.trim() !== "" || item.businessDepartment.trim() !== "" || item.classification.trim() !== "" || item.type.trim() !== "" ){
+    if(item.businessOwner.trim() === "" || item.businessDepartment.trim() === "" || item.classification.trim() === "" || item.type.trim() === "" ){
       teamsMissingInfoCountTemp = teamsMissingInfoCountTemp - 1;
     }
 
+    if(item.teamsExternalUser > 0){
+      teamsWithExternalUserCountTemp = teamsWithExternalUserCountTemp - 1;
+    }
+    if(item.teamsWithNoOwner === 0){
+      teamsWithNoOwnerCountTemp = teamsWithNoOwnerCountTemp - 1; 
+    }
 
     var currentItemList = this.state.workspaceItemList;
     currentItemList.splice(currentItemList.indexOf(item),1);
@@ -1819,7 +1826,13 @@ getKey={this._getKey}
             workspaceItemList: updatedWorkspces,
             dialog: "none",
             inActiveCount : inactiveTeamsCountTemp,
-            teamsMissingInfo : teamsMissingInfoCountTemp
+            teamsMissingInfo : teamsMissingInfoCountTemp,
+            teamsExternalUser : teamsWithExternalUserCountTemp,
+            itemWithNoOwner : teamsWithNoOwnerCountTemp
+        },
+        () => {
+          
+          this.forceUpdate();
         });
   }
 
@@ -1837,10 +1850,18 @@ getKey={this._getKey}
                 console.log("Archived API Response");
                 console.log(response);
                 if (response.ok === true) {
-                  await this._getAllPublicTeams().then((teamsDetails: any[]) => {
-                    this.setState({
-                      itemsList: teamsDetails
-                    });
+                  item.status = "Archived";
+                  let tempItem = item;
+                  let tempWorkspaces = this.state.workspaceItemList;
+                  tempWorkspaces.splice(tempWorkspaces.indexOf(item),1);
+                  tempWorkspaces.push(tempItem);
+                  this.setState({
+                    workspaceItemList : []
+                  });
+
+                  this.setState({
+                    workspaceItemList : tempWorkspaces,
+                    dialog : "none"
                   });
                 }
               }
