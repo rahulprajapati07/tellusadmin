@@ -20,6 +20,10 @@ import LockIcon from "../Icons/LockIcon.png";
 import sharepointImg from "../Icons/sharepointImg.png";
 import InfoIcon from "../Icons/InfoIcon.jpg";
 import { EditableGrid, EventEmitter, EventType } from "fluentui-editable-grid";
+
+//import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 //import {  Dialog } from '@fluentui/react-northstar';
 
 import {
@@ -1286,6 +1290,7 @@ endMessage={
 }
 > */}
                   <div className={classNames.controlWrapper}>
+                  
                     <TextField
                       placeholder="Search Teams"
                       className={mergeStyles({
@@ -1297,34 +1302,36 @@ endMessage={
                       }
                     />
                   </div>
-
-                  <EditableGrid
-                    id={1}
-                    columns={this.state.columns}
-                    items={this.state.workspaceItemList}
-                    //enableCellEdit={true}
-                    enableExport={true}
-                    // enableTextFieldEditMode={true}
-                    // enableTextFieldEditModeCancel={true}
-                    // enableGridRowsDelete={true}
-                    // enableGridRowsAdd={true}
-                    //height={'40vh'}
-                    width={"140vh"}
-                    //position={'relative'}
-                    // enableUnsavedEditIndicator={true}
-                    //onGridSave={onGridSave}
-                    //enableGridReset={true}
-                    enableColumnFilters={true}
-                    //enableColumnFilterRules={true}
-                    // enableRowAddWithValues={{enable : true, enableRowsCounterInPanel : true}}
-                    //layoutMode={DetailsListLayoutMode.justified}
-                    selectionMode={SelectionMode.none}
-                  // enableRowEdit={true}
-                  // enableRowEditCancel={true}
-                  // enableBulkEdit={true}
-                  // enableColumnEdit={true}
-                  // enableSave={true}
-                  />
+                  <div className="ms-DetailsList-contentWrapper">
+                    {/* <Skeleton count={5} /> */}
+                      <EditableGrid
+                      id={1}
+                      columns={this.state.columns}
+                      items={this.state.workspaceItemList}
+                      //enableCellEdit={true}
+                      enableExport={true}
+                      // enableTextFieldEditMode={true}
+                      // enableTextFieldEditModeCancel={true}
+                      // enableGridRowsDelete={true}
+                      // enableGridRowsAdd={true}
+                      //height={'40vh'}
+                      width={"140vh"}
+                      //position={'relative'}
+                      // enableUnsavedEditIndicator={true}
+                      //onGridSave={onGridSave}
+                      //enableGridReset={true}
+                      enableColumnFilters={true}
+                      //enableColumnFilterRules={true}
+                      // enableRowAddWithValues={{enable : true, enableRowsCounterInPanel : true}}
+                      //layoutMode={DetailsListLayoutMode.justified}
+                      selectionMode={SelectionMode.none}
+                      // enableRowEdit={true}
+                      // enableRowEditCancel={true}
+                      // enableBulkEdit={true}
+                      // enableColumnEdit={true}
+                      // enableSave={true}
+                      />
+                  </div>
                   <label id={this._labelId} className={screenReaderOnly}>
                     My sample Label
                   </label>
