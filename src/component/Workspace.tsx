@@ -52,6 +52,7 @@ import "../component/Pagination.scss";
 import {
   // IconButton,
   Button,
+  IconButton
 } from "office-ui-fabric-react/lib/Button";
 
 import {
@@ -263,6 +264,7 @@ class WorkspaceDetails extends React.Component<
     this.renderEditDialog = this.renderEditDialog.bind(this);
     this.addClickEvent = this.addClickEvent.bind(this);
     this._updateWorkspaces = this._updateWorkspaces.bind(this);
+    this.renderDialog = this.renderDialog.bind(this);
     // onscroll = (event) => {
     //   console.log(event);
     // }
@@ -284,13 +286,23 @@ class WorkspaceDetails extends React.Component<
         // onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev), content={`${item.test} file`}
         onRender: (item: IWorkspace) => (
           <div className="test">
-            <TooltipHost key={item.key}>
+            {
+              item.test ?
+              <TooltipHost key={item.key}>
               <img
                 src={item.test}
                 className={classNames.fileIconImg}
                 alt={`${item.test} file icon`}
               />
-            </TooltipHost>
+              </TooltipHost>
+              : 
+              <IconButton
+                iconProps={{ iconName: "ProgressLoopOuter" }}
+                title="Request Details"
+                className={[styles.workspaceImage, styles.requestImage].join(' ')}
+              />
+            }
+         
           </div>
         ),
       },
@@ -830,7 +842,7 @@ class WorkspaceDetails extends React.Component<
         }
       }
 
-
+      teamsDetails = teamsDetails.sort((a,b) => a.name.localeCompare(b.name) );
       this.setState({
         displayItems: teamsDetails.slice(0, this.state.itemArrayAppend),
         serachItem: teamsDetails,
@@ -868,33 +880,20 @@ class WorkspaceDetails extends React.Component<
   }
 
   public addClickEvent() {
-
     const that = this;
-
     let testArr: any = document.querySelectorAll('.ms-DetailsHeader-cell')
-
     testArr.forEach((element: any) => {
-
       element.addEventListener('click', function (ev: Event) {
-
-        // alert('column')
-
         let checkPopup = () => {
-
           if (document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label") &&
-
             document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1]) {
-
             that.applyCustomCSS();
-
             clearInterval(test1);
-
           }
         };
         let test1 = setInterval(() => { checkPopup(); }, 100);
       });
     })
-
   }
 
   public applyCustomCSS() {
@@ -1477,16 +1476,8 @@ getKey={this._getKey}
 
   private renderEditDialog(item: any): JSX.Element {
     <script src="https://unpkg.com/@microsoft/mgt/dist/bundle/mgt-loader.js"></script>
-    //const [people, setPeople] = useState([]);
-    // const personDetails = {
-    //   displayName: 'Bill Gates',
-    // };
-    // const handleSelectionChanged = (e:any) => {
-    //   this.setState ({ people : peopleDetails});
-    // };
     return (
       <div className="dialogboxedit">
-
         <Dialog
           hidden={this.state.dialog === "none"}
           onDismiss={() => this.closeDialog(false)}
@@ -1496,20 +1487,12 @@ getKey={this._getKey}
             //  subText: `Are you sure you want to ${this.state.dialog.toLocaleLowerCase()} this Team?`,
           }}
         >
-          {/* <div className='close-wrapper'>
-          <button id="closeButton"><span aria-hidden="true">×</span></button>
-          </div> */}
           <div className="dialogboxtext" >
-
             <label>Business Department</label>
-            {/* <PeoplePicker people={this.state.people}  selectionChanged={handleSelectionChanged} />
-          Selected People: <People people={this.state.people} /> */}
             <TextField
               id="textTitle"
               name="Title"
               placeholder=""
-            // value={}
-            //onChange={(e) => { this.setState({  }) }}
             />
           </div>
           <div className="dialogboxtextfield dialogboxtext" >
@@ -1518,14 +1501,11 @@ getKey={this._getKey}
               id="textTitle"
               name="Title"
               placeholder=""
-            // value={}
-            //onChange={(e) => { this.setState({  }) }}
             />
           </div>
 
           <DialogFooter>
             <PrimaryButton
-              // onClick={() => this.closeDialog(true)}
               text={this.state.dialog}
             />
 
@@ -1534,34 +1514,35 @@ getKey={this._getKey}
               text="Cancel"
             />
           </DialogFooter>
-
         </Dialog>
       </div>
     );
   }
 
+
   private renderDialog(item: any): JSX.Element {
     return (
-      <Dialog
-        hidden={this.state.dialog === "none"}
-        onDismiss={() => this.closeDialog(false)}
-        dialogContentProps={{
-          type: DialogType.normal,
-          title: this.state.dialog + " Team",
-          subText: `Are you sure you want to ${this.state.dialog.toLocaleLowerCase()} this Team?`,
-        }}
-      >
-        <DialogFooter>
+          <Dialog
+            hidden={this.state.dialog === "none"}
+            onDismiss={() => this.closeDialog(false)}
+            dialogContentProps={{
+              type: DialogType.normal,
+              title: this.state.dialog + " Team",
+              subText: `Are you sure you want to ${this.state.dialog.toLocaleLowerCase()} this Team?`,
+            }}
+          >
+
+          <DialogFooter>
           <PrimaryButton
             onClick={() => this.state.dialog === "Delete" ? this._deleteWorkspace(item) : this._archiveWorkspace(item)}
             text={this.state.dialog}
           />
           <DefaultButton
-            onClick={() => this.closeDialog(false)}
+            onClick={() => this.closeDialog(false) }
             text="Cancel"
           />
         </DialogFooter>
-      </Dialog>
+        </Dialog>
     );
   }
 
@@ -1910,34 +1891,5 @@ function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boo
   return sortedItems;
 }
 
-// const DialogExample = () => {
-//   return (
-//     <>
-//         <Dialog
-//           cancelButton="Cancel"
-//           confirmButton="Confirm"
-//           header="Action confirmation"
-//           trigger={<Button content="Open a dialog" />}
-//         />
-//     </>
-//   )
-// }
-
-
-
-// function getContextualMenuDetails(){
-//   const [Selection, SetSelection] = React.useState<{ [key: string]: boolean }>({});
-//   // const menuProps: IContextualMenuProps = React.useMemo(
-//   //   () => ({
-//   //     shouldFocusOnMount: true,
-//   //     items: [
-//   //       { key: "HR", text: 'New', canCheck: true, isChecked: selection["HR"] },
-//   //       { key: "Developer", text: 'Share', canCheck: true, isChecked: selection["Developer"]},
-//   //       { key: "Infra", text: 'Mobile', canCheck: true, isChecked: selection["Infra"]},
-//   //     ],
-//   //   }),
-//   //   [selection],
-//   // );
-// }
 
 export default WorkspaceDetails;
