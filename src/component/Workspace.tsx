@@ -5,6 +5,7 @@ import { IColumn } from '@fluentui/react/lib/DetailsList'; //SelectionMode Detai
 import { TooltipHost, mergeStyles } from '@fluentui/react';
 import { Panel } from '@fluentui/react/lib/Panel';
 import styles from "./CollaborationWorkspace.module.scss";
+import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 //import { useState } from 'react';
 import { mergeStyleSets, SelectionMode, TextField } from "@fluentui/react"; //DetailsListLayoutMode, mergeStyles,DetailsListLayoutMode
 import { IColumnConfig } from "fluentui-editable-grid"; //, EventEmitter, EventType, NumberAndDateOperators, EditableGrid, EditControlType,
@@ -229,6 +230,7 @@ export interface IWorkspaceExampleState {
   isDraggable: boolean;
   dialog: any;
   people: any;
+  showSpinner : boolean;
 }
 
 export interface IWorkspace {
@@ -614,6 +616,7 @@ class WorkspaceDetails extends React.Component<
       hideDialog: true,
       isDraggable: false,
       people: peopleDetails,
+      showSpinner : true,
     };
   }
 
@@ -1068,7 +1071,14 @@ class WorkspaceDetails extends React.Component<
                         }}
                       >
                         {" "}
-                        {this.state.inActiveCount}{" "}
+                        
+                        {this.state.inActiveCount > 0 ? this.state.inActiveCount : this.renderSpinner(
+                            "",
+                            SpinnerSize.large,
+                            "right"
+                          ) }{" "}
+
+                        
                       </h3>
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
@@ -1116,7 +1126,11 @@ class WorkspaceDetails extends React.Component<
                         }}
                       >
                         {" "}
-                        {this.state.itemWithNoOwner}{" "}
+                        {this.state.itemWithNoOwner > 0 ? this.state.itemWithNoOwner : this.renderSpinner(
+                            "",
+                            SpinnerSize.large,
+                            "right"
+                          )}{" "}
                       </h3>
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
@@ -1164,7 +1178,11 @@ class WorkspaceDetails extends React.Component<
                         }}
                       >
                         {" "}
-                        {this.state.teamsExternalUser}{" "}
+                        {this.state.teamsExternalUser > 0 ? this.state.teamsExternalUser : this.renderSpinner(
+                            "",
+                            SpinnerSize.large,
+                            "right"
+                          )}{" "}
                       </h3>
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
@@ -1212,7 +1230,11 @@ class WorkspaceDetails extends React.Component<
                         }}
                       >
                         {" "}
-                        {this.state.teamsMissingInfo}{" "}
+                        {this.state.teamsMissingInfo > 0 ? this.state.teamsMissingInfo : this.renderSpinner(
+                            "",
+                            SpinnerSize.large,
+                            "right"
+                          )}{" "}
                       </h3>
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
@@ -1519,6 +1541,17 @@ getKey={this._getKey}
     );
   }
 
+  private renderSpinner(label:any, size:any, position:any): JSX.Element {
+    return (
+      <Spinner
+        className={styles.spinner}
+        label={label}
+        size={size}
+        labelPosition={position}
+      />
+    );
+  }
+
 
   private renderDialog(item: any): JSX.Element {
     return (
@@ -1682,6 +1715,7 @@ getKey={this._getKey}
 
               this.setState({
                 inActiveCount: totalInActiveTeams,
+                showSpinner : false
                 // itemWithNoOwner : countWithnoOwner,
               });
 
