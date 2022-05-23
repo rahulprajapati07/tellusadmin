@@ -115,7 +115,7 @@ class App extends React.Component {
               message
           });
       },
-      resources:["api://ambitious-pebble-0b2637f10.1.azurestaticapps.net/b0785c01-bd69-4a12-bfe1-e558e7a4b7d1"]
+      resources:["https://antaresbots.onmicrosoft.com/tellus-dev-api"]
   });
 
 
