@@ -18,8 +18,9 @@ import ExtUsersIcon from "../Icons/ExtUsersIcon.png";
 import NoOwnersIcon from "../Icons/NoOwnersIcon.png";
 import TeamsMissingIcon from "../Icons/TeamsMissingIcon.png";
 import LockIcon from "../Icons/LockIcon.png";
-import sharepointImg from "../Icons/sharepointImg.png";
+//import sharepointImg from "../Icons/sharepointImg.png";
 import InfoIcon from "../Icons/InfoIcon.jpg";
+import sharepointImg from "../Icons/sharepointImg.svg";
 import { EditableGrid, EventEmitter, EventType } from "fluentui-editable-grid";
 
 //import Skeleton from 'react-loading-skeleton'
@@ -816,9 +817,6 @@ class WorkspaceDetails extends React.Component<
     });
 
     this.addClickEvent();
-    await this._getInActiveTeams().then((ActiveTeams: any[]) => {
-      console.log("Component Teams Log =-=-=-=-= " + ActiveTeams);
-    });
     
     await this._getAllPublicTeams().then((teamsDetails: any[]) => {
       console.log("Component Teams Log" + teamsDetails);
@@ -860,7 +858,8 @@ class WorkspaceDetails extends React.Component<
       document
         .getElementsByClassName("ms-TextField-wrapper")[0]
         .appendChild(exp);
-        
+        var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .css-160')[0]
+            gridHeight.style.height = "75vh";
       //   document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1].innerHTML = "Clear";
       // var filterPadding: any = document.querySelectorAll('div[role="filtercallout"]')[0].closest('.ms-Callout');
       // filterPadding.style.padding = '13px'
@@ -884,6 +883,15 @@ class WorkspaceDetails extends React.Component<
 
   public addClickEvent() {
     const that = this;
+    var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .css-160')[0]
+        gridHeight.style.height = "40px";
+
+    if (
+        document.getElementById('export')
+        ) {
+        var exp: any = document.getElementById('export');
+        exp.setAttribute('title', 'Export Teams');
+    }
     let testArr: any = document.querySelectorAll('.ms-DetailsHeader-cell')
     testArr.forEach((element: any) => {
       element.addEventListener('click', function (ev: Event) {
@@ -904,51 +912,29 @@ class WorkspaceDetails extends React.Component<
     // change text clear All to clear
 
     if (document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label") &&
-
       document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1]) {
-
       document.querySelectorAll(
-
         "div[role='filtercallout'] .ms-Button .ms-Button-label"
-
       )[1].textContent = 'Clear';
-
     }
-
-
 
     //descrease Padding of filter box
 
     if (
-
       document.querySelectorAll('div[role="filtercallout"]') &&
-
       document.querySelectorAll('div[role="filtercallout"]')[0]
-
     ) {
-
       var filterPadding: any = document
-
         .querySelectorAll('div[role="filtercallout"]')[0]
-
         .closest('.ms-Callout')
-
       filterPadding.style.padding = '13px'
-
     }
 
-
-
     //change filter search textbox placeholder
-
     if (
-
       document.querySelectorAll('.ms-TextField-field') &&
-
       document.querySelectorAll('.ms-TextField-field')[1]
-
     ) {
-
       var placeHolderSearch: any = document.querySelectorAll(
         '.ms-TextField-field'
       )[1]
@@ -1260,13 +1246,14 @@ class WorkspaceDetails extends React.Component<
             </div>
             {/* Render table */}
             <div
-              className="ms-Grid"
-              style={{
-                margin: "15px 0",
-                backgroundColor: "#FFFFFF",
-                boxShadow: "1px 2px 7px #0000000f",
-                borderRadius: "5px",
-              }}
+                className='ms-Grid'
+                style={{
+                margin: '15px 0',
+                backgroundColor: '#FFFFFF',
+                boxShadow: '1px 2px 7px #0000000f',
+                borderRadius: '5px',
+                paddingBottom: '25px'
+                }}
             >
               {/* region Showing the All Teams Section */}
               <div className="ms-Grid-row" style={{ marginTop: 20 }}>
@@ -1287,43 +1274,13 @@ class WorkspaceDetails extends React.Component<
               {this.state.contextualMenuProps && (
                 <ContextualMenu {...this.state.contextualMenuProps} />
               )}
-              {/* {this.state.uniqueFilterValues.map((value) => {
-return <Checkbox
-label={value ? value : "(No value)"}
-//className={styles.checkbox}
-// disabled={this.state.enabledValues.indexOf(value) == -1}
-// defaultChecked={this.state.checkedFilterValues.indexOf(value) !== -1}
-// onChange={(ev: any, checked: boolean) => {
-// if (checked) {
-// this.state.checkedFilterValues.push(value);
-// } else {
-// let index = this.state.checkedFilterValues.indexOf(value);
-// if (index !== -1) {
-// this.state.checkedFilterValues.splice(index, 1);
-// }
-// }
-// this.setState({ checkedFilterValues: this.state.checkedFilterValues });
-// }}
-/>;
-})} */}
+              
               {/* This Renders the Teams Records */}
               <div className="ms-Grid-row">
                 <div
                   className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"
                   style={{ padding: "0px" }}
                 >
-                  {/* <InfiniteScroll
-dataLength={this.state.displayItems.length}
-next={this.fetchMoreData}
-hasMore={this.state.hasMore}
-loader={<h4>Loading...</h4>}
-// onScroll = { this.updateMoreData }
-endMessage={
-<p style={{ textAlign: "center" }}>
-<b>Yay! You have seen it all</b>
-</p>
-}
-> */}
                   <div className={classNames.controlWrapper}>
                   
                     <TextField
@@ -1462,6 +1419,11 @@ getKey={this._getKey}
                 <p>Content goes here.</p>
               </Panel>
             </div>
+            {this.state.showSpinner ? this.renderSpinner(
+                    "Loading Tellus",
+                    SpinnerSize.large,
+                    "right"
+                    ) : null}
           </div>
         ) : this.state.userIsAdmin === "false" ? (
           <div
@@ -1678,12 +1640,11 @@ getKey={this._getKey}
             .then((data: any[]) => {
               data.forEach((element) => {
                 var daysSinceActivity = 0;
+                
+                // if(element.title === "B's test team 2" ){
+                //     daysSinceActivity = daysSinceActivity + 1; 
+                // }
 
-                if (element.latestActivityDate != null) {
-                  daysSinceActivity =
-                    (today - new Date(element.latestActivityDate).getTime()) /
-                    (1000 * 60 * 60 * 24.0);
-                }
                 if (element.latestActivityDate != null) {
                   daysSinceActivity =
                     (today - new Date(element.latestActivityDate).getTime()) /
@@ -1727,74 +1688,13 @@ getKey={this._getKey}
               });
               // let countWithnoOwner = items.map(x => x.businessOwner == null || "" ? true : false).length;
 
+              
               this.setState({
                 inActiveCount: totalInActiveTeams,
                 showSpinner : false
                 // itemWithNoOwner : countWithnoOwner,
               });
 
-              resolve(items);
-            });
-        });
-    });
-  };
-
-  public _getInActiveTeams = async (): Promise<IWorkspace[]> => {
-    return new Promise<any>((resolve, reject) => {
-      const items: IWorkspace[] = [];
-      this.props.instance
-        .acquireTokenSilent({
-          ...loginRequest,
-          account: this.props.accounts[0],
-        })
-        .then((response: any) => {
-          callGetPublicTeams(response.accessToken)
-            .then((response) => response)
-            .then((data: any[]) => {
-              var today = this.state.today.getTime();
-              data.forEach((element) => {
-                var daysSinceActivity = 0;
-
-                if (element.latestActivityDate != null) {
-                  daysSinceActivity =
-                    (today - new Date(element.latestActivityDate).getTime()) /
-                    (1000 * 60 * 60 * 24.0);
-                }
-                if (element.status === "Active" && daysSinceActivity >= 97) {
-                  element.status = "Inactive";
-                  items.push({
-                    test: element.imageBlob,
-                    key: element.id.toString(),
-                    teamsSiteUrl: element.UrlTeams,
-                    sharePointSiteUrl: element.UrlSharePoint,
-                    name: element.title,
-                    businessDepartment: element.businessDepartment,
-                    status: element.status,
-                    type: element.template,
-                    classification: element.classification,
-                    businessOwner: element.ownerName,
-                    teamsExternalUser: element.teamsExternalUser,
-                    teamsWithNoOwner: element.teamsOwner,
-                    teamsGroupId: element.groupId,
-                  });
-                } else {
-                  items.push({
-                    test: element.imageBlob,
-                    key: element.id.toString(),
-                    teamsSiteUrl: element.UrlTeams,
-                    sharePointSiteUrl: element.UrlSharePoint,
-                    name: element.title,
-                    businessDepartment: element.businessDepartment,
-                    status: element.status,
-                    type: element.template,
-                    classification: element.classification,
-                    businessOwner: element.ownerName,
-                    teamsExternalUser: element.teamsExternalUser,
-                    teamsWithNoOwner: element.teamsOwner,
-                    teamsGroupId: element.groupId,
-                  });
-                }
-              });
               resolve(items);
             });
         });

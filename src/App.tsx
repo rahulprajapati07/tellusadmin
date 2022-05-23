@@ -75,11 +75,6 @@ const MainContent = () => {
       </div>
   );
 };
-
-// function getAccount () {
-
-// }
-// const { instance , accounts } = useMsal();
 class App extends React.Component {
 
   constructor(props:any){
@@ -97,6 +92,7 @@ class App extends React.Component {
 
     microsoftTeams.authentication.getAuthToken({
       successCallback: (token: string) => {
+        console.log("Access Token For Teams : " + token);
           //const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
           //setName(decoded!.name);
           microsoftTeams.appInitialization.notifySuccess();
@@ -106,7 +102,6 @@ class App extends React.Component {
           }).catch((err) => {
               console.log(err);
           })
-
       },
       failureCallback: (message: string) => {
           //setError(message);
@@ -115,7 +110,7 @@ class App extends React.Component {
               message
           });
       },
-      resources:["https://antaresbots.onmicrosoft.com/tellus-dev-api"]
+      resources:["api://ambitious-pebble-0b2637f10.1.azurestaticapps.net/b0785c01-bd69-4a12-bfe1-e558e7a4b7d1"]
   });
 
 

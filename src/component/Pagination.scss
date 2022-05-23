@@ -151,6 +151,9 @@
     box-shadow: 1px 2px 7px #0000000f;
     border-radius: 4px;
     padding: 13px 5px !important;
+    .ms-Spinner {
+      padding-top: 0;
+    }
     .title_wrapper {
       display: flex;
       align-items: center;
