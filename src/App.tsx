@@ -9,10 +9,11 @@ import WorkspaceDetails from './component/Workspace';
 //import { promises } from 'fs';
 import {canUserRestoreTeams}  from "../src/component/graph";
 import * as microsoftTeams from "@microsoft/teams-js";
+//import jwtDecode from "jwt-decode";
 //import UnAuthorizeduser from "../src/component/UnAuthorizedUser"
 
 //import { ProfileContentBackendService } from './component/BackendService';
-// import {canUserRestoreTeams} from './component/graph';
+import {getClientDetails} from './component/graph';
 
 
 // let userIsAdmin = false;
@@ -93,16 +94,44 @@ class App extends React.Component {
   }
 
   componentDidMount(){
+
     microsoftTeams.authentication.getAuthToken({
       successCallback: (token: string) => {
-        console.log("Access Token :- ", token);
-      },
+          //const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
+          //setName(decoded!.name);
+          microsoftTeams.appInitialization.notifySuccess();
 
+          getClientDetails(token + "", "belinda@iiab.onmicrosoft.com", "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
+              console.log(graphToken);
+          }).catch((err) => {
+              console.log(err);
+          })
+
+      },
       failureCallback: (message: string) => {
-          console.log("Teams Error FailureCallback :- " ,message);
+          //setError(message);
+          microsoftTeams.appInitialization.notifyFailure({
+              reason: microsoftTeams.appInitialization.FailedReason.AuthFailed,
+              message
+          });
       },
       resources:["api://ambitious-pebble-0b2637f10.1.azurestaticapps.net/b0785c01-bd69-4a12-bfe1-e558e7a4b7d1"]
-    });
+  });
+
+
+
+    // microsoftTeams.authentication.getAuthToken({
+    //   successCallback: (token: string) => {
+
+
+    //     console.log("Access Token :- ", token);
+    //   },
+
+    //   failureCallback: (message: string) => {
+    //       console.log("Teams Error FailureCallback :- " ,message);
+    //   },
+    //   resources:["api://ambitious-pebble-0b2637f10.1.azurestaticapps.net/b0785c01-bd69-4a12-bfe1-e558e7a4b7d1"]
+    // });
   }
 
   render(){

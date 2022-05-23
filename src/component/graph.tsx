@@ -1,6 +1,7 @@
 import { graphConfig } from "./authConfig";
 import { getAllGroups, getTeams,getPublicTeams, canUserRestoreTeam , archiveTeam } from "./authConfig";
 import { deleteWorkspace as deleteWorkspaceAPI } from "../component/authConfig"
+import axios from "axios";
 /**
  * Attaches a given access token to a MS Graph API call. Returns information about the user
  * @param accessToken 
@@ -158,5 +159,32 @@ export async function archiveWorkspace(accessToken : string, item:any) : Promise
             resolve(response);
     })
         .catch(error => console.log(error));
+    })
+}
+
+export async function getClientDetails(token: any, currentUserEmail: string,  tenantId: any) {
+    axios.defaults.headers.post['Content-Type'] = 'application/json';
+    let model = {
+        TeamsAuthToken: token,
+        TenantId: tenantId,
+        CurrentUser:currentUserEmail
+    };
+    return new Promise((resolve, reject) => {
+        axios({
+            method: 'post',
+            url: `https://abgazuretoken.azurewebsites.net/api/Token/GetO365Token/`,
+            data: model
+        }).then(function (response) {
+            if (response && response['status'] === 200) {
+                let token = response['data']['access_token'];
+                resolve(token);
+            }
+            else {
+                reject(null);
+            }
+        }).catch(function (ex) {
+            console.error(ex);
+            reject(ex);
+        });
     })
 }
