@@ -1072,11 +1072,19 @@ class WorkspaceDetails extends React.Component<
                       >
                         {" "}
                         
-                        {this.state.inActiveCount > 0 ? this.state.inActiveCount : this.renderSpinner(
+                        {this.state.showSpinner ? null : this.state.inActiveCount}
+
+                          { this.state.showSpinner ? this.renderSpinner(
                             "",
                             SpinnerSize.large,
                             "right"
-                          ) }{" "}
+                          ) : null}
+
+                        {/* {this.state.inActiveCount > 0 ? this.state.inActiveCount : this.renderSpinner(
+                            "",
+                            SpinnerSize.large,
+                            "right"
+                          ) }{" "} */}
 
                         
                       </h3>
@@ -1126,11 +1134,13 @@ class WorkspaceDetails extends React.Component<
                         }}
                       >
                         {" "}
-                        {this.state.itemWithNoOwner > 0 ? this.state.itemWithNoOwner : this.renderSpinner(
-                            "",
-                            SpinnerSize.large,
-                            "right"
-                          )}{" "}
+                        {this.state.showSpinner ? null : this.state.itemWithNoOwner}
+
+                        { this.state.showSpinner ? this.renderSpinner(
+                          "",
+                          SpinnerSize.large,
+                          "right"
+                        ) : null}
                       </h3>
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
@@ -1178,11 +1188,13 @@ class WorkspaceDetails extends React.Component<
                         }}
                       >
                         {" "}
-                        {this.state.teamsExternalUser > 0 ? this.state.teamsExternalUser : this.renderSpinner(
-                            "",
-                            SpinnerSize.large,
-                            "right"
-                          )}{" "}
+                        {this.state.showSpinner ? null : this.state.teamsExternalUser}
+
+                        { this.state.showSpinner ? this.renderSpinner(
+                          "",
+                          SpinnerSize.large,
+                          "right"
+                        ) : null}
                       </h3>
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
@@ -1230,11 +1242,13 @@ class WorkspaceDetails extends React.Component<
                         }}
                       >
                         {" "}
-                        {this.state.teamsMissingInfo > 0 ? this.state.teamsMissingInfo : this.renderSpinner(
-                            "",
-                            SpinnerSize.large,
-                            "right"
-                          )}{" "}
+                        {this.state.showSpinner ? null : this.state.teamsMissingInfo}
+
+                        { this.state.showSpinner ? this.renderSpinner(
+                          "",
+                          SpinnerSize.large,
+                          "right"
+                        ) : null}
                       </h3>
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg6">
@@ -1850,7 +1864,9 @@ getKey={this._getKey}
             inActiveCount : inactiveTeamsCountTemp,
             teamsMissingInfo : teamsMissingInfoCountTemp,
             teamsExternalUser : teamsWithExternalUserCountTemp,
-            itemWithNoOwner : teamsWithNoOwnerCountTemp
+            itemWithNoOwner : teamsWithNoOwnerCountTemp,
+            showSpinner : false
+            
         },
         () => {
           

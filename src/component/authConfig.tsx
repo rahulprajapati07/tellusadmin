@@ -38,7 +38,7 @@ export const getTeams = {
 //   getPublicTeams : "https://ffde-40-88-125-34.ngrok.io/api/GetPublicTeams?"
 // }
 export const getPublicTeams = {
-  getPublicTeams : "https://tellus-dev-api.azurewebsites.net/api/GetMyTeams?"
+  getPublicTeams : "https://tellus-dev-api.azurewebsites.net/api/GetAllTeams?"
 };
 
 export const deleteWorkspace = {
