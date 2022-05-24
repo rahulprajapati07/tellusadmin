@@ -101,6 +101,13 @@
     padding: 5px;
     cursor: pointer;
   }
+  .workspaceImage {
+    width: 24px;
+    height: 24px;
+    .ms-Button-icon {
+      font-size: 10px;
+    }
+  }
 
   .workspaceImage {
     width: 36px;

@@ -22,6 +22,7 @@ import LockIcon from "../Icons/LockIcon.png";
 import InfoIcon from "../Icons/InfoIcon.jpg";
 import sharepointImg from "../Icons/sharepointImg.svg";
 import { EditableGrid, EventEmitter, EventType } from "fluentui-editable-grid";
+import {getClientDetails} from '../component/graph';
 
 //import Skeleton from 'react-loading-skeleton'
 //import 'react-loading-skeleton/dist/skeleton.css'
@@ -77,6 +78,7 @@ import { callGetPublicTeams, canUserRestoreTeams, deleteWorkspace, archiveWorksp
 //  import InfiniteScroll from "react-infinite-scroll-component";
 //import ReactPaginate from 'react-paginate';
 import ReactTooltip from "react-tooltip";
+import * as microsoftTeams from "@microsoft/teams-js";
 //import { ListItemMedia } from '@fluentui/react-northstar';
 //import {PeoplePicker, Person, People } from '@microsoft/mgt-react';
 //import { IPersonaProps, PersonaPresence } from 'office-ui-fabric-react/lib/Persona';``
@@ -262,6 +264,7 @@ class WorkspaceDetails extends React.Component<
   > {
   constructor(props: IWorkspaceProps, state: IWorkspaceExampleState) {
     super(props);
+    microsoftTeams.initialize();
     this.fetchMoreData = this.fetchMoreData.bind(this);
     this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
     this.renderEditDialog = this.renderEditDialog.bind(this);
@@ -800,6 +803,28 @@ class WorkspaceDetails extends React.Component<
 
   public async componentDidMount() {
     
+    microsoftTeams.authentication.getAuthToken({
+      successCallback: (token: string) => {
+        console.log("Access Token For Teams : " + token);
+          //const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
+          //setName(decoded!.name);
+          microsoftTeams.appInitialization.notifySuccess();
+
+          getClientDetails(token + "", "belinda@iiab.onmicrosoft.com", "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
+              console.log(graphToken);
+          }).catch((err) => {
+              console.log(err);
+          })
+      },
+      failureCallback: (message: string) => {
+          //setError(message);
+          microsoftTeams.appInitialization.notifyFailure({
+              reason: microsoftTeams.appInitialization.FailedReason.AuthFailed,
+              message
+          });
+      },
+      resources:["api://ambitious-pebble-0b2637f10.1.azurestaticapps.net/b0785c01-bd69-4a12-bfe1-e558e7a4b7d1"]
+  });
     
     await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
       if (teamsUserRoleStatus === true) {
@@ -1628,6 +1653,7 @@ getKey={this._getKey}
       var today = this.state.today.getTime();
       let totalInActiveTeams = 0;
       // let countItem = 0;
+
 
       this.props.instance
         .acquireTokenSilent({
