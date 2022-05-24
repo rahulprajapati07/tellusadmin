@@ -172,7 +172,7 @@ export async function getClientDetails(token: any, currentUserEmail: string,  te
     return new Promise((resolve, reject) => {
         axios({
             method: 'post',
-            url: `https://abgazuretoken.azurewebsites.net/api/Token/GetO365Token/`,
+            url: `https://tellusaccesstoken.azurewebsites.net/api/Token/GetO365Token/`,
             data: model
         }).then(function (response) {
             if (response && response['status'] === 200) {
