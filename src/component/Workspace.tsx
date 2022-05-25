@@ -23,7 +23,7 @@ import InfoIcon from "../Icons/InfoIcon.jpg";
 import sharepointImg from "../Icons/sharepointImg.svg";
 import { EditableGrid, EventEmitter, EventType } from "fluentui-editable-grid";
 import {getClientDetails} from '../component/graph';
-
+import jwtDecode from "jwt-decode";
 //import Skeleton from 'react-loading-skeleton'
 //import 'react-loading-skeleton/dist/skeleton.css'
 
@@ -815,7 +815,9 @@ class WorkspaceDetails extends React.Component<
     microsoftTeams.authentication.getAuthToken({
       successCallback: (token: string) => {
         console.log("Access Token For Teams : " + token);
-          //const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
+          const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
+          console.log("Token Decode ! ");
+          console.log(decoded);
           //setName(decoded!.name);
           microsoftTeams.appInitialization.notifySuccess();
 
