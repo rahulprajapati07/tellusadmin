@@ -271,6 +271,7 @@ class WorkspaceDetails extends React.Component<
     this.addClickEvent = this.addClickEvent.bind(this);
     this._updateWorkspaces = this._updateWorkspaces.bind(this);
     this.renderDialog = this.renderDialog.bind(this);
+    this._getAccessToken = this._getAccessToken.bind(this);
     // onscroll = (event) => {
     //   console.log(event);
     // }
@@ -887,7 +888,7 @@ class WorkspaceDetails extends React.Component<
         .getElementsByClassName("ms-TextField-wrapper")[0]
         .appendChild(exp);
         var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .css-160')[0]
-            gridHeight.style.height = "75vh";
+            gridHeight.style.height = "62vh";
       //   document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1].innerHTML = "Clear";
       // var filterPadding: any = document.querySelectorAll('div[role="filtercallout"]')[0].closest('.ms-Callout');
       // filterPadding.style.padding = '13px'
@@ -1031,7 +1032,7 @@ class WorkspaceDetails extends React.Component<
     return (
       <div className="container-custom">
         {this.state.userIsAdmin === "true" ? (
-          <div className="ms-Grid" style={{marginTop:'30px'}} dir="ltr">
+          <div className="ms-Grid" style={{marginTop:'15px'}} dir="ltr">
             {/* style= {{ height : '40px' }} */}
             {/* <div className="ms-Grid-row" style={{ height: "40px" }}>
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"> */}
@@ -1648,20 +1649,18 @@ getKey={this._getKey}
   }
 
   public _getAllPublicTeams = async (): Promise<IWorkspace[]> => {
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<any>(async (resolve, reject) => {
+
+      let accessToken = await this._getAccessToken();
+
+      console.log("get Token for all public teams ");
+      console.log(accessToken);
+
       const items: IWorkspace[] = [];
       var today = this.state.today.getTime();
       let totalInActiveTeams = 0;
       // let countItem = 0;
-
-
-      this.props.instance
-        .acquireTokenSilent({
-          ...loginRequest,
-          account: this.props.accounts[0],
-        })
-        .then((response: any) => {
-          callGetPublicTeams(response.accessToken)
+      callGetPublicTeams(accessToken)
             .then((response) => response)
             .then((data: any[]) => {
               data.forEach((element) => {
@@ -1723,7 +1722,16 @@ getKey={this._getKey}
 
               resolve(items);
             });
-        });
+
+
+      // this.props.instance
+      //   .acquireTokenSilent({
+      //     ...loginRequest,
+      //     account: this.props.accounts[0],
+      //   })
+      //   .then((response: any) => {
+          
+      //   });
     });
   };
 
@@ -1853,6 +1861,45 @@ getKey={this._getKey}
             .then((data: any) => {
               resolve(data);
             });
+        });
+    });
+  };
+
+  // Genrates Access Token For the API 
+  private _getAccessToken = async () : Promise<string> => {
+    return new Promise<string>((resolve, reject) => {
+       
+      console.log("Function : Get Token Function Call");
+
+      microsoftTeams.authentication.getAuthToken({
+          
+        successCallback: (token: string) => {
+            console.log("Function : Teams Token : " + token);
+              //const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
+              //setName(decoded!.name);
+              microsoftTeams.appInitialization.notifySuccess();
+    
+              getClientDetails(token + "", "belinda@iiab.onmicrosoft.com", "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
+                
+                console.log("Function : Graph Token :")  
+                console.log(graphToken);
+
+                  resolve(graphToken as string);
+              }).catch((err) => {
+                  console.log("Function : Error For Genrates Token :");
+                  console.log(err);
+              })
+          },
+          
+          failureCallback: (message: string) => {
+              //setError(message);
+              microsoftTeams.appInitialization.notifyFailure({
+                  reason: microsoftTeams.appInitialization.FailedReason.AuthFailed,
+                  message
+              });
+          },
+
+          resources:["api://ambitious-pebble-0b2637f10.1.azurestaticapps.net/b0785c01-bd69-4a12-bfe1-e558e7a4b7d1"]
         });
     });
   };
