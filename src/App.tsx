@@ -1,13 +1,13 @@
 import React  from 'react'; //, {useState}
 import './App.css';
-import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
-import { loginRequest } from "./component/authConfig";
+//import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
+//import { loginRequest } from "./component/authConfig";
 //import { useJwt } from "react-jwt";
 //import  Button from "react-bootstrap/Button";
 //import  DetailsListDemo  from './DataListDemo';
 import WorkspaceDetails from './component/Workspace';
 //import { promises } from 'fs';
-import {canUserRestoreTeams}  from "../src/component/graph";
+//import {canUserRestoreTeams}  from "../src/component/graph";
 import * as microsoftTeams from "@microsoft/teams-js";
 //import jwtDecode from "jwt-decode";
 //import UnAuthorizeduser from "../src/component/UnAuthorizedUser"
@@ -18,63 +18,64 @@ import {getClientDetails} from './component/graph';
 
 // let userIsAdmin = false;
 
-let checkuserIsAdmin : any;
+//let checkuserIsAdmin : any = true;
 
-function handleLogin(instance :any,accounts:any) {
-    instance.loginPopup(loginRequest).catch((e :any)  => {
-        console.error(e);
-    });
-}
-const ProfileContent = () => {
-  const { instance, accounts } = useMsal();
-      return (
-        <> 
-            <WorkspaceDetails instance = {instance} accounts = {accounts} userIsAdmin = {checkuserIsAdmin}  />
-        </>
-        )
-}
+// function handleLogin(instance :any,accounts:any) {
+//     instance.loginPopup(loginRequest).catch((e :any)  => {
+//         console.error(e);
+//     });
+// }
+// const ProfileContent = () => {
+//   //const { instance, accounts } = useMsal();
+//       return (
+//         <> 
+//             <WorkspaceDetails  userIsAdmin = {checkuserIsAdmin}  />
+//             {/* <WorkspaceDetails instance = {instance} accounts = {accounts} userIsAdmin = {checkuserIsAdmin}  /> */}
+//         </>
+//         )
+// }
 /**
  * If a user is authenticated the ProfileContent component above is rendered. Otherwise a message indicating a user is not authenticated is rendered.
  */
-const MainContent = () => {
-  const { instance , accounts } = useMsal();
+// const MainContent = () => {
+//   const { instance , accounts } = useMsal();
   
-  var loginSuccess = 1;
-  for (let index = 0; index <= loginSuccess; index++) {
-    if(instance.getAllAccounts()[0] === undefined)
-        {
-          handleLogin(instance,accounts);
-        }
-  }
+//   var loginSuccess = 1;
+//   for (let index = 0; index <= loginSuccess; index++) {
+//     if(instance.getAllAccounts()[0] === undefined)
+//         {
+//           handleLogin(instance,accounts);
+//         }
+//   }
 
-  checkUserRole();
+//   checkUserRole();
 
-  function checkUserRole() {
-    instance.acquireTokenSilent({
-      ...loginRequest,
-      account: accounts[0]
-    }).then((response : any) => 
-    {
-      canUserRestoreTeams(response.accessToken, accounts[0].username).then(response => response ).then( (data:any) =>
-      {
-        checkuserIsAdmin = data;
-      })
-    })
-  }
+//   function checkUserRole() {
+//     instance.acquireTokenSilent({
+//       ...loginRequest,
+//       account: accounts[0]
+//     }).then((response : any) => 
+//     {
+//       canUserRestoreTeams(response.accessToken, accounts[0].username).then(response => response ).then( (data:any) =>
+//       {
+//         checkuserIsAdmin = data;
+//       })
+//     })
+//   }
 
-  return (
-      <div className="App">
+//   return (
+//       <div className="App">
 
-          <AuthenticatedTemplate>
-               <ProfileContent />
-          </AuthenticatedTemplate>
+//           <AuthenticatedTemplate>
+//                <ProfileContent />
+//           </AuthenticatedTemplate>
 
-          <UnauthenticatedTemplate>
-          {/* <Button variant="secondary" className="ml-auto" onClick={() => handleLogin(instance,accounts)}>Sign in using Popup</Button> */}
-          </UnauthenticatedTemplate>
-      </div>
-  );
-};
+//           <UnauthenticatedTemplate>
+//           {/* <Button variant="secondary" className="ml-auto" onClick={() => handleLogin(instance,accounts)}>Sign in using Popup</Button> */}
+//           </UnauthenticatedTemplate>
+//       </div>
+//   );
+// };
 class App extends React.Component {
 
   constructor(props:any){
@@ -135,7 +136,8 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <MainContent />
+        <WorkspaceDetails userIsAdmin = {true} />
+        {/* <MainContent /> */}
         {/* <AuthenticatedTemplate>
                <ProfileContent />
           </AuthenticatedTemplate> */}

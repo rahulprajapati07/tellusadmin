@@ -73,7 +73,7 @@ import {
 
 //import { TextField } from '@fluentui/react/lib/TextField';
 //  import { Label } from '@fluentui/react/lib/Label';
-import { loginRequest } from "../component/authConfig";
+//import { loginRequest } from "../component/authConfig";
 import { callGetPublicTeams, canUserRestoreTeams, deleteWorkspace, archiveWorkspace } from "../component/graph";
 //  import InfiniteScroll from "react-infinite-scroll-component";
 //import ReactPaginate from 'react-paginate';
@@ -253,10 +253,15 @@ export interface IWorkspace {
 }
 
 interface IWorkspaceProps {
-  instance: any;
-  accounts: any;
+  // instance: any;
+  // accounts: any;
   userIsAdmin: any;
 }
+// interface IWorkspaceProps {
+//   instance: any;
+//   accounts: any;
+//   userIsAdmin: any;
+// }
 // let userRole :any ;
 class WorkspaceDetails extends React.Component<
   IWorkspaceProps,
@@ -1739,14 +1744,10 @@ getKey={this._getKey}
     this.setState({
       dialog:"none"
     });
-    return new Promise<any>((resolve, reject) => {
-      this.props.instance
-        .acquireTokenSilent({
-          ...loginRequest,
-          account: this.props.accounts[0],
-        })
-        .then((response: any) => {
-          deleteWorkspace(response.accessToken, item)
+    return new Promise<any>( async (resolve, reject) => {
+
+      let accessToken = await this._getAccessToken();
+      deleteWorkspace(accessToken, item)
             .then(async (response: any) => {
               if (response.ok === true) {
                 this._updateWorkspaces(item);
@@ -1758,7 +1759,15 @@ getKey={this._getKey}
                 // });
               }
             })
-        });
+
+      // this.props.instance
+      //   .acquireTokenSilent({
+      //     ...loginRequest,
+      //     account: this.props.accounts[0],
+      //   })
+      //   .then((response: any) => {
+          
+      //   });
     });
   }
 
@@ -1808,14 +1817,10 @@ getKey={this._getKey}
   }
 
   public _archiveWorkspace = async (item: any): Promise<any> => {
-    return new Promise<any>((resolve, reject) => {
-      this.props.instance
-        .acquireTokenSilent({
-          ...loginRequest,
-          account: this.props.accounts[0],
-        })
-        .then((response: any) => {
-          archiveWorkspace(response.accessToken, item)
+    return new Promise<any>( async (resolve, reject) => {
+
+      let accessToken = await this._getAccessToken();
+      archiveWorkspace(accessToken, item)
             .then(
               async (response: any) => {
                 console.log("Archived API Response");
@@ -1841,28 +1846,36 @@ getKey={this._getKey}
             .then((data: any) => {
               resolve(data);
             })
-        });
+      
+      // this.props.instance
+      //   .acquireTokenSilent({
+      //     ...loginRequest,
+      //     account: this.props.accounts[0],
+      //   })
+      //   .then((response: any) => {
+          
+      //   });
     });
   }
 
   public _getUserRole = async (): Promise<boolean> => {
-    return new Promise<boolean>((resolve, reject) => {
-      this.props.instance
-        .acquireTokenSilent({
-          ...loginRequest,
-          account: this.props.accounts[0],
-        })
-        .then((response: any) => {
-          canUserRestoreTeams(
-            response.accessToken,
-            this.props.accounts[0].username
-          )
-            .then((response) => response)
-            .then((data: any) => {
-              resolve(data);
-            });
+    return new Promise<boolean>( async (resolve, reject) => {
+      let accessToken = await this._getAccessToken();
+      canUserRestoreTeams(accessToken,"belinda@iiab.onmicrosoft.com")
+        .then((response) => response)
+        .then((data: any) => {
+          resolve(data);
         });
     });
+
+
+    //   this.props.instance
+    //     .acquireTokenSilent({
+    //       ...loginRequest,
+    //       account: this.props.accounts[0],
+    //     })
+    //     .then((response: any) => {
+    // });
   };
 
   // Genrates Access Token For the API 
