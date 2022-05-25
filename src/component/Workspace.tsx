@@ -79,6 +79,7 @@ import { callGetPublicTeams, canUserRestoreTeams, deleteWorkspace, archiveWorksp
 //import ReactPaginate from 'react-paginate';
 import ReactTooltip from "react-tooltip";
 import * as microsoftTeams from "@microsoft/teams-js";
+//import { name } from '@azure/msal-browser/dist/packageMetadata';
 //import { ListItemMedia } from '@fluentui/react-northstar';
 //import {PeoplePicker, Person, People } from '@microsoft/mgt-react';
 //import { IPersonaProps, PersonaPresence } from 'office-ui-fabric-react/lib/Persona';``
@@ -818,6 +819,12 @@ class WorkspaceDetails extends React.Component<
           const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
           console.log("Token Decode ! ");
           console.log(decoded);
+
+          console.log("Token Unique Name ! ");
+          console.log(decoded!.name);
+
+          console.log("Token Tenant Id ! ");
+          console.log(decoded!.tenantId);
           //setName(decoded!.name);
           microsoftTeams.appInitialization.notifySuccess();
 
