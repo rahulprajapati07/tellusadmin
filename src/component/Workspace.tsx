@@ -235,6 +235,7 @@ export interface IWorkspaceExampleState {
   dialog: any;
   people: any;
   showSpinner : boolean;
+  currentUserEmail : string;
 }
 
 export interface IWorkspace {
@@ -631,6 +632,7 @@ class WorkspaceDetails extends React.Component<
       isDraggable: false,
       people: peopleDetails,
       showSpinner : true,
+      currentUserEmail : '',
     };
   }
 
@@ -817,18 +819,26 @@ class WorkspaceDetails extends React.Component<
       successCallback: (token: string) => {
         console.log("Access Token For Teams : " + token);
           const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
+          
+          this.setState({
+            currentUserEmail : decoded!.unique_name
+          });
+
+          console.log("Current user Email ");
+          console.log(this.state.currentUserEmail);
+
           console.log("Token Decode ! ");
           console.log(decoded);
 
           console.log("Token Unique Name ! ");
-          console.log(decoded!.name);
+          console.log(decoded!.unique_name);
 
           console.log("Token Tenant Id ! ");
           console.log(decoded!.tenantId);
           //setName(decoded!.name);
           microsoftTeams.appInitialization.notifySuccess();
 
-          getClientDetails(token + "", "belinda@iiab.onmicrosoft.com", "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
+          getClientDetails(token + "", this.state.currentUserEmail, "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
               console.log(graphToken);
           }).catch((err) => {
               console.log(err);
@@ -1870,7 +1880,7 @@ getKey={this._getKey}
   public _getUserRole = async (): Promise<boolean> => {
     return new Promise<boolean>( async (resolve, reject) => {
       let accessToken = await this._getAccessToken();
-      canUserRestoreTeams(accessToken,"belinda@iiab.onmicrosoft.com")
+      canUserRestoreTeams(accessToken,this.state.currentUserEmail)
         .then((response) => response)
         .then((data: any) => {
           resolve(data);
@@ -1901,7 +1911,7 @@ getKey={this._getKey}
               //setName(decoded!.name);
               microsoftTeams.appInitialization.notifySuccess();
     
-              getClientDetails(token + "", "belinda@iiab.onmicrosoft.com", "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
+              getClientDetails(token + "", this.state.currentUserEmail, "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
                 
                 console.log("Function : Graph Token :")  
                 console.log(graphToken);
