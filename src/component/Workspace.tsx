@@ -349,7 +349,7 @@ class WorkspaceDetails extends React.Component<
           return (
             <div className="test">
               {" "}
-              <span onClick={() => window.open(item.teamsSiteUrl, "_blank")}>
+              <span onClick={() => item.teamsSiteUrl ? window.open(item.teamsSiteUrl, "_blank") : null}>
                 {" "}
                 {item.name}{" "}
               </span>{" "}
@@ -572,6 +572,7 @@ class WorkspaceDetails extends React.Component<
         maxWidth: 20,
         // onColumnClick: (ev, columns) =>  this._onColumnContextMenu(columns, ev),
         onRender: (item: IWorkspace) => (
+          item.sharePointSiteUrl ?
           <div className="test">
             <TooltipHost key={item.key}>
               <img
@@ -582,6 +583,8 @@ class WorkspaceDetails extends React.Component<
               />
             </TooltipHost>
           </div>
+          : 
+          null
         ),
       },
     ];
@@ -1445,7 +1448,7 @@ getKey={this._getKey}
               </Panel>
             </div>
             {this.state.showSpinner ? this.renderSpinner(
-                    "Loading Tellus",
+                    "Loading",
                     SpinnerSize.large,
                     "right"
                     ) : null}
@@ -1457,11 +1460,8 @@ getKey={this._getKey}
             style={{
               display: "flex",
               justifyContent: "center",
-
               flexDirection: "column",
-
               alignItems: "center",
-
               height: "78vh",
             }}
           >
@@ -1795,7 +1795,6 @@ getKey={this._getKey}
             
         },
         () => {
-          
           this.forceUpdate();
         });
   }
@@ -1817,8 +1816,9 @@ getKey={this._getKey}
                   item.status = "Archived";
                   let tempItem = item;
                   let tempWorkspaces = this.state.workspaceItemList;
-                  tempWorkspaces.splice(tempWorkspaces.indexOf(item),1);
+                  tempWorkspaces.splice(tempWorkspaces.indexOf(tempItem),1);
                   tempWorkspaces.push(tempItem);
+
                   this.setState({
                     workspaceItemList : []
                   });
