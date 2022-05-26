@@ -430,50 +430,9 @@ class WorkspaceDetails extends React.Component<
   }
 
   public async componentDidMount() {
-
-    // Get The Token for Microsoft Teams 
-    microsoftTeams.authentication.getAuthToken({
-      successCallback: (token: string) => {
-        console.log("Access Token For Teams : " + token);
-          const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
-          
-          this.setState({
-            currentUserEmail : decoded!.unique_name
-          });
-
-          console.log("Current user Email ");
-          console.log(this.state.currentUserEmail);
-
-          console.log("Token Decode ! ");
-          console.log(decoded);
-
-          console.log("Token Unique Name ! ");
-          console.log(decoded!.unique_name);
-
-          console.log("Token Tenant Id ! ");
-          console.log(decoded!.tenantId);
-          //setName(decoded!.name);
-          microsoftTeams.appInitialization.notifySuccess();
-
-          getClientDetails(token + "", this.state.currentUserEmail, "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
-              console.log(graphToken);
-          }).catch((err) => {
-              console.log(err);
-          })
-      },
-      failureCallback: (message: string) => {
-          //setError(message);
-          microsoftTeams.appInitialization.notifyFailure({
-              reason: microsoftTeams.appInitialization.FailedReason.AuthFailed,
-              message
-          });
-      },
-      resources:["api://ambitious-pebble-0b2637f10.1.azurestaticapps.net/b0785c01-bd69-4a12-bfe1-e558e7a4b7d1"]
-  });
     
     // Check The User Is Admin 
     await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
-
       teamsUserRoleStatus ? this.setState({ userIsAdmin : 'true' }) : this.setState({ userIsAdmin : "false" }) 
     });
 
@@ -482,7 +441,7 @@ class WorkspaceDetails extends React.Component<
 
     // Get the all teams details
     await this._getAllPublicTeams().then((teamsDetails: any[]) => {
-      console.log("Component Teams Log" + teamsDetails);
+      //console.log("Component Teams Log" + teamsDetails);
 
       let countNumber = 0;
       let countMissiongInformation = 0;
@@ -1051,13 +1010,14 @@ class WorkspaceDetails extends React.Component<
 
   // Get all teams from the Azure Function 
   public _getAllPublicTeams = async (): Promise<IWorkspace[]> => {
-    return new Promise<any>(async (resolve, reject) => {
-
+    return new Promise<any>(async (resolve, reject) => {  
+      
+      console.log("Call The get all public Teams :");
       // this _getAccessToken method Genrates the access token for azure function API Call 
       let accessToken = await this._getAccessToken();
 
-      console.log("get Token for all public teams ");
-      console.log(accessToken);
+      // console.log("get Token for all public teams ");
+      // console.log(accessToken);
 
       const items: IWorkspace[] = [];
       var today = this.state.today.getTime();
@@ -1125,6 +1085,8 @@ class WorkspaceDetails extends React.Component<
                 inActiveCount: totalInActiveTeams,
                 showSpinner : false
               });
+              console.log("Get All Public Teams Response");
+              console.log(items);
               resolve(items);
             });
     });
@@ -1209,8 +1171,8 @@ class WorkspaceDetails extends React.Component<
             .then(
               async (response: any) => {
 
-                console.log("Archived API Response");
-                console.log(response);
+                // console.log("Archived API Response");
+                // console.log(response);
 
                 if (response.ok === true) {
                   item.status = "Archived";
@@ -1240,10 +1202,14 @@ class WorkspaceDetails extends React.Component<
   // this function will get the user role and retuen boolean expression if the response is true then user will Teams administrator 
   public _getUserRole = async (): Promise<boolean> => {
     return new Promise<boolean>( async (resolve, reject) => {
+      console.log("Call The GetUserRole API :");
+
       let accessToken = await this._getAccessToken();
       canUserRestoreTeams(accessToken,this.state.currentUserEmail)
         .then((response) => response)
         .then((data: any) => {
+          console.log("GetUserRole API Response :");
+          console.log(data);
           resolve(data);
         });
     });
@@ -1253,25 +1219,25 @@ class WorkspaceDetails extends React.Component<
   private _getAccessToken = async () : Promise<string> => {
     return new Promise<string>((resolve, reject) => {
        
-      console.log("Function : Get Token Function Call");
+      //console.log("Function : Get Token Function Call");
 
       microsoftTeams.authentication.getAuthToken({
           
         successCallback: (token: string) => {
-            console.log("Function : Teams Token : " + token);
+            //console.log("Function : Teams Token : " + token);
               //const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
               //setName(decoded!.name);
               microsoftTeams.appInitialization.notifySuccess();
     
               getClientDetails(token + "", this.state.currentUserEmail, "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
                 
-                console.log("Function : Graph Token :")  
-                console.log(graphToken);
+                // console.log("Function : Graph Token :")  
+                // console.log(graphToken);
 
                   resolve(graphToken as string);
               }).catch((err) => {
-                  console.log("Function : Error For Genrates Token :");
-                  console.log(err);
+                  // console.log("Function : Error For Genrates Token :");
+                  // console.log(err);
               })
           },
           
