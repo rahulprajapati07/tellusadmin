@@ -15,21 +15,4 @@ export function ProfileContentBackendService  (instance : any,accounts : any)  {
                 console.log("Request all Teams data",data);
             });
         });
-        // function getAllPublicTeams() {
-        //     instance.acquireTokenSilent({
-        //         ...loginRequest,
-        //         account: accounts[0]
-        //     }).then((response) => {
-        //         callAllTeamsRequest(response.accessToken).then(response => response).then((data:any[]) =>
-        //         {
-        //             console.log("Request all Teams data",data);
-        //         });;
-        //     });
-        // }
 }
-
-
-
-// export async function GetAllPublicTeams() : Promise<any> {
-//     getAllPublicTeams();
-// }
