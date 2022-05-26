@@ -1,9 +1,9 @@
 import * as React from 'react';
 //import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import * as ReactIcons from '@fluentui/react-icons-mdl2';
-import { IColumn } from '@fluentui/react/lib/DetailsList'; //SelectionMode DetailsList,
+//import { IColumn } from '@fluentui/react/lib/DetailsList'; //SelectionMode DetailsList,
 import { TooltipHost, mergeStyles } from '@fluentui/react';
-import { Panel } from '@fluentui/react/lib/Panel';
+//import { Panel } from '@fluentui/react/lib/Panel';
 import styles from "./CollaborationWorkspace.module.scss";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 //import { useState } from 'react';
@@ -66,10 +66,9 @@ import {
 
 import {
   IContextualMenuProps,
-  DirectionalHint,
   ContextualMenu,
   //IContextualMenuItem,
-} from "office-ui-fabric-react/lib/ContextualMenu";
+} from "office-ui-fabric-react/lib/ContextualMenu"; //DirectionalHint,
 
 //import { TextField } from '@fluentui/react/lib/TextField';
 //  import { Label } from '@fluentui/react/lib/Label';
@@ -86,58 +85,58 @@ import * as microsoftTeams from "@microsoft/teams-js";
 //import DialogExample from '../component/DialogBox/OpenDialogBox';
 // import { getTsBuildInfoEmitOutputFilePath } from 'typescript';
 
-const peopleDetails: any = [
-  {
-    key: 1,
-    imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
-    imageInitials: 'PV',
-    primaryText: 'Annie Lindqvist',
-    secondaryText: 'Designer',
-    tertiaryText: 'In a meeting',
-    optionalText: 'Available at 4:00pm',
-    //presence: PersonaPresence.online
-  },
-  {
-    key: 2,
-    imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
-    imageInitials: 'AR',
-    primaryText: 'Aaron Reid',
-    secondaryText: 'Designer',
-    tertiaryText: 'In a meeting',
-    optionalText: 'Available at 4:00pm',
-    //presence: PersonaPresence.busy
-  },
-  {
-    key: 3,
-    imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
-    imageInitials: 'AL',
-    primaryText: 'Alex Lundberg',
-    secondaryText: 'Software Developer',
-    tertiaryText: 'In a meeting',
-    optionalText: 'Available at 4:00pm',
-    //presence: PersonaPresence.dnd
-  },
-  {
-    key: 4,
-    imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
-    imageInitials: 'RK',
-    primaryText: 'Roko Kolar',
-    secondaryText: 'Financial Analyst',
-    tertiaryText: 'In a meeting',
-    optionalText: 'Available at 4:00pm',
-    //presence: PersonaPresence.offline
-  },
-  {
-    key: 5,
-    imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
-    imageInitials: 'CB',
-    primaryText: 'Christian Bergqvist',
-    secondaryText: 'Sr. Designer',
-    tertiaryText: 'In a meeting',
-    optionalText: 'Available at 4:00pm',
-    //presence: PersonaPresence.online
-  }
-];
+// const peopleDetails: any = [
+//   {
+//     key: 1,
+//     imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
+//     imageInitials: 'PV',
+//     primaryText: 'Annie Lindqvist',
+//     secondaryText: 'Designer',
+//     tertiaryText: 'In a meeting',
+//     optionalText: 'Available at 4:00pm',
+//     //presence: PersonaPresence.online
+//   },
+//   {
+//     key: 2,
+//     imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
+//     imageInitials: 'AR',
+//     primaryText: 'Aaron Reid',
+//     secondaryText: 'Designer',
+//     tertiaryText: 'In a meeting',
+//     optionalText: 'Available at 4:00pm',
+//     //presence: PersonaPresence.busy
+//   },
+//   {
+//     key: 3,
+//     imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
+//     imageInitials: 'AL',
+//     primaryText: 'Alex Lundberg',
+//     secondaryText: 'Software Developer',
+//     tertiaryText: 'In a meeting',
+//     optionalText: 'Available at 4:00pm',
+//     //presence: PersonaPresence.dnd
+//   },
+//   {
+//     key: 4,
+//     imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
+//     imageInitials: 'RK',
+//     primaryText: 'Roko Kolar',
+//     secondaryText: 'Financial Analyst',
+//     tertiaryText: 'In a meeting',
+//     optionalText: 'Available at 4:00pm',
+//     //presence: PersonaPresence.offline
+//   },
+//   {
+//     key: 5,
+//     imageUrl: 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALeSURBVHhe7dsxihRRFIXhWYAbcANuwA24AlfgDtyAGJgZaWYmJoYmgqGphqaDyIAMgggyIBgYGJVcmQZpfpn37HPua+Fc+JJD96viTFFd3VVzcnLvdIsGGIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoYm1x9+2G4++XgQWve/gKHJ3VdfNuW8PP2+PXv3bbvz4vN24/EZbvNoYGiiLnp/zi5+/t7GtQfvcftLYWjiLvrPqW3RPiyDoUln0TVvz38czykFQ5Puondz6+k57k8rDE1WFV1z+/kn3Kc2GJqsLLpm6WkEQ5OZouvSbV9dVRw6y65IMDQZLbpKpffv1JF5//XXy1fPTV1305p2GJqoit6po/NfCl/yDRNDE3XRO/VBNzN1CqJ1rDA0cRVdZstuP6oxNHEWXR69ubhc4eqp19IaNhiauIuuc/bM0Bo2GJq4iy4zR3Xr6QNDk46i6+v26NT+0BoWGJp0FD1z+mg9T2No0lF0Gf0Geeh2pmBo0lV0vX9kUnSKPkyKbpKim6ToJl1Fj07rT6YYmnQUXQ/pjE7tD61hgaFJR9H1MM3otN60xdCko+h6xGB0Wm9rYWjiLrp+JBqd9ltaGJo4i66jc+bmbfvjBxiaOIuuI3R0civrcmaKriO5Xj8zSx6mwdBEXfTsfcKa+rCktewwNBktusqoD7Z9dTlWa8zcRdmfZU8rYWgyWrRr6hqb9qsFhiYri26/670PQ5NVRS8vuWBosqLo2ibtSzsMTTqLrmvl+gCl/VgCQ5OOoqvgJdfJV8HQxFV0lVvn4aP4F4q/wdCkjrT6MnKI+mOVulSrU0P9/kzbOjoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GoYdh6GEYehiGHoahh2HoYRh6GIYehqGHYehhGHoYhh6GIXa6/QJ7DwJzermjxgAAAABJRU5ErkJggg==',
+//     imageInitials: 'CB',
+//     primaryText: 'Christian Bergqvist',
+//     secondaryText: 'Sr. Designer',
+//     tertiaryText: 'In a meeting',
+//     optionalText: 'Available at 4:00pm',
+//     //presence: PersonaPresence.online
+//   }
+// ];
 
 const screenReaderOnly = mergeStyles(hiddenContentStyle);
 const classNames = mergeStyleSets({
@@ -203,37 +202,37 @@ const icons = Object.keys(ReactIcons).reduce((acc: React.FC[], exportName) => {
 
 export interface IWorkspaceExampleState {
   columns: IColumnConfig[];
-  displayItems: IWorkspace[];
-  serachItem: IWorkspace[];
-  itemsList: IWorkspace[];
+  //displayItems: IWorkspace[];
+  //serachItem: IWorkspace[];
+  //itemsList: IWorkspace[];
   workspaceItemList : IWorkspace[];
-  sortItemsDetails: IWorkspace[];
-  uniqueFilterValues: string[];
+  //sortItemsDetails: IWorkspace[];
+  //uniqueFilterValues: string[];
   //selectionDetails: string;
   sortItemCheck: boolean;
-  isModalSelection: boolean;
-  isCompactMode: boolean;
-  announcedMessage?: string;
+  //isModalSelection: boolean;
+  //isCompactMode: boolean;
+  //announcedMessage?: string;
   userIsAdmin: string;
-  hasMore: boolean;
-  isPanelOpen: boolean;
-  isPanelClose: boolean;
-  itemArrayAppend: number;
-  checkSearchItem: boolean;
+  //hasMore: boolean;
+  //isPanelOpen: boolean;
+  //isPanelClose: boolean;
+  //itemArrayAppend: number;
+  //checkSearchItem: boolean;
   contextualMenuProps?: IContextualMenuProps;
   today: Date;
   inActiveCount: number;
   itemWithNoOwner: number;
   teamsMissingInfo: number;
   teamsExternalUser: number;
-  Paginationdata: any;
-  perPage: number;
-  pages: number;
+  //Paginationdata: any;
+  //perPage: number;
+  //pages: number;
   currentItem: any;
   hideDialog: boolean;
   isDraggable: boolean;
   dialog: any;
-  people: any;
+  ///people: any;
   showSpinner : boolean;
   currentUserEmail : string;
 }
@@ -272,7 +271,7 @@ class WorkspaceDetails extends React.Component<
   constructor(props: IWorkspaceProps, state: IWorkspaceExampleState) {
     super(props);
     microsoftTeams.initialize();
-    this.fetchMoreData = this.fetchMoreData.bind(this);
+    //this.fetchMoreData = this.fetchMoreData.bind(this);
     this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
     this.renderEditDialog = this.renderEditDialog.bind(this);
     this.addClickEvent = this.addClickEvent.bind(this);
@@ -346,8 +345,8 @@ class WorkspaceDetails extends React.Component<
         dataType: "string",
         includeColumnInExport: true,
         includeColumnInSearch: true,
-        onColumnClick: (ev, columns) =>
-          this._onColumnClick(columns, this.state.sortItemCheck),
+        // onColumnClick: (ev, columns) =>
+        //   this._onColumnClick(columns, this.state.sortItemCheck),
         isSorted: true,
         isSortedDescending: false,
         sortAscendingAriaLabel: "Sorted A to Z",
@@ -599,38 +598,38 @@ class WorkspaceDetails extends React.Component<
 
     let today = new Date();
     this.state = {
-      displayItems: [],
-      serachItem: [],
-      itemsList: [],
+      //displayItems: [],
+      //serachItem: [],
+      //itemsList: [],
       workspaceItemList : [],
-      sortItemsDetails: [],
+      //sortItemsDetails: [],
       columns: columns,
       contextualMenuProps: undefined,
       sortItemCheck: true,
-      uniqueFilterValues: [],
+      //uniqueFilterValues: [],
       // selectionDetails: this._getSelectionDetails(),
-      isModalSelection: false,
-      isCompactMode: false,
-      announcedMessage: undefined,
+      //isModalSelection: false,
+      //isCompactMode: false,
+      //announcedMessage: undefined,
       userIsAdmin: '',
-      hasMore: true,
+      //hasMore: true,
       dialog: "none",
       today: today,
-      isPanelOpen: false,
-      isPanelClose: true,
-      checkSearchItem: false,
-      itemArrayAppend: 20,
+      //isPanelOpen: false,
+      //isPanelClose: true,
+      //checkSearchItem: false,
+      //itemArrayAppend: 20,
       inActiveCount: 0,
       itemWithNoOwner: 0,
       teamsMissingInfo: 0,
       teamsExternalUser: 0,
-      Paginationdata: [],
-      perPage: 8,
-      pages: 0,
+      //Paginationdata: [],
+      //perPage: 8,
+      //pages: 0,
       currentItem: {},
       hideDialog: true,
       isDraggable: false,
-      people: peopleDetails,
+      //people: peopleDetails,
       showSpinner : true,
       currentUserEmail : '',
     };
@@ -645,87 +644,87 @@ class WorkspaceDetails extends React.Component<
     menu: ContextualMenu,
   };
 
-  private _onColumnContextMenu = (
-    column: IColumn,
-    ev: React.MouseEvent<HTMLElement>
-  ): void => {
-    this.setState({
-      contextualMenuProps: this._getContextualMenuProps(ev, column),
-    });
-  };
+  // private _onColumnContextMenu = (
+  //   column: IColumn,
+  //   ev: React.MouseEvent<HTMLElement>
+  // ): void => {
+  //   this.setState({
+  //     contextualMenuProps: this._getContextualMenuProps(ev, column),
+  //   });
+  // };
 
-  private _getContextualMenuProps(
-    ev: React.MouseEvent<HTMLElement>,
-    column: IColumn
-  ): IContextualMenuProps {
-    // var uniqueVals = [], enabledVals = [];
-    //var workspacesUnfiltered :any , workspaces;
+  // private _getContextualMenuProps(
+  //   ev: React.MouseEvent<HTMLElement>,
+  //   column: IColumn
+  // ): IContextualMenuProps {
+  //   // var uniqueVals = [], enabledVals = [];
+  //   //var workspacesUnfiltered :any , workspaces;
 
-    // workspaces = this.state.itemsList;
-    // workspacesUnfiltered = this.state.columns;
+  //   // workspaces = this.state.itemsList;
+  //   // workspacesUnfiltered = this.state.columns;
 
-    // let namesArray = workspaces.map(elem => elem.businessDepartment);
-    // let namesTraversed : any = [];
-    // let currentCountOfName = 1;
-    // let len = 0;
-    let itemForCheckbox = this.state.itemsList;
+  //   // let namesArray = workspaces.map(elem => elem.businessDepartment);
+  //   // let namesTraversed : any = [];
+  //   // let currentCountOfName = 1;
+  //   // let len = 0;
+  //   let itemForCheckbox = this.state.workspaceItemList;
 
-    let uniqueValues = itemForCheckbox.filter(
-      (ele, ind) =>
-        ind ===
-        itemForCheckbox.findIndex((elem) =>
-          elem.businessDepartment.trim() !== ""
-            ? elem.businessDepartment.trim() === ele.businessDepartment.trim()
-            : undefined
-        )
-    );
+  //   let uniqueValues = itemForCheckbox.filter(
+  //     (ele, ind) =>
+  //       ind ===
+  //       itemForCheckbox.findIndex((elem) =>
+  //         elem.businessDepartment.trim() !== ""
+  //           ? elem.businessDepartment.trim() === ele.businessDepartment.trim()
+  //           : undefined
+  //       )
+  //   );
 
-    let uniqueString: string[] = [];
+  //   let uniqueString: string[] = [];
 
-    uniqueValues.forEach((element) =>
-      uniqueString.push(element.businessDepartment)
-    );
+  //   uniqueValues.forEach((element) =>
+  //     uniqueString.push(element.businessDepartment)
+  //   );
 
-    this.setState({
-      uniqueFilterValues: uniqueString,
-    });
+  //   this.setState({
+  //     uniqueFilterValues: uniqueString,
+  //   });
 
-    // let ItemsForCheckBox ;
+  //   // let ItemsForCheckBox ;
 
-    // const items = [
-    //   { key: uniqueString[0], text: uniqueString[0], canCheck: true  },
-    //   { key: uniqueString[1], text: uniqueString[1], canCheck: true },
-    //   { key: uniqueString[1], text: uniqueString[0], canCheck: true },
-    // ];
+  //   // const items = [
+  //   //   { key: uniqueString[0], text: uniqueString[0], canCheck: true  },
+  //   //   { key: uniqueString[1], text: uniqueString[1], canCheck: true },
+  //   //   { key: uniqueString[1], text: uniqueString[0], canCheck: true },
+  //   // ];
 
-    const items = [
-      {
-        key: uniqueString[0],
-        name: uniqueString[0],
-        iconProps: { iconName: "SortUp" },
-        canCheck: true,
-        checked: column.isSorted && !column.isSortedDescending,
-        isChecked: uniqueString[0],
-      },
-      {
-        key: uniqueString[1],
-        name: uniqueString[1],
-        iconProps: { iconName: "SortDown" },
-        canCheck: true,
-        checked: column.isSorted && column.isSortedDescending,
-        isChecked: uniqueString[1],
-      },
-    ];
+  //   const items = [
+  //     {
+  //       key: uniqueString[0],
+  //       name: uniqueString[0],
+  //       iconProps: { iconName: "SortUp" },
+  //       canCheck: true,
+  //       checked: column.isSorted && !column.isSortedDescending,
+  //       isChecked: uniqueString[0],
+  //     },
+  //     {
+  //       key: uniqueString[1],
+  //       name: uniqueString[1],
+  //       iconProps: { iconName: "SortDown" },
+  //       canCheck: true,
+  //       checked: column.isSorted && column.isSortedDescending,
+  //       isChecked: uniqueString[1],
+  //     },
+  //   ];
 
-    return {
-      items: items,
-      target: ev.currentTarget as HTMLElement,
-      directionalHint: DirectionalHint.bottomLeftEdge,
-      gapSpace: 10,
-      isBeakVisible: true,
-      onDismiss: this.onContextualMenuDismissed,
-    };
-  }
+  //   return {
+  //     items: items,
+  //     target: ev.currentTarget as HTMLElement,
+  //     directionalHint: DirectionalHint.bottomLeftEdge,
+  //     gapSpace: 10,
+  //     isBeakVisible: true,
+  //     onDismiss: this.onContextualMenuDismissed,
+  //   };
+  // }
 
   private onContextualMenuDismissed = (): void => {
     this.setState({
@@ -733,44 +732,44 @@ class WorkspaceDetails extends React.Component<
     });
   };
 
-  private _onColumnClick = (column: IColumn, checkOrder: boolean): void => {
-    const { columns, sortItemsDetails } = this.state;
-    const newColumns: IColumnConfig[] = columns.slice();
-    const currColumn: IColumn = newColumns.filter(
-      (currCol) => column.key === currCol.key
-    )[0];
-    newColumns.forEach((newCol: IColumn) => {
-      if (newCol === currColumn) {
-        currColumn.isSortedDescending = !currColumn.isSortedDescending;
-        currColumn.isSorted = true;
-        this.setState({
-          announcedMessage: `${currColumn.name} is sorted ${currColumn.isSortedDescending ? "descending" : "ascending"
-            }`,
-        });
-      } else {
-        newCol.isSorted = false;
-        newCol.isSortedDescending = true;
-      }
-    });
-    const newItems = _copyAndSort(
-      sortItemsDetails,
-      currColumn.fieldName!,
-      checkOrder
-    );
-    let itemsCount = 20;
-    // this.setState({
-    //   itemsList:newItems,
-    //   itemArrayAppend : itemsCount
-    // });
-    let getItemsbyScroll = newItems.slice(0, itemsCount);
-    this.setState({
-      itemsList: newItems,
-      itemArrayAppend: itemsCount,
-      columns: newColumns,
-      displayItems: getItemsbyScroll,
-      sortItemCheck: !checkOrder,
-    });
-  };
+  // private _onColumnClick = (column: IColumn, checkOrder: boolean): void => {
+  //   const { columns, sortItemsDetails } = this.state;
+  //   const newColumns: IColumnConfig[] = columns.slice();
+  //   const currColumn: IColumn = newColumns.filter(
+  //     (currCol) => column.key === currCol.key
+  //   )[0];
+  //   newColumns.forEach((newCol: IColumn) => {
+  //     if (newCol === currColumn) {
+  //       currColumn.isSortedDescending = !currColumn.isSortedDescending;
+  //       currColumn.isSorted = true;
+  //       this.setState({
+  //         announcedMessage: `${currColumn.name} is sorted ${currColumn.isSortedDescending ? "descending" : "ascending"
+  //           }`,
+  //       });
+  //     } else {
+  //       newCol.isSorted = false;
+  //       newCol.isSortedDescending = true;
+  //     }
+  //   });
+  //   const newItems = _copyAndSort(
+  //     sortItemsDetails,
+  //     currColumn.fieldName!,
+  //     checkOrder
+  //   );
+  //   let itemsCount = 20;
+  //   // this.setState({
+  //   //   itemsList:newItems,
+  //   //   itemArrayAppend : itemsCount
+  //   // });
+  //   let getItemsbyScroll = newItems.slice(0, itemsCount);
+  //   this.setState({
+  //     itemsList: newItems,
+  //     itemArrayAppend: itemsCount,
+  //     columns: newColumns,
+  //     displayItems: getItemsbyScroll,
+  //     sortItemCheck: !checkOrder,
+  //   });
+  // };
 
   private onRenderPlainCard(item: any): JSX.Element {
     return (
@@ -898,11 +897,11 @@ class WorkspaceDetails extends React.Component<
 
       teamsDetails = teamsDetails.sort((a,b) => a.name.localeCompare(b.name) );
       this.setState({
-        displayItems: teamsDetails.slice(0, this.state.itemArrayAppend),
-        serachItem: teamsDetails,
-        itemsList: teamsDetails,
+        //displayItems: teamsDetails.slice(0, this.state.itemArrayAppend),
+        //serachItem: teamsDetails,
+        //itemsList: teamsDetails,
         workspaceItemList : teamsDetails,
-        sortItemsDetails: teamsDetails,
+        //sortItemsDetails: teamsDetails,
         itemWithNoOwner: countNumber,
         teamsMissingInfo: countMissiongInformation,
         teamsExternalUser: countExternalUser,
@@ -922,16 +921,16 @@ class WorkspaceDetails extends React.Component<
     //   .getElementsByClassName("ms-TextField-field")[1]
     //   .setAttribute("placeholder", "Search");
 
-    this.setState({
-      pages: Math.round(this.state.itemsList.length / this.state.perPage),
-    });
-    let page = 0;
-    let itemsPagination = this.state.itemsList.slice(
-      page * this.state.perPage,
-      (page + 1) * this.state.perPage
-    );
+    // this.setState({
+    //   pages: Math.round(this.state.itemsList.length / this.state.perPage),
+    // });
+    // let page = 0;
+    // let itemsPagination = this.state.itemsList.slice(
+    //   page * this.state.perPage,
+    //   (page + 1) * this.state.perPage
+    // );
 
-    this.setState({ Paginationdata: itemsPagination });
+    // this.setState({ Paginationdata: itemsPagination });
   }
 
   public addClickEvent() {
@@ -995,62 +994,62 @@ class WorkspaceDetails extends React.Component<
     }
   }
 
-  public handlePageClick = (event: any) => {
-    let page = event.selected;
-    //Pagination
-    let items = this.state.itemsList.slice(
-      page * this.state.perPage,
-      (page + 1) * this.state.perPage
-    );
-    this.setState({ Paginationdata: items });
-  };
+  // public handlePageClick = (event: any) => {
+  //   let page = event.selected;
+  //   //Pagination
+  //   let items = this.state.itemsList.slice(
+  //     page * this.state.perPage,
+  //     (page + 1) * this.state.perPage
+  //   );
+  //   this.setState({ Paginationdata: items });
+  // };
 
-  public updateMoreData = () => {
-    this.setState({
-      displayItems: this.state.displayItems,
-    });
-  };
+  // public updateMoreData = () => {
+  //   this.setState({
+  //     displayItems: this.state.displayItems,
+  //   });
+  // };
 
-  public fetchMoreData = () => {
-    let tempAllItems = this.state.itemsList;
+  // public fetchMoreData = () => {
+  //   let tempAllItems = this.state.itemsList;
 
-    this.setState({
-      itemArrayAppend: this.state.itemArrayAppend + 20,
-    });
+  //   this.setState({
+  //     itemArrayAppend: this.state.itemArrayAppend + 20,
+  //   });
 
-    // if(this.state.displayItems.length == this.state.itemsList.length){
-    //   this.setState({ hasMore: false });
-    //   return;
-    // }
+  //   // if(this.state.displayItems.length == this.state.itemsList.length){
+  //   //   this.setState({ hasMore: false });
+  //   //   return;
+  //   // }
 
-    // a fake async api call like which sends
-    // 20 more records in .5 secs
+  //   // a fake async api call like which sends
+  //   // 20 more records in .5 secs
 
-    if (this.state.itemsList.length > 0) {
-      if (this.state.displayItems.length === this.state.itemsList.length) {
-        this.setState({ hasMore: false });
-        return;
-      }
-      setTimeout(() => {
-        this.setState({
-          displayItems: this.state.itemsList.slice(
-            0,
-            this.state.itemArrayAppend
-          ),
-        });
-      }, 1500);
-    } else {
-      if (this.state.displayItems.length === tempAllItems.length) {
-        this.setState({ hasMore: false });
-        return;
-      }
-      setTimeout(() => {
-        this.setState({
-          displayItems: tempAllItems.slice(0, this.state.itemArrayAppend),
-        });
-      }, 1500);
-    }
-  };
+  //   if (this.state.itemsList.length > 0) {
+  //     if (this.state.displayItems.length === this.state.itemsList.length) {
+  //       this.setState({ hasMore: false });
+  //       return;
+  //     }
+  //     setTimeout(() => {
+  //       this.setState({
+  //         displayItems: this.state.itemsList.slice(
+  //           0,
+  //           this.state.itemArrayAppend
+  //         ),
+  //       });
+  //     }, 1500);
+  //   } else {
+  //     if (this.state.displayItems.length === tempAllItems.length) {
+  //       this.setState({ hasMore: false });
+  //       return;
+  //     }
+  //     setTimeout(() => {
+  //       this.setState({
+  //         displayItems: tempAllItems.slice(0, this.state.itemArrayAppend),
+  //       });
+  //     }, 1500);
+  //   }
+  // };
 
   render() {
     return (
@@ -1460,7 +1459,7 @@ items={this.state.items}
 columns={this.state.columns}
 getKey={this._getKey}
 /> */}
-              <Panel
+              {/* <Panel
                 headerText="Sample panel"
                 isOpen={this.state.isPanelOpen}
                 onDismiss={() => {
@@ -1470,7 +1469,7 @@ getKey={this._getKey}
                 closeButtonAriaLabel="Close"
               >
                 <p>Content goes here.</p>
-              </Panel>
+              </Panel> */}
             </div>
             {this.state.showSpinner ? this.renderSpinner(
                     "Loading",
@@ -1621,56 +1620,56 @@ getKey={this._getKey}
     this.setState({ isDraggable: !this.state.isDraggable });
   };
 
-  public _closePanel() {
-    this.setState({
-      isPanelOpen: false,
-      isPanelClose: false,
-    });
-  }
+  // public _closePanel() {
+  //   this.setState({
+  //     isPanelOpen: false,
+  //     isPanelClose: false,
+  //   });
+  // }
 
-  private _getKey(item: any, index?: number): string {
-    return item.key;
-  }
+  // private _getKey(item: any, index?: number): string {
+  //   return item.key;
+  // }
 
-  public _onChangeText = (ev: any): void => {
-    let testData = this.state.serachItem;
-    let searchData =
-      ev.target.value !== ""
-        ? testData.filter((i) =>
-          i.name.toLowerCase().startsWith(ev.target.value.toLowerCase())
-        )
-        : testData;
+  // public _onChangeText = (ev: any): void => {
+  //   let testData = this.state.serachItem;
+  //   let searchData =
+  //     ev.target.value !== ""
+  //       ? testData.filter((i) =>
+  //         i.name.toLowerCase().startsWith(ev.target.value.toLowerCase())
+  //       )
+  //       : testData;
 
-    if (searchData.length < 20) {
-      this.setState(
-        {
-          displayItems: searchData.slice(0, this.state.itemArrayAppend),
-          itemsList: searchData,
-          checkSearchItem: true,
-          hasMore: false,
-        },
-        () => console.log(this.state.displayItems)
-      );
-    } else {
-      this.setState(
-        {
-          displayItems: searchData.slice(0, this.state.itemArrayAppend),
-          itemsList: searchData,
-          checkSearchItem: true,
-          hasMore: true,
-        },
-        () => console.log(this.state.displayItems)
-      );
-    }
-  };
+  //   if (searchData.length < 20) {
+  //     this.setState(
+  //       {
+  //         displayItems: searchData.slice(0, this.state.itemArrayAppend),
+  //         itemsList: searchData,
+  //         checkSearchItem: true,
+  //         hasMore: false,
+  //       },
+  //       () => console.log(this.state.displayItems)
+  //     );
+  //   } else {
+  //     this.setState(
+  //       {
+  //         displayItems: searchData.slice(0, this.state.itemArrayAppend),
+  //         itemsList: searchData,
+  //         checkSearchItem: true,
+  //         hasMore: true,
+  //       },
+  //       () => console.log(this.state.displayItems)
+  //     );
+  //   }
+  // };
 
-  public _updatedWorkspace = async () => {
-    await this._getAllPublicTeams().then((teamsDetails: any[]) => {
-      this.setState({
-        itemsList: teamsDetails
-      });
-    });
-  }
+  // public _updatedWorkspace = async () => {
+  //   await this._getAllPublicTeams().then((teamsDetails: any[]) => {
+  //     this.setState({
+  //       itemsList: teamsDetails
+  //     });
+  //   });
+  // }
 
   public _getAllPublicTeams = async (): Promise<IWorkspace[]> => {
     return new Promise<any>(async (resolve, reject) => {
