@@ -423,7 +423,6 @@ class WorkspaceDetails extends React.Component<
         />
 
         {/* Dialog popup for both archive and delete (e.g. are you sure you want to delete?) */}
-        { this.state.contextualMenuProps ? null : this.onContextualMenuDismissed() }
         {this.state.dialog === "Update" ? this.renderEditDialog(item) : this.renderDialog(item)}
         
       </div>
