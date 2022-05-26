@@ -145,16 +145,7 @@ class WorkspaceDetails extends React.Component<
   > {
   constructor(props: IWorkspaceProps, state: IWorkspaceExampleState) {
     super(props);
-    microsoftTeams.initialize();
-    this.getUserEmail = this.getUserEmail.bind(this);
-    this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
-    this.onContextualMenuDismissed = this.onContextualMenuDismissed.bind(this);
-    this.renderEditDialog = this.renderEditDialog.bind(this);
-    this.renderDialogDelete = this.renderDialogDelete.bind(this);
-    this.addClickEvent = this.addClickEvent.bind(this);
-    this._updateWorkspaces = this._updateWorkspaces.bind(this);
-    this.renderDialog = this.renderDialog.bind(this);
-    this._getAccessToken = this._getAccessToken.bind(this);
+    let today = new Date();
 
     const columns: IColumnConfig[] = [
       {
@@ -352,7 +343,6 @@ class WorkspaceDetails extends React.Component<
       },
     ];
 
-    let today = new Date();
     this.state = {
       workspaceItemList : [],
       columns: columns,
@@ -371,6 +361,28 @@ class WorkspaceDetails extends React.Component<
       showSpinner : true,
       currentUserEmail : '',
     };
+
+    microsoftTeams.initialize();
+
+    microsoftTeams.getContext((context : any) => {
+      let userEmail = context.userPrincipalName;
+      console.log(userEmail);
+      this.setState({
+        currentUserEmail : userEmail
+      });
+      console.log("current User Email :", this.state.currentUserEmail);
+    });
+
+    this.getUserEmail = this.getUserEmail.bind(this);
+    this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
+    this.onContextualMenuDismissed = this.onContextualMenuDismissed.bind(this);
+    this.renderEditDialog = this.renderEditDialog.bind(this);
+    this.renderDialogDelete = this.renderDialogDelete.bind(this);
+    this.addClickEvent = this.addClickEvent.bind(this);
+    this._updateWorkspaces = this._updateWorkspaces.bind(this);
+    this.renderDialog = this.renderDialog.bind(this);
+    this._getAccessToken = this._getAccessToken.bind(this);
+    
   }
 
   private _labelId: string = getId("dialogLabel");
@@ -996,14 +1008,7 @@ class WorkspaceDetails extends React.Component<
   }
 
   private getUserEmail (){
-    microsoftTeams.getContext((context : any) => {
-      let userEmail = context.userPrincipalName;
-      console.log(userEmail);
-      this.setState({
-        currentUserEmail : userEmail
-      });
-      console.log("current User Email :", this.state.currentUserEmail);
-    });
+    
   }
 
   private renderDialog(item: any): JSX.Element {
