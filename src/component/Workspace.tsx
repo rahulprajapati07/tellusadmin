@@ -14,7 +14,7 @@ import LockIcon from "../Icons/LockIcon.png";
 import InfoIcon from "../Icons/InfoIcon.jpg";
 import sharepointImg from "../Icons/sharepointImg.svg";
 import { EditableGrid, EventEmitter, EventType } from "fluentui-editable-grid";
-import {getClientDetails} from '../component/graph';
+import {getClientDetails} from './BackendService';
 import jwtDecode from "jwt-decode";
 import {
   Dialog,
@@ -41,7 +41,7 @@ import {
   IContextualMenuProps,
   ContextualMenu,
 } from "office-ui-fabric-react/lib/ContextualMenu"; //DirectionalHint,
-import { callGetPublicTeams, canUserRestoreTeams, deleteWorkspace, archiveWorkspace } from "../component/graph";
+import { callGetPublicTeams, canUserRestoreTeams, deleteWorkspace, archiveWorkspace } from "./BackendService";
 import ReactTooltip from "react-tooltip";
 import * as microsoftTeams from "@microsoft/teams-js";
 
