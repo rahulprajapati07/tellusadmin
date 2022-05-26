@@ -148,6 +148,7 @@ class WorkspaceDetails extends React.Component<
     super(props);
     microsoftTeams.initialize();
     this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
+    this.onContextualMenuDismissed = this.onContextualMenuDismissed.bind(this);
     this.renderEditDialog = this.renderEditDialog.bind(this);
     this.addClickEvent = this.addClickEvent.bind(this);
     this._updateWorkspaces = this._updateWorkspaces.bind(this);
@@ -422,14 +423,14 @@ class WorkspaceDetails extends React.Component<
         />
 
         {/* Dialog popup for both archive and delete (e.g. are you sure you want to delete?) */}
+        {this.onContextualMenuDismissed()}
         {this.state.dialog === "Update" ? this.renderEditDialog(item) : this.renderDialog(item)}
-
+        
       </div>
     );
   }
 
   public async componentDidMount() {
-    
 
     // Get The Token for Microsoft Teams 
     microsoftTeams.authentication.getAuthToken({
@@ -1039,11 +1040,13 @@ class WorkspaceDetails extends React.Component<
   }
 
   private closeDialog = (confirm: boolean): void => {
-    this.setState({ dialog: "none" , contextualMenuProps : undefined });
+    this.onContextualMenuDismissed();
+    this.setState({ dialog: "none" });
   };
 
   private _closeDialog = (): void => {
-    this.setState({ hideDialog: true, contextualMenuProps : undefined });
+    this.onContextualMenuDismissed();
+    this.setState({ hideDialog: true });
   };
 
 
