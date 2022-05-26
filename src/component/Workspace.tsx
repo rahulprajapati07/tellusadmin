@@ -1936,14 +1936,14 @@ getKey={this._getKey}
   };
 }
 
-function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+// function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
 
-  let key = columnKey as keyof T;
-  let sortedItems = items.slice(0).sort((a: any, b: any) => ( //a[key] === null ? 1 : b[key] === null ? -1 :
-    (a[key].toString().toLowerCase() === b[key].toString().toLowerCase() ? 0 : isSortedDescending ? a[key].toString().toLowerCase() < b[key].toString().toLowerCase() : a[key].toString().toLowerCase() > b[key].toString().toLowerCase()) ? 1 : -1)
-  );
-  return sortedItems;
-}
+//   let key = columnKey as keyof T;
+//   let sortedItems = items.slice(0).sort((a: any, b: any) => ( //a[key] === null ? 1 : b[key] === null ? -1 :
+//     (a[key].toString().toLowerCase() === b[key].toString().toLowerCase() ? 0 : isSortedDescending ? a[key].toString().toLowerCase() < b[key].toString().toLowerCase() : a[key].toString().toLowerCase() > b[key].toString().toLowerCase()) ? 1 : -1)
+//   );
+//   return sortedItems;
+// }
 
 
 export default WorkspaceDetails;
