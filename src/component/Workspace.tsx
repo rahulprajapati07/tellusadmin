@@ -15,7 +15,7 @@ import InfoIcon from "../Icons/InfoIcon.jpg";
 import sharepointImg from "../Icons/sharepointImg.svg";
 import { EditableGrid, EventEmitter, EventType } from "fluentui-editable-grid";
 import {getClientDetails} from './BackendService';
-import jwtDecode from "jwt-decode";
+//import jwtDecode from "jwt-decode";
 import {
   Dialog,
   DialogType,
@@ -44,7 +44,6 @@ import {
 import { callGetPublicTeams, canUserRestoreTeams, deleteWorkspace, archiveWorkspace } from "./BackendService";
 import ReactTooltip from "react-tooltip";
 import * as microsoftTeams from "@microsoft/teams-js";
-
 
 const screenReaderOnly = mergeStyles(hiddenContentStyle);
 const classNames = mergeStyleSets({
@@ -148,10 +147,10 @@ class WorkspaceDetails extends React.Component<
     super(props);
     microsoftTeams.initialize();
     this.getUserEmail = this.getUserEmail.bind(this);
-
     this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
     this.onContextualMenuDismissed = this.onContextualMenuDismissed.bind(this);
     this.renderEditDialog = this.renderEditDialog.bind(this);
+    this.renderDialogDelete = this.renderDialogDelete.bind(this);
     this.addClickEvent = this.addClickEvent.bind(this);
     this._updateWorkspaces = this._updateWorkspaces.bind(this);
     this.renderDialog = this.renderDialog.bind(this);
@@ -424,11 +423,12 @@ class WorkspaceDetails extends React.Component<
         />
 
         {/* Dialog popup for both archive and delete (e.g. are you sure you want to delete?) */}
-        {this.state.dialog === "Update" ? this.renderEditDialog(item) : this.renderDialog(item)}
+        {(this.state.dialog === "Update") ? this.renderEditDialog(item) : (this.state.dialog === "Delete") ? this.renderDialogDelete(item) : (this.state.dialog === "none") ? () => { } : this.renderDialog(item)}
         
       </div>
     );
   }
+
 
   public async componentDidMount() {
     
@@ -915,6 +915,30 @@ class WorkspaceDetails extends React.Component<
       </div>
     );
   }
+  private renderDialogDelete(item: any): JSX.Element {
+    return (
+      <Dialog
+        hidden={this.state.dialog === "none"}
+        onDismiss={() => this.closeDialog(false)}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: "Delete Team",
+          subText: `Are you sure you want to delete this Team?`,
+        }}
+      >
+        <DialogFooter>
+          <PrimaryButton
+            onClick={() => this.state.dialog === "Delete" ? this._deleteWorkspace(item) : this._archiveWorkspace(item)}
+            text={'Delete'}
+          />
+          <DefaultButton
+            onClick={() => this.closeDialog(false)}
+            text="Cancel"
+          />
+        </DialogFooter>
+      </Dialog>
+    );
+  }
 
   private renderEditDialog(item: any): JSX.Element {
     <script src="https://unpkg.com/@microsoft/mgt/dist/bundle/mgt-loader.js"></script>
@@ -1259,7 +1283,6 @@ class WorkspaceDetails extends React.Component<
                   message
               });
           },
-
           resources:["api://ambitious-pebble-0b2637f10.1.azurestaticapps.net/b0785c01-bd69-4a12-bfe1-e558e7a4b7d1"]
         });
     });
