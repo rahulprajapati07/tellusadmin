@@ -373,7 +373,11 @@ class WorkspaceDetails extends React.Component<
       console.log("current User Email :", this.state.currentUserEmail);
     });
 
-    this.getUserEmail = this.getUserEmail.bind(this);
+    // Check The User Is Admin 
+    this._getUserRole().then((teamsUserRoleStatus: boolean) => {
+      teamsUserRoleStatus ? this.setState({ userIsAdmin : 'true' }) : this.setState({ userIsAdmin : "false" }) 
+    });
+
     this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
     this.onContextualMenuDismissed = this.onContextualMenuDismissed.bind(this);
     this.renderEditDialog = this.renderEditDialog.bind(this);
@@ -481,11 +485,6 @@ class WorkspaceDetails extends React.Component<
         .appendChild(exp);
         var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .css-160')[0]
             gridHeight.style.height = "62vh";
-    });
-    
-    // Check The User Is Admin 
-    await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
-      teamsUserRoleStatus ? this.setState({ userIsAdmin : 'true' }) : this.setState({ userIsAdmin : "false" }) 
     });
 
     this.addClickEvent();
@@ -997,10 +996,6 @@ class WorkspaceDetails extends React.Component<
         labelPosition={position}
       />
     );
-  }
-
-  private getUserEmail (){
-    
   }
 
   private renderDialog(item: any): JSX.Element {
