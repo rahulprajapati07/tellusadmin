@@ -443,14 +443,6 @@ class WorkspaceDetails extends React.Component<
 
 
   public async componentDidMount() {
-    
-    // Check The User Is Admin 
-    await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
-      teamsUserRoleStatus ? this.setState({ userIsAdmin : 'true' }) : this.setState({ userIsAdmin : "false" }) 
-    });
-
-    this.addClickEvent();
-    
 
     // Get the all teams details
     await this._getAllPublicTeams().then((teamsDetails: any[]) => {
@@ -478,11 +470,7 @@ class WorkspaceDetails extends React.Component<
 
       teamsDetails = teamsDetails.sort((a,b) => a.name.localeCompare(b.name) );
       this.setState({
-        //displayItems: teamsDetails.slice(0, this.state.itemArrayAppend),
-        //serachItem: teamsDetails,
-        //itemsList: teamsDetails,
         workspaceItemList : teamsDetails,
-        //sortItemsDetails: teamsDetails,
         itemWithNoOwner: countNumber,
         teamsMissingInfo: countMissiongInformation,
         teamsExternalUser: countExternalUser,
@@ -493,10 +481,14 @@ class WorkspaceDetails extends React.Component<
         .appendChild(exp);
         var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .css-160')[0]
             gridHeight.style.height = "62vh";
-      //   document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1].innerHTML = "Clear";
-      // var filterPadding: any = document.querySelectorAll('div[role="filtercallout"]')[0].closest('.ms-Callout');
-      // filterPadding.style.padding = '13px'
     });
+    
+    // Check The User Is Admin 
+    await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
+      teamsUserRoleStatus ? this.setState({ userIsAdmin : 'true' }) : this.setState({ userIsAdmin : "false" }) 
+    });
+
+    this.addClickEvent();
   }
 
   public addClickEvent() {

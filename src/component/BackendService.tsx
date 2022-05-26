@@ -20,10 +20,11 @@ export async function callGetPublicTeams(accessToken : string) : Promise<any> {
         headers: headers
     };
 
-    return new Promise<any>((resolve, reject) => {  fetch(getPublicTeams.getPublicTeams, options)
+    return new Promise<any>((resolve, reject) => {  
+        fetch(getPublicTeams.getPublicTeams, options)
         .then(response => response.json())
         .then((data) => {
-            console.log("Graph Call : Response For API ");
+            console.log("Graph Call : Response For Get All Teams API ");
             resolve(data);
           })
         .catch(error => console.log(error));
