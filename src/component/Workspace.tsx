@@ -15,7 +15,7 @@ import InfoIcon from "../Icons/InfoIcon.jpg";
 import sharepointImg from "../Icons/sharepointImg.svg";
 import { EditableGrid, EventEmitter, EventType } from "fluentui-editable-grid";
 import {getClientDetails} from './BackendService';
-import jwtDecode from "jwt-decode";
+//import jwtDecode from "jwt-decode";
 import {
   Dialog,
   DialogType,
