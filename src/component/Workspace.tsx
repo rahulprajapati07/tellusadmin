@@ -373,11 +373,6 @@ class WorkspaceDetails extends React.Component<
       console.log("current User Email :", this.state.currentUserEmail);
     });
 
-    // Check The User Is Admin 
-    this._getUserRole().then((teamsUserRoleStatus: boolean) => {
-      teamsUserRoleStatus ? this.setState({ userIsAdmin : 'true' }) : this.setState({ userIsAdmin : "false" }) 
-    });
-
     this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
     this.onContextualMenuDismissed = this.onContextualMenuDismissed.bind(this);
     this.renderEditDialog = this.renderEditDialog.bind(this);
@@ -448,44 +443,70 @@ class WorkspaceDetails extends React.Component<
 
   public async componentDidMount() {
 
-    // Get the all teams details
-    await this._getAllPublicTeams().then((teamsDetails: any[]) => {
-      //console.log("Component Teams Log" + teamsDetails);
+    // Check The User Is Admin 
+    await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
+            teamsUserRoleStatus ? this.setState({ userIsAdmin : 'true' }) : this.setState({ userIsAdmin : "false" }) 
+          });
 
-      let countNumber = 0;
-      let countMissiongInformation = 0;
-      let countExternalUser = 0;
-      for (let i = 0; i < teamsDetails.length; i++) {
-        if (teamsDetails[i].teamsWithNoOwner === 0) {
-          countNumber = countNumber + 1;
-        }
-        if (teamsDetails[i].teamsExternalUser > 0) {
-          countExternalUser = countExternalUser + 1;
-        }
-        if (
-          teamsDetails[i].businessOwner === "" ||
-          teamsDetails[i].businessDepartment === "" ||
-          teamsDetails[i].classification === "" ||
-          teamsDetails[i].type === ""
-        ) {
-          countMissiongInformation = countMissiongInformation + 1;
-        }
-      }
+    microsoftTeams.authentication.getAuthToken({
+      successCallback: (token: string) => {
+            microsoftTeams.appInitialization.notifySuccess();
+            getClientDetails(token + "", this.state.currentUserEmail, "082a7423-5b17-4f5e-a4dc-6d2396d7edfa")
+            .then(async (graphToken) => {  
+              // Get the all teams details
+                await this._getAllPublicTeams(graphToken as string ).then((teamsDetails: any[]) => {
+                  //console.log("Component Teams Log" + teamsDetails);
 
-      teamsDetails = teamsDetails.sort((a,b) => a.name.localeCompare(b.name) );
-      this.setState({
-        workspaceItemList : teamsDetails,
-        itemWithNoOwner: countNumber,
-        teamsMissingInfo: countMissiongInformation,
-        teamsExternalUser: countExternalUser,
+                  let countNumber = 0;
+                  let countMissiongInformation = 0;
+                  let countExternalUser = 0;
+                  for (let i = 0; i < teamsDetails.length; i++) {
+                    if (teamsDetails[i].teamsWithNoOwner === 0) {
+                      countNumber = countNumber + 1;
+                    }
+                    if (teamsDetails[i].teamsExternalUser > 0) {
+                      countExternalUser = countExternalUser + 1;
+                    }
+                    if (
+                      teamsDetails[i].businessOwner === "" ||
+                      teamsDetails[i].businessDepartment === "" ||
+                      teamsDetails[i].classification === "" ||
+                      teamsDetails[i].type === ""
+                    ) {
+                      countMissiongInformation = countMissiongInformation + 1;
+                    }
+                  }
+
+                  teamsDetails = teamsDetails.sort((a,b) => a.name.localeCompare(b.name) );
+                  this.setState({
+                    workspaceItemList : teamsDetails,
+                    itemWithNoOwner: countNumber,
+                    teamsMissingInfo: countMissiongInformation,
+                    teamsExternalUser: countExternalUser,
+                  });
+
+                  var exp: any = document.getElementById("export");
+                  document
+                    .getElementsByClassName("ms-TextField-wrapper")[0]
+                    .appendChild(exp);
+                    var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .css-160')[0]
+                        gridHeight.style.height = "62vh";
+                });
+            }).catch((err) => {
+                // console.log("Function : Error For Genrates Token :");
+                // console.log(err);
+            })
+        },
+        failureCallback: (message: string) => {
+            //setError(message);
+            microsoftTeams.appInitialization.notifyFailure({
+                reason: microsoftTeams.appInitialization.FailedReason.AuthFailed,
+                message
+            });
+        },
+        resources:["api://ambitious-pebble-0b2637f10.1.azurestaticapps.net/b0785c01-bd69-4a12-bfe1-e558e7a4b7d1"]
       });
-      var exp: any = document.getElementById("export");
-      document
-        .getElementsByClassName("ms-TextField-wrapper")[0]
-        .appendChild(exp);
-        var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .css-160')[0]
-            gridHeight.style.height = "62vh";
-    });
+    
 
     this.addClickEvent();
   }
@@ -1036,12 +1057,12 @@ class WorkspaceDetails extends React.Component<
 
 
   // Get all teams from the Azure Function 
-  public _getAllPublicTeams = async (): Promise<IWorkspace[]> => {
+  public _getAllPublicTeams = async (token:string): Promise<IWorkspace[]> => {
     return new Promise<any>(async (resolve, reject) => {  
       
       console.log("Call The get all public Teams :");
       // this _getAccessToken method Genrates the access token for azure function API Call 
-      let accessToken = await this._getAccessToken();
+      //let accessToken = await this._getAccessToken();
 
       // console.log("get Token for all public teams ");
       // console.log(accessToken);
@@ -1052,7 +1073,7 @@ class WorkspaceDetails extends React.Component<
       let totalInActiveTeams = 0; // Count for the inActiveTeams In Tellus Admin.
       
       // Call Azure Function With Access Token 
-      callGetPublicTeams(accessToken)
+      callGetPublicTeams(token)
             .then((response) => response)
             .then((data: any[]) => {
               data.forEach((element) => {
@@ -1282,3 +1303,9 @@ class WorkspaceDetails extends React.Component<
 }
 
 export default WorkspaceDetails;
+
+
+// Token Decode
+  //console.log("Function : Teams Token : " + token);
+  //const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
+  //setName(decoded!.name);
