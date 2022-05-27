@@ -525,10 +525,10 @@ class WorkspaceDetails extends React.Component<
     const tooltipDiv: any = document.createElement("div");
     tooltipDiv.className = 'exportTooltip';
     tooltipDiv.textContent = 'Export list of All Teams';
-    if (document.getElementById('export')) {
-      var exp: any = document.getElementById('export');    
-      exp.append(tooltipDiv);
-    }
+    // if (document.getElementById('export')) {
+    //   var exp: any = document.getElementById('export');    
+    //   exp.append(tooltipDiv);
+    // }
 
     if (
         document.getElementById('export')
