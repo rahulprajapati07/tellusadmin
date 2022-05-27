@@ -489,8 +489,11 @@ class WorkspaceDetails extends React.Component<
                   document
                     .getElementsByClassName("ms-TextField-wrapper")[0]
                     .appendChild(exp);
-                    var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .css-160')[0]
-                        gridHeight.style.height = "62vh";
+                    if (document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')) {
+                      var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')[0]
+                      let parentNodeOfScrollPane: any = gridHeight.parentElement
+                      parentNodeOfScrollPane.style.height = "61vh";
+                    }
                 });
             }).catch((err) => {
                 // console.log("Function : Error For Genrates Token :");
@@ -513,15 +516,28 @@ class WorkspaceDetails extends React.Component<
 
   public addClickEvent() {
     const that = this;
-    var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .css-160')[0]
-        gridHeight.style.height = "40px";
+    if (document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')) {
+      var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')[0]
+      let parentNodeOfScrollPane: any = gridHeight.parentElement
+      parentNodeOfScrollPane.style.height = "40px";
+    }
+
+    const tooltipDiv: any = document.createElement("div");
+    tooltipDiv.className = 'exportTooltip';
+    tooltipDiv.textContent = 'Export list of All Teams';
+    if (document.getElementById('export')) {
+      var exp: any = document.getElementById('export');    
+      exp.append(tooltipDiv);
+    }
 
     if (
         document.getElementById('export')
         ) {
         var exp: any = document.getElementById('export');
         exp.setAttribute('title', 'Export Teams');
+
     }
+
     let testArr: any = document.querySelectorAll('.ms-DetailsHeader-cell')
     testArr.forEach((element: any) => {
       element.addEventListener('click', function (ev: Event) {
@@ -1251,8 +1267,11 @@ class WorkspaceDetails extends React.Component<
   public _getUserRole = async (): Promise<boolean> => {
     return new Promise<boolean>( async (resolve, reject) => {
       console.log("Call The GetUserRole API :");
-
-      let accessToken = await this._getAccessToken();
+      let accessToken = "";
+      this.setState({
+        currentUserEmail : "belinda@iiab.onmicrosoft.com"
+      })
+      //let accessToken = await this._getAccessToken();
       canUserRestoreTeams(accessToken,this.state.currentUserEmail)
         .then((response) => response)
         .then((data: any) => {
