@@ -548,20 +548,12 @@
   border-radius: 4px;
   position: relative;
   &:hover {
-
     background-color: transparent !important;
-
     .exportTooltip {
-
       display: block;
-
     }
-
   }
-
-
-
-  .exportTooltip {
+    .exportTooltip {
     display: none;
     position: absolute;
     top: -38px;

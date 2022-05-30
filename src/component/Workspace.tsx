@@ -517,8 +517,8 @@ class WorkspaceDetails extends React.Component<
     if (
         document.getElementById('export')
         ) {
-        var exp: any = document.getElementById('export');
-        exp.setAttribute('title', 'Export Teams');
+        var exportDocumnet: any = document.getElementById('export');
+        exportDocumnet.setAttribute('title', 'Export Teams');
 
     }
 
