@@ -443,75 +443,64 @@ class WorkspaceDetails extends React.Component<
 
   public async componentDidMount() {
 
-    microsoftTeams.authentication.getAuthToken({
-      successCallback: (token: string) => {
-            microsoftTeams.appInitialization.notifySuccess();
-            getClientDetails(token + "", this.state.currentUserEmail, "082a7423-5b17-4f5e-a4dc-6d2396d7edfa")
-            .then(async (graphToken) => {  
-              // Check The User Is Admin 
-                await this._getUserRole(graphToken as string).then((teamsUserRoleStatus: boolean) => {
-                  teamsUserRoleStatus ? this.setState({ userIsAdmin : 'true' }) : this.setState({ userIsAdmin : "false" }) 
-                });
-            }).catch((err) => {
-                // console.log("Function : Error For Genrates Token :");
-                // console.log(err);
-            })
-        },
-        failureCallback: (message: string) => {
-            //setError(message);
-            microsoftTeams.appInitialization.notifyFailure({
-                reason: microsoftTeams.appInitialization.FailedReason.AuthFailed,
-                message
-            });
-        },
-        resources:["api://ambitious-pebble-0b2637f10.1.azurestaticapps.net/b0785c01-bd69-4a12-bfe1-e558e7a4b7d1"]
-      });
 
-      // Get the all teams details
-      await this._getAllPublicTeams().then((teamsDetails: any[]) => {
-        //console.log("Component Teams Log" + teamsDetails);
-
-        let countNumber = 0;
-        let countMissiongInformation = 0;
-        let countExternalUser = 0;
-        for (let i = 0; i < teamsDetails.length; i++) {
-          if (teamsDetails[i].teamsWithNoOwner === 0) {
-            countNumber = countNumber + 1;
-          }
-          if (teamsDetails[i].teamsExternalUser > 0) {
-            countExternalUser = countExternalUser + 1;
-          }
-          if (
-            teamsDetails[i].businessOwner === "" ||
-            teamsDetails[i].businessDepartment === "" ||
-            teamsDetails[i].classification === "" ||
-            teamsDetails[i].type === ""
-          ) {
-            countMissiongInformation = countMissiongInformation + 1;
-          }
-        }
-
-        teamsDetails = teamsDetails.sort((a,b) => a.name.localeCompare(b.name) );
+    await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
+      if (teamsUserRoleStatus === true) {
+        //userRole = teamsUserRoleStatus;
         this.setState({
-          workspaceItemList : teamsDetails,
-          itemWithNoOwner: countNumber,
-          teamsMissingInfo: countMissiongInformation,
-          teamsExternalUser: countExternalUser,
+          userIsAdmin: 'true', // true
         });
-
-        var exp: any = document.getElementById("export");
-        document
-          .getElementsByClassName("ms-TextField-wrapper")[0]
-          .appendChild(exp);
-          if (document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')) {
-            var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')[0]
-            let parentNodeOfScrollPane: any = gridHeight.parentElement
-            parentNodeOfScrollPane.style.height = "40px";
-          }
-      });
-    
-
+        console.log("Teams User Role status : " + this.state.userIsAdmin);
+      } else {
+        //userRole = teamsUserRoleStatus;
+        this.setState({
+          userIsAdmin: 'false',
+        });
+      }
+    });
     this.addClickEvent();
+    
+    await this._getAllPublicTeams().then((teamsDetails: any[]) => {
+      console.log("Component Teams Log" + teamsDetails);
+      //if(teamsDetails.status === ''){}
+      // this._allItems = teamsDetails;
+      let countNumber = 0;
+      let countMissiongInformation = 0;
+      let countExternalUser = 0;
+      for (let i = 0; i < teamsDetails.length; i++) {
+        if (teamsDetails[i].teamsWithNoOwner === 0) {
+          countNumber = countNumber + 1;
+        }
+        if (teamsDetails[i].teamsExternalUser > 0) {
+          countExternalUser = countExternalUser + 1;
+        }
+        if (
+          teamsDetails[i].businessOwner === "" ||
+          teamsDetails[i].businessDepartment === "" ||
+          teamsDetails[i].classification === "" ||
+          teamsDetails[i].type === ""
+        ) {
+          countMissiongInformation = countMissiongInformation + 1;
+        }
+      }
+      teamsDetails = teamsDetails.sort((a, b) => a.name.localeCompare(b.name));
+      this.setState({
+        workspaceItemList: teamsDetails,
+        itemWithNoOwner: countNumber,
+        teamsMissingInfo: countMissiongInformation,
+        teamsExternalUser: countExternalUser,
+      });
+      var exp: any = document.getElementById("export");
+      document
+        .getElementsByClassName("ms-TextField-wrapper")[0]
+        .appendChild(exp);
+      if (document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')) {
+        var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')[0];
+        // var HeightUnset: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-Fabric div:nth-child(2)')[0];
+        let parentNodeOfScrollPane: any = gridHeight.parentElement
+        parentNodeOfScrollPane.style.height = "61vh";
+      }
+    });
   }
 
   public addClickEvent() {
@@ -1264,14 +1253,14 @@ class WorkspaceDetails extends React.Component<
   }
 
   // this function will get the user role and retuen boolean expression if the response is true then user will Teams administrator 
-  public _getUserRole = async (accessToken : string): Promise<boolean> => {
+  public _getUserRole = async (): Promise<boolean> => {
     return new Promise<boolean>( async (resolve, reject) => {
       console.log("Call The GetUserRole API :");
       // let accessToken = "";
       // this.setState({
       //   currentUserEmail : "belinda@iiab.onmicrosoft.com"
       // })
-      //let accessToken = await this._getAccessToken();
+      let accessToken = await this._getAccessToken();
       canUserRestoreTeams(accessToken, this.state.currentUserEmail)
         .then((response) => response)
         .then((data: any) => {
@@ -1283,7 +1272,7 @@ class WorkspaceDetails extends React.Component<
   };
 
   // Genrates Access Token For the API 
-  private _getAccessToken = async () : Promise<string> => {
+  public _getAccessToken = async () : Promise<string> => {
     return new Promise<string>((resolve, reject) => {
        
       //console.log("Function : Get Token Function Call");
