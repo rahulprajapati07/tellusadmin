@@ -467,8 +467,6 @@ class WorkspaceDetails extends React.Component<
         resources:["api://ambitious-pebble-0b2637f10.1.azurestaticapps.net/b0785c01-bd69-4a12-bfe1-e558e7a4b7d1"]
       });
 
-      this.addClickEvent();
-
       // Get the all teams details
       await this._getAllPublicTeams().then((teamsDetails: any[]) => {
         //console.log("Component Teams Log" + teamsDetails);
@@ -508,9 +506,12 @@ class WorkspaceDetails extends React.Component<
           if (document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')) {
             var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')[0]
             let parentNodeOfScrollPane: any = gridHeight.parentElement
-            parentNodeOfScrollPane.style.height = "61vh";
+            parentNodeOfScrollPane.style.height = "40px";
           }
       });
+    
+
+    this.addClickEvent();
   }
 
   public addClickEvent() {
@@ -518,7 +519,7 @@ class WorkspaceDetails extends React.Component<
     if (document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')) {
       var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')[0]
       let parentNodeOfScrollPane: any = gridHeight.parentElement
-      parentNodeOfScrollPane.style.height = "40px";
+      parentNodeOfScrollPane.style.height = "61vh";
     }
 
     const tooltipDiv: any = document.createElement("div");
