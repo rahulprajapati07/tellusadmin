@@ -654,7 +654,7 @@ class WorkspaceDetails extends React.Component<
                       }}
                     >
                       {" "}
-                      Teams with no Owner
+                      Teams with no Owner's
                     </h6>
                     <div data-tip="Total Teams with no owner">
                       <img
@@ -708,7 +708,7 @@ class WorkspaceDetails extends React.Component<
                       }}
                     >
                       {" "}
-                      Teams with external user
+                      Teams with external user's
                     </h6>
                     <div data-tip="Total Teams with external user">
                       <img
