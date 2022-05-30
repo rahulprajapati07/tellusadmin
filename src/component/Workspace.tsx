@@ -505,11 +505,6 @@ class WorkspaceDetails extends React.Component<
 
   public addClickEvent() {
     const that = this;
-    if (document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')) {
-      var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')[0]
-      let parentNodeOfScrollPane: any = gridHeight.parentElement
-      parentNodeOfScrollPane.style.height = "61vh";
-    }
 
     const tooltipDiv: any = document.createElement("div");
     tooltipDiv.className = 'exportTooltip';
