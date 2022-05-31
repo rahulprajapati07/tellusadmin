@@ -367,6 +367,8 @@ class WorkspaceDetails extends React.Component<
     microsoftTeams.initialize();
 
     microsoftTeams.getContext((context : any) => {
+      console.log(" Current Teams Context :");
+      console.log(context.theme);
       let userEmail = context.userPrincipalName;
       console.log(userEmail);
       this.setState({
@@ -445,8 +447,7 @@ class WorkspaceDetails extends React.Component<
 
 
   public async componentDidMount() {
-
-
+    
     await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
       if (teamsUserRoleStatus === true) {
         //userRole = teamsUserRoleStatus;
@@ -616,14 +617,15 @@ class WorkspaceDetails extends React.Component<
   render() {
     return (
       <div className="container-custom">
+      
 
-        {/* Change Teams Theme  */}
-      <div className="ms-Toggle">
-      <input type="checkbox" id="modeCheck" onClick={this.checkMode} className="ms-Toggle-input" />
-      </div>
-
-        {this.state.userIsAdmin === true ? (
+        {this.state.userIsAdmin ? (
           <div className="ms-Grid" style={{marginTop:'15px'}} dir="ltr">
+            <div className="ms-Grid-row"> 
+              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"> 
+                <input type="checkbox" id="modeCheck" onClick={this.checkMode} className="ms-Toggle-input" />
+              </div>
+            </div>
             <div className="ms-Grid-row">
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
                 <div
