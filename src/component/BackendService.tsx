@@ -116,6 +116,9 @@ export async function getClientDetails(token: any, currentUserEmail: string,  te
         TenantId: tenantId,
         CurrentUser:currentUserEmail
     };
+
+    console.log("Teams Request :-");
+    console.log(model);
     return new Promise((resolve, reject) => {
         axios({
             method: 'post',

@@ -1327,6 +1327,9 @@ class WorkspaceDetails extends React.Component<
               //const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
               //setName(decoded!.name);
               microsoftTeams.appInitialization.notifySuccess();
+
+              console.log("Function : Teams Token :")  
+                console.log(graphToken);
     
               getClientDetails(token + "", this.state.currentUserEmail, "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
                 
