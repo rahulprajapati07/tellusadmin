@@ -1303,6 +1303,7 @@ class WorkspaceDetails extends React.Component<
       //   currentUserEmail : "belinda@iiab.onmicrosoft.com"
       // })
       let accessToken = await this._getAccessToken();
+      
       canUserRestoreTeams(accessToken, this.state.currentUserEmail)
         .then((response) => response)
         .then((data: any) => {
@@ -1329,8 +1330,8 @@ class WorkspaceDetails extends React.Component<
     
               getClientDetails(token + "", this.state.currentUserEmail, "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
                 
-                // console.log("Function : Graph Token :")  
-                // console.log(graphToken);
+                console.log("Function : Graph Token :")  
+                console.log(graphToken);
 
                   resolve(graphToken as string);
               }).catch((err) => {
