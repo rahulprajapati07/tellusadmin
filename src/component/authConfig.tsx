@@ -1,6 +1,6 @@
 
 export const getPublicTeams = {
-  getPublicTeams : "https://tellus-dev-api.azurewebsites.net/api/GetMyTeams?"
+  getPublicTeams : "https://tellus-dev-api.azurewebsites.net/api/GetAllTeams?"
 };
 
 export const deleteWorkspace = {
