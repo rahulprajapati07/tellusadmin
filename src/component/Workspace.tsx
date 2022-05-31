@@ -624,11 +624,6 @@ class WorkspaceDetails extends React.Component<
       <div className="container-custom">
         {this.state.userIsAdmin === "true" ? (
           <div className="ms-Grid" style={{marginTop:'15px'}} dir="ltr">
-            <div className="ms-Grid-row"> 
-              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"> 
-                <input type="checkbox" id="modeCheck" onClick={this.checkMode} className="ms-Toggle-input" />
-              </div>
-            </div>
             <div className="ms-Grid-row">
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
                 <div
