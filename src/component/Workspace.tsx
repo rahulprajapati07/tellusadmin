@@ -528,7 +528,7 @@ class WorkspaceDetails extends React.Component<
     //     teamsMode: true
     //   });
     // }
-    let bodyEle: any = document.querySelectorAll('body')[0];
+    let bodyEle: any = document.querySelectorAll('html')[0];
 
     if (bodyEle) {
       this.state.teamsMode === true ? bodyEle.className = "lightMode" : bodyEle.className = "darkMode";
@@ -543,7 +543,7 @@ class WorkspaceDetails extends React.Component<
   public addClickEvent() {
     const that = this;
 
-    let bodyEle: any = document.querySelectorAll('body')[0]
+    let bodyEle: any = document.querySelectorAll('html')[0]
 
     if (bodyEle) {
       if (this.state.teamsMode) {
@@ -874,7 +874,6 @@ class WorkspaceDetails extends React.Component<
               <div className="ms-Grid-row">
                 <div
                   className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"
-                  style={{ padding: "0px" }}
                 >
                   <div className={classNames.controlWrapper}>
                   
