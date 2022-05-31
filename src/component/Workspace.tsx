@@ -75,6 +75,7 @@ const classNames = mergeStyleSets({
   controlWrapper: {
     display: "flex",
     flexWrap: "wrap",
+    padding:"20px 0"
   },
   workspaceImage: {
     width: "36px",
@@ -874,7 +875,7 @@ class WorkspaceDetails extends React.Component<
               <div className="ms-Grid-row">
                 <div
                   className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"
-                  style={{ padding: "20px 0" }}
+                  
                 >
                   <div className={classNames.controlWrapper}>
                   
