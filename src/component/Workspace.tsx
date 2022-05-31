@@ -104,7 +104,7 @@ export interface IWorkspaceExampleState {
   columns: IColumnConfig[];
   workspaceItemList : IWorkspace[];
   sortItemCheck: boolean;
-  userIsAdmin: string;
+  userIsAdmin: boolean;
   contextualMenuProps?: IContextualMenuProps;
   today: Date;
   inActiveCount: number;
@@ -349,7 +349,7 @@ class WorkspaceDetails extends React.Component<
       columns: columns,
       contextualMenuProps: undefined,
       sortItemCheck: true,
-      userIsAdmin: '',
+      userIsAdmin: false,
       dialog: "none",
       today: today,
       inActiveCount: 0,
@@ -451,13 +451,13 @@ class WorkspaceDetails extends React.Component<
       if (teamsUserRoleStatus === true) {
         //userRole = teamsUserRoleStatus;
         this.setState({
-          userIsAdmin: 'true', // true
+          userIsAdmin: true, // true
         });
         console.log("Teams User Role status : " + this.state.userIsAdmin);
       } else {
         //userRole = teamsUserRoleStatus;
         this.setState({
-          userIsAdmin: 'false',
+          userIsAdmin: false,
         });
       }
     });
@@ -508,24 +508,28 @@ class WorkspaceDetails extends React.Component<
 
   public checkMode() {
     console.log(this.state.teamsMode)
-    let modeCheck: any = document.getElementById('modeCheck')
-    if (modeCheck.checked) {
-      this.setState({
-        teamsMode: false
-      });
-    }
-    else {
+    
+    //let modeCheck: any = document.getElementById('modeCheck')
+    
+    this.state.teamsMode ? this.setState({ teamsMode : false }) : this.setState({ teamsMode : true });
 
-      this.setState({
-        teamsMode: true
-      });
-    }
+    // if (modeCheck.checked) {
+    //   this.setState({
+    //     teamsMode: false
+    //   });
+    // }
+    // else {
+
+    //   this.setState({
+    //     teamsMode: true
+    //   });
+    // }
     let bodyEle: any = document.querySelectorAll('body')[0]
     if (bodyEle) {
       if (this.state.teamsMode) {
-        bodyEle.className = "lightMode";
-      } else {
         bodyEle.className = "darkMode";
+      } else {
+        bodyEle.className = "lightMode";
       }
     }
   }
@@ -616,12 +620,9 @@ class WorkspaceDetails extends React.Component<
         {/* Change Teams Theme  */}
       <div className="ms-Toggle">
       <input type="checkbox" id="modeCheck" onClick={this.checkMode} className="ms-Toggle-input" />
-      <label htmlFor="demo-toggle-3" className="ms-Toggle-field" >
-        <span className="ms-Label ms-Label--off">Theme Switch</span>
-      </label>
       </div>
 
-        {this.state.userIsAdmin === "true" ? (
+        {this.state.userIsAdmin === true ? (
           <div className="ms-Grid" style={{marginTop:'15px'}} dir="ltr">
             <div className="ms-Grid-row">
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
@@ -847,7 +848,7 @@ class WorkspaceDetails extends React.Component<
             </div>
             {/* Render table */}
             <div
-                className='ms-Grid'
+                className='darkGird'
                 style={{
                 margin: '15px 0',
                 backgroundColor: '#FFFFFF',
@@ -942,7 +943,7 @@ class WorkspaceDetails extends React.Component<
             </div>
             {this.state.showSpinner ? this.renderSpinner("Loading",SpinnerSize.large,"right") : null}
           </div>
-        ) : this.state.userIsAdmin === "false" ? (
+        ) : this.state.userIsAdmin === false ? (
           <div
             className="ms-Grid"
             dir="ltr"
