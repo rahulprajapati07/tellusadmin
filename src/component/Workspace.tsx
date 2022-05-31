@@ -1329,7 +1329,7 @@ class WorkspaceDetails extends React.Component<
               microsoftTeams.appInitialization.notifySuccess();
 
               console.log("Function : Teams Token :")  
-                console.log(graphToken);
+                console.log(token);
     
               getClientDetails(token + "", this.state.currentUserEmail, "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
                 
