@@ -104,7 +104,7 @@ export interface IWorkspaceExampleState {
   columns: IColumnConfig[];
   workspaceItemList : IWorkspace[];
   sortItemCheck: boolean;
-  userIsAdmin: boolean;
+  userIsAdmin: string;
   contextualMenuProps?: IContextualMenuProps;
   today: Date;
   inActiveCount: number;
@@ -117,7 +117,7 @@ export interface IWorkspaceExampleState {
   dialog: any;
   showSpinner : boolean;
   currentUserEmail : string;
-  teamsMode : string;
+  teamsMode : boolean;
 }
 
 export interface IWorkspace {
@@ -349,7 +349,7 @@ class WorkspaceDetails extends React.Component<
       columns: columns,
       contextualMenuProps: undefined,
       sortItemCheck: true,
-      userIsAdmin: false,
+      userIsAdmin: '',
       dialog: "none",
       today: today,
       inActiveCount: 0,
@@ -361,7 +361,7 @@ class WorkspaceDetails extends React.Component<
       isDraggable: false,
       showSpinner : true,
       currentUserEmail : '',
-      teamsMode : 'default'
+      teamsMode : true
     };
 
     microsoftTeams.initialize();
@@ -370,7 +370,7 @@ class WorkspaceDetails extends React.Component<
       console.log(" Current Teams Context :");
       console.log(context.theme);
 
-      context.theme === "default" ? this.setState({ teamsMode : "default" }) : this.setState({ teamsMode : "dark" });
+      context.theme === "default" ? this.setState({ teamsMode : true }) : this.setState({ teamsMode : false });
 
       let userEmail = context.userPrincipalName;
       console.log(userEmail);
@@ -455,13 +455,13 @@ class WorkspaceDetails extends React.Component<
       if (teamsUserRoleStatus === true) {
         //userRole = teamsUserRoleStatus;
         this.setState({
-          userIsAdmin: true, // true
+          userIsAdmin: "true", // true
         });
         console.log("Teams User Role status : " + this.state.userIsAdmin);
       } else {
         //userRole = teamsUserRoleStatus;
         this.setState({
-          userIsAdmin: false,
+          userIsAdmin: "false",
         });
       }
     });
@@ -515,7 +515,7 @@ class WorkspaceDetails extends React.Component<
     
     //let modeCheck: any = document.getElementById('modeCheck')
     
-    this.state.teamsMode === "default" ? this.setState({ teamsMode : "default" }) : this.setState({ teamsMode : "dark" });
+    this.state.teamsMode ? this.setState({ teamsMode : true }) : this.setState({ teamsMode : false });
     
     // if (modeCheck.checked) {
     //   this.setState({
@@ -531,7 +531,7 @@ class WorkspaceDetails extends React.Component<
     let bodyEle: any = document.querySelectorAll('body')[0];
 
     if (bodyEle) {
-      this.state.teamsMode === "default" ? bodyEle.className = "darkMode" : bodyEle.className = "lightMode";
+      this.state.teamsMode === true ? bodyEle.className = "lightMode" : bodyEle.className = "darkMode";
       // if (this.state.teamsMode) {
       //   bodyEle.className = "darkMode";
       // } else {
@@ -622,9 +622,7 @@ class WorkspaceDetails extends React.Component<
   render() {
     return (
       <div className="container-custom">
-      
-
-        {this.state.userIsAdmin ? (
+        {this.state.userIsAdmin === "true" ? (
           <div className="ms-Grid" style={{marginTop:'15px'}} dir="ltr">
             <div className="ms-Grid-row"> 
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"> 
@@ -950,7 +948,7 @@ class WorkspaceDetails extends React.Component<
             </div>
             {this.state.showSpinner ? this.renderSpinner("Loading",SpinnerSize.large,"right") : null}
           </div>
-        ) : this.state.userIsAdmin === false ? (
+        ) : this.state.userIsAdmin === "false" ? (
           <div
             className="ms-Grid"
             dir="ltr"
