@@ -701,9 +701,9 @@ class WorkspaceDetails extends React.Component<
                       }}
                     >
                       {" "}
-                      Teams with no Owner's
+                      Teams with no Owner
                     </h6>
-                    <div data-tip="Total Teams with no owner">
+                    <div data-tip="Total Teams with no owner's">
                       <img
                         width="10.0"
                         src={InfoIcon}
@@ -755,9 +755,9 @@ class WorkspaceDetails extends React.Component<
                       }}
                     >
                       {" "}
-                      Teams with external user's
+                      Teams with external user
                     </h6>
-                    <div data-tip="Total Teams with external user">
+                    <div data-tip="Total Teams with external user's">
                       <img
                         width="10.0"
                         src={InfoIcon}
@@ -874,6 +874,7 @@ class WorkspaceDetails extends React.Component<
               <div className="ms-Grid-row">
                 <div
                   className="ms-Grid-col ms-sm6 ms-md4 ms-lg12"
+                  style={{ padding: "20px 0" }}
                 >
                   <div className={classNames.controlWrapper}>
                   
