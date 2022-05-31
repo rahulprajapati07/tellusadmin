@@ -117,7 +117,7 @@ export interface IWorkspaceExampleState {
   dialog: any;
   showSpinner : boolean;
   currentUserEmail : string;
-  teamsMode : boolean;
+  teamsMode : string;
 }
 
 export interface IWorkspace {
@@ -361,7 +361,7 @@ class WorkspaceDetails extends React.Component<
       isDraggable: false,
       showSpinner : true,
       currentUserEmail : '',
-      teamsMode : true
+      teamsMode : 'default'
     };
 
     microsoftTeams.initialize();
@@ -369,6 +369,9 @@ class WorkspaceDetails extends React.Component<
     microsoftTeams.getContext((context : any) => {
       console.log(" Current Teams Context :");
       console.log(context.theme);
+
+      context.theme === "default" ? this.setState({ teamsMode : "default" }) : this.setState({ teamsMode : "dark" });
+
       let userEmail = context.userPrincipalName;
       console.log(userEmail);
       this.setState({
@@ -512,8 +515,8 @@ class WorkspaceDetails extends React.Component<
     
     //let modeCheck: any = document.getElementById('modeCheck')
     
-    this.state.teamsMode ? this.setState({ teamsMode : false }) : this.setState({ teamsMode : true });
-
+    this.state.teamsMode === "default" ? this.setState({ teamsMode : "default" }) : this.setState({ teamsMode : "dark" });
+    
     // if (modeCheck.checked) {
     //   this.setState({
     //     teamsMode: false
@@ -525,13 +528,15 @@ class WorkspaceDetails extends React.Component<
     //     teamsMode: true
     //   });
     // }
-    let bodyEle: any = document.querySelectorAll('body')[0]
+    let bodyEle: any = document.querySelectorAll('body')[0];
+
     if (bodyEle) {
-      if (this.state.teamsMode) {
-        bodyEle.className = "darkMode";
-      } else {
-        bodyEle.className = "lightMode";
-      }
+      this.state.teamsMode === "default" ? bodyEle.className = "darkMode" : bodyEle.className = "lightMode";
+      // if (this.state.teamsMode) {
+      //   bodyEle.className = "darkMode";
+      // } else {
+      //   bodyEle.className = "lightMode";
+      // }
     }
   }
 
