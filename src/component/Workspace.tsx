@@ -117,6 +117,7 @@ export interface IWorkspaceExampleState {
   dialog: any;
   showSpinner : boolean;
   currentUserEmail : string;
+  teamsMode : boolean;
 }
 
 export interface IWorkspace {
@@ -360,6 +361,7 @@ class WorkspaceDetails extends React.Component<
       isDraggable: false,
       showSpinner : true,
       currentUserEmail : '',
+      teamsMode : true
     };
 
     microsoftTeams.initialize();
@@ -373,6 +375,7 @@ class WorkspaceDetails extends React.Component<
       console.log("current User Email :", this.state.currentUserEmail);
     });
 
+    this.checkMode = this.checkMode.bind(this);
     this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
     this.onContextualMenuDismissed = this.onContextualMenuDismissed.bind(this);
     this.renderEditDialog = this.renderEditDialog.bind(this);
@@ -503,8 +506,42 @@ class WorkspaceDetails extends React.Component<
     });
   }
 
+  public checkMode() {
+    console.log(this.state.teamsMode)
+    let modeCheck: any = document.getElementById('modeCheck')
+    if (modeCheck.checked) {
+      this.setState({
+        teamsMode: false
+      });
+    }
+    else {
+
+      this.setState({
+        teamsMode: true
+      });
+    }
+    let bodyEle: any = document.querySelectorAll('body')[0]
+    if (bodyEle) {
+      if (this.state.teamsMode) {
+        bodyEle.className = "lightMode";
+      } else {
+        bodyEle.className = "darkMode";
+      }
+    }
+  }
+
   public addClickEvent() {
     const that = this;
+
+    let bodyEle: any = document.querySelectorAll('body')[0]
+
+    if (bodyEle) {
+      if (this.state.teamsMode) {
+        bodyEle.className = "lightMode";
+      } else {
+        bodyEle.className = "darkMode";
+      }
+    }
 
     const tooltipDiv: any = document.createElement("div");
     tooltipDiv.className = 'exportTooltip';
@@ -575,6 +612,15 @@ class WorkspaceDetails extends React.Component<
   render() {
     return (
       <div className="container-custom">
+
+        {/* Change Teams Theme  */}
+      <div className="ms-Toggle">
+      <input type="checkbox" id="modeCheck" onClick={this.checkMode} className="ms-Toggle-input" />
+      <label htmlFor="demo-toggle-3" className="ms-Toggle-field" >
+        <span className="ms-Label ms-Label--off">Theme Switch</span>
+      </label>
+      </div>
+
         {this.state.userIsAdmin === "true" ? (
           <div className="ms-Grid" style={{marginTop:'15px'}} dir="ltr">
             <div className="ms-Grid-row">
