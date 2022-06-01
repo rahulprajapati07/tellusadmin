@@ -1271,7 +1271,17 @@ class WorkspaceDetails extends React.Component<
                 // console.log(response);
 
                 if (response.ok === true) {
-                  item.status = "Archived";
+                  
+                  if(item.status == "Inactive")
+                  {
+                    item.status == "Archived" ? "Active" : "Archived";  
+                  }
+                  else
+                  {
+                    item.status == "Archived" ? "Active" : "Archived";
+                  }
+                  // item.status == "Archived" ? (item.status == "Active" ?  "Active":  "Active") : "Archived";
+                  
                   let tempItem = item;
                   let tempWorkspaces = this.state.workspaceItemList;
 
