@@ -627,6 +627,9 @@
       // border: 3px solid #b6b5b5a2; /* creates padding around scroll thumb */
     }
   }
+  span[class^="subText-"]{
+    color:#fff
+  } 
   //tooltip
   .type-dark,
   .exportTooltip {
