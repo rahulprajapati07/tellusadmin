@@ -459,6 +459,22 @@ class WorkspaceDetails extends React.Component<
 
   public async componentDidMount() {
 
+    await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
+      if (teamsUserRoleStatus === true) {
+        //userRole = teamsUserRoleStatus;
+        this.setState({
+          userIsAdmin: "true", // true
+        });
+        console.log("Teams User Role status : " + this.state.userIsAdmin);
+      } else {
+        //userRole = teamsUserRoleStatus;
+        this.setState({
+          userIsAdmin: "false",
+        });
+      }
+    });
+    this.addClickEvent();
+
     await this._getAllPublicTeams().then((teamsDetails: any[]) => {
       console.log("Component Teams Log" + teamsDetails);
       //if(teamsDetails.status === ''){}
@@ -501,21 +517,7 @@ class WorkspaceDetails extends React.Component<
       }
     });
     
-    await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
-      if (teamsUserRoleStatus === true) {
-        //userRole = teamsUserRoleStatus;
-        this.setState({
-          userIsAdmin: "true", // true
-        });
-        console.log("Teams User Role status : " + this.state.userIsAdmin);
-      } else {
-        //userRole = teamsUserRoleStatus;
-        this.setState({
-          userIsAdmin: "false",
-        });
-      }
-    });
-    this.addClickEvent();
+    
   }
 
   public checkMode() {
