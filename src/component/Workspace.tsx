@@ -119,6 +119,7 @@ export interface IWorkspaceExampleState {
   showSpinner : boolean;
   currentUserEmail : string;
   teamsMode : boolean;
+  isSort : boolean;
 }
 
 export interface IWorkspace {
@@ -363,7 +364,8 @@ class WorkspaceDetails extends React.Component<
       isDraggable: false,
       showSpinner : true,
       currentUserEmail : '',
-      teamsMode : true
+      teamsMode : true,
+      isSort : true
     };
 
     microsoftTeams.initialize();
@@ -391,7 +393,7 @@ class WorkspaceDetails extends React.Component<
     this._updateWorkspaces = this._updateWorkspaces.bind(this);
     this.renderDialog = this.renderDialog.bind(this);
     this._getAccessToken = this._getAccessToken.bind(this);
-    
+    this.sortColumn = this.sortColumn.bind(this);
   }
 
   private _labelId: string = getId("dialogLabel");
@@ -562,7 +564,7 @@ class WorkspaceDetails extends React.Component<
       if (this.state.teamsMode) {
         bodyEle.className = "lightMode";
       } else {
-        bodyEle.className = "darkMode";
+        bodyEle.className = "highContrast";
       }
     }
 
@@ -581,6 +583,15 @@ class WorkspaceDetails extends React.Component<
         exportDocumnet.setAttribute('title', 'Export Teams');
 
     }
+    let nameColumn: any = document.querySelectorAll('.ms-DetailsHeader-cell')[1]
+    nameColumn.addEventListener('click',  (ev: Event) => {
+      let currentEvent = ev;
+      console.log(currentEvent);
+      this.sortColumn(true);
+      // let currentWorkspaces = this.state.workspaceItemList;
+
+    });
+
 
     let testArr: any = document.querySelectorAll('.ms-DetailsHeader-cell')
     testArr.forEach((element: any) => {
@@ -595,6 +606,32 @@ class WorkspaceDetails extends React.Component<
         let test1 = setInterval(() => { checkPopup(); }, 100);
       });
     })
+  }
+
+  public sortColumn (currentSort : boolean)
+  {
+
+    let currentWorkspaces = [...this.state.workspaceItemList];
+
+    if(this.state.isSort)
+    {
+      
+      let decWorkspaces = currentWorkspaces.sort((a, b) => b.name.localeCompare(a.name));
+      
+      this.setState({
+          workspaceItemList : decWorkspaces,
+          isSort : false
+      });
+    }
+    else
+    {
+      let accWorkspaces = currentWorkspaces.sort((a, b) => a.name.localeCompare(b.name));
+      
+      this.setState({
+          workspaceItemList : accWorkspaces,
+          isSort : true
+      });
+    }
   }
 
   public applyCustomCSS() {
@@ -632,7 +669,7 @@ class WorkspaceDetails extends React.Component<
     }
   }
 
-  render() {
+  public render() {
 
     return (
       <div className="container-custom">
@@ -1307,14 +1344,14 @@ class WorkspaceDetails extends React.Component<
                   // item.status == "Archived" ? (item.status == "Active" ?  "Active":  "Active") : "Archived";
                   
                   let tempItem = item;
-                  let tempWorkspaces = this.state.workspaceItemList;
+                  let tempWorkspaces = [...this.state.workspaceItemList];
 
                   tempWorkspaces.splice(tempWorkspaces.indexOf(tempItem),1);
                   tempWorkspaces.push(tempItem);
 
-                  this.setState({
-                    workspaceItemList : []
-                  });
+                  // this.setState({
+                  //   workspaceItemList : []
+                  // });
 
                   this.setState({
                     workspaceItemList : tempWorkspaces,
