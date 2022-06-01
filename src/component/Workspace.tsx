@@ -543,7 +543,7 @@ class WorkspaceDetails extends React.Component<
     let bodyEle: any = document.querySelectorAll('html')[0];
 
     if (bodyEle) {
-      this.state.teamsMode === true ? bodyEle.className = "lightMode" : bodyEle.className = "highContrast";
+      this.state.teamsMode === true ? bodyEle.className = "lightMode" : bodyEle.className = "darkMode";
       
 
       
