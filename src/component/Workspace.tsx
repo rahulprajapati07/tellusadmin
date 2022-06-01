@@ -198,6 +198,7 @@ class WorkspaceDetails extends React.Component<
         sortAscendingAriaLabel: "Sorted A to Z",
         sortDescendingAriaLabel: "Sorted Z to A",
         data: "string",
+        onColumnClick : (ev: React.MouseEvent<HTMLElement>) => this.onColumnClick(ev),
         onRender: (item: IWorkspace) => {
           return (
             <div className="test">
@@ -396,6 +397,12 @@ class WorkspaceDetails extends React.Component<
   private _labelId: string = getId("dialogLabel");
   private _subTextId: string = getId("subTextLabel");
 
+  private onColumnClick (event:any){
+    let clickEvent = event;
+    console.log("Click Event :- ");
+    console.log(clickEvent);
+  }
+
   private _dragOptions = {
     moveMenuItemText: "Move",
     closeMenuItemText: "Close",
@@ -451,23 +458,7 @@ class WorkspaceDetails extends React.Component<
 
 
   public async componentDidMount() {
-    
-    await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
-      if (teamsUserRoleStatus === true) {
-        //userRole = teamsUserRoleStatus;
-        this.setState({
-          userIsAdmin: "true", // true
-        });
-        console.log("Teams User Role status : " + this.state.userIsAdmin);
-      } else {
-        //userRole = teamsUserRoleStatus;
-        this.setState({
-          userIsAdmin: "false",
-        });
-      }
-    });
-    this.addClickEvent();
-    
+
     await this._getAllPublicTeams().then((teamsDetails: any[]) => {
       console.log("Component Teams Log" + teamsDetails);
       //if(teamsDetails.status === ''){}
@@ -509,6 +500,22 @@ class WorkspaceDetails extends React.Component<
         parentNodeOfScrollPane.style.height = "61vh";
       }
     });
+    
+    await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
+      if (teamsUserRoleStatus === true) {
+        //userRole = teamsUserRoleStatus;
+        this.setState({
+          userIsAdmin: "true", // true
+        });
+        console.log("Teams User Role status : " + this.state.userIsAdmin);
+      } else {
+        //userRole = teamsUserRoleStatus;
+        this.setState({
+          userIsAdmin: "false",
+        });
+      }
+    });
+    this.addClickEvent();
   }
 
   public checkMode() {
@@ -532,7 +539,10 @@ class WorkspaceDetails extends React.Component<
     let bodyEle: any = document.querySelectorAll('html')[0];
 
     if (bodyEle) {
-      this.state.teamsMode === true ? bodyEle.className = "lightMode" : bodyEle.className = "darkMode";
+      this.state.teamsMode === true ? bodyEle.className = "lightMode" : bodyEle.className = "highContrast";
+      
+
+      
       // if (this.state.teamsMode) {
       //   bodyEle.className = "darkMode";
       // } else {
@@ -621,10 +631,11 @@ class WorkspaceDetails extends React.Component<
   }
 
   render() {
+
     return (
       <div className="container-custom">
         {this.state.userIsAdmin === "true" ? (
-          <div className="ms-Grid" style={{marginTop:'15px'}} dir="ltr">
+          <div className="ms-Grid" style={{marginTop:'30px'}} dir="ltr">
             <div className="ms-Grid-row">
               <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg3">
                 <div

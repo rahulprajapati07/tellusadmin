@@ -194,16 +194,7 @@
       }
     }
   }
-  .elliptical-menu {
-    .ms-Button {
-      &:hover {
-        background-color: #212121 !important;
-      }
-      .ms-Button-label {
-        color: #fff !important;
-      }
-    }
-  }
+
   .ms-FocusZone,
   .ms-Fabric {
     background-color: #ffffff;
@@ -411,7 +402,7 @@
         width: 100%;
         padding: 5px 20px;
         &:hover {
-          background-color: #f5f5f5;
+          background-color: #f5f5f5 !important;
         }
         .ms-Button-label {
           font-weight: 400 !important;
@@ -605,14 +596,26 @@
     }
   }
 }
-
+.themeContainer {
+  display: flex;
+  margin-top: 5px;
+  font-family: inherit;
+  font-size: 14px;
+}
+.__react_component_tooltip {
+  padding: 4px 21px !important;
+}
 //------------Dark Mode ----------------------//
 .darkMode {
+  .ms-Tooltip-subtext {
+    color: #fff !important;
+  }
   background-color: #000 !important;
   color: #fff !important;
   :root {
+    background-color: #000;
     div[class^="root-"] {
-      color: rgb(61, 61, 61) !important;
+      color: #fff !important;
     }
     ::-webkit-scrollbar {
       width: 7px; /* width of the entire scrollbar */
@@ -627,9 +630,6 @@
       // border: 3px solid #b6b5b5a2; /* creates padding around scroll thumb */
     }
   }
-  span[class^="subText-"]{
-    color:#fff
-  } 
   //tooltip
   .type-dark,
   .exportTooltip {
@@ -660,7 +660,7 @@
         .ms-TextField {
           .ms-TextField-fieldGroup {
             position: relative;
-            border-color: #525252 !important;
+            border-color: #353535 !important;
             border-radius: 5px !important;
             &::before {
               position: absolute;
@@ -670,7 +670,7 @@
               filter: invert(1);
             }
             input {
-              background: #525252 !important;
+              background: #353535 !important;
               background-position: 97% !important;
               background-repeat: no-repeat !important;
               border: none !important;
@@ -744,10 +744,10 @@
 
       .ms-TextField-fieldGroup {
         position: relative;
-        border-color: #525252 !important;
+        border-color: #4f4c4c !important;
         border-radius: 5px !important;
         input {
-          background: #525252 !important;
+          background: #4f4c4c !important;
           background-position: 97% !important;
           background-repeat: no-repeat !important;
           border: none !important;
@@ -792,6 +792,287 @@
     }
     .ms-TextField-fieldGroup {
       background-color: #363636 !important;
+    }
+  }
+  // export context
+  .ms-ContextualMenu {
+    background-color: #363636;
+    .ms-ContextualMenu-link {
+      &:hover {
+        background-color: #000;
+        .ms-ContextualMenu-icon {
+          color: #fff !important;
+        }
+        .ms-ContextualMenu-itemText {
+          color: #fff;
+        }
+      }
+    }
+    .ms-ContextualMenu-icon {
+      color: #fff !important;
+    }
+    .ms-ContextualMenu-itemText {
+      color: #fff;
+    }
+  }
+
+  .elliptical-menu {
+    .ms-Button {
+      &:hover {
+        background-color: #212121 !important;
+        color: #000 !important;
+        .ms-Button-label {
+          color: #000 !important;
+        }
+      }
+      .ms-Button-label {
+        color: #fff !important;
+      }
+    }
+  }
+}
+
+.highContrast {
+  background-color: #000 !important;
+  color: #fff;
+
+  .ms-Spinner-circle {
+    border-color: #ff0 rgba(98, 100, 167, 0.2705882353)
+      rgba(98, 100, 167, 0.2705882353) !important;
+  }
+  .App {
+    color: #fff;
+    background-color: #000 !important;
+    .white-wrapper {
+      color: #fff;
+      background-color: #000 !important;
+      border: 1px solid #fff;
+      img {
+        filter: invert(10) contrast(7);
+      }
+      .title_wrapper {
+        h6 {
+          color: #ff0;
+        }
+      }
+    }
+    .darkGird {
+      color: #fff;
+      background-color: #000 !important;
+      border: 1px solid #fff;
+      #export {
+        background-color: #000 !important;
+        i[data-icon-name="Download"] {
+          color: #ff0;
+        }
+      }
+      .ms-Grid-col {
+        .ms-TextField {
+          .ms-TextField-fieldGroup {
+            position: relative;
+            border-color: #525252 !important;
+            border-radius: 5px !important;
+            &::before {
+              position: absolute;
+              content: url(../Icons/Search.png);
+              right: 10px;
+              top: 8px;
+              filter: invert(1);
+            }
+            input {
+              background: #525252 !important;
+              background-position: 97% !important;
+              background-repeat: no-repeat !important;
+              border: none !important;
+              caret-color: #fff;
+              color: #ff0;
+              border-radius: 3px !important;
+              &::placeholder {
+                color: #ff0 !important;
+              }
+            }
+          }
+        }
+      }
+
+      .ms-DetailsList-contentWrapper {
+        .ms-FocusZone {
+          border-bottom: 1px solid #484644 !important;
+          background-color: #000;
+          .ms-DetailsHeader-cell {
+            color: #ff0 !important;
+          }
+        }
+        .ms-DetailsHeader {
+          color: #ff0 !important;
+          border-bottom: 1px solid #484644 !important;
+        }
+      }
+      .ms-ScrollablePane {
+        background-color: #212121 !important;
+      }
+      .ms-DetailsRow {
+        border-bottom: 1px solid #484644 !important;
+        &:hover {
+          color: #000 !important;
+          background-color: #ff0 !important;
+          .ms-DetailsRow-cell {
+            color: #000 !important;
+          }
+        }
+        .ms-DetailsRow-cell {
+          color: #fff !important;
+        }
+      }
+    }
+  }
+  //export context
+  .ms-ContextualMenu {
+    background-color: #000;
+    .ms-ContextualMenu-link {
+      &:hover {
+        background-color: #ff0;
+        .ms-ContextualMenu-icon {
+          color: rgb(0, 0, 0) !important;
+        }
+        .ms-ContextualMenu-itemText {
+          color: rgb(0, 0, 0);
+        }
+      }
+    }
+    .ms-ContextualMenu-icon {
+      color: #ff0 !important;
+    }
+    .ms-ContextualMenu-itemText {
+      color: #fff;
+    }
+  }
+  //dialog
+  .ms-Dialog-main {
+    background-color: #212121;
+    color: #fff !important;
+    border: 1px solid #fff;
+    .ms-Dialog-title,
+    label,
+    p,
+    .ms-Button-icon {
+      color: #ff0;
+    }
+    .ms-Button--primary {
+      background-color: #ff0 !important;
+      border-color: #ff0 !important;
+      color: #000 !important;
+    }
+    .ms-Button--default {
+      background-color: #212121 !important;
+      color: #fff !important;
+    }
+    .ms-TextField-fieldGroup {
+      background-color: #363636 !important;
+    }
+  }
+
+  //filter
+
+  .ms-Fabric {
+    color: #fff;
+
+    .ms-Callout-beakCurtain {
+      border: 1px solid #fff;
+    }
+    .ms-layer {
+      .ms-Tooltip {
+        .ms-Callout-beakCurtain,
+        .ms-Callout-main {
+          border: 1px solid transparent !important;
+        }
+        border: none !important;
+      }
+    }
+    .ms-Tooltip-subtext {
+      color: #fff !important;
+      border-color: transparent !important;
+    }
+    .ms-PlainCard-root {
+      border: 1px solid #fff;
+    }
+    .ms-Callout-beakCurtain,
+    .ms-Callout-main {
+      background-color: #000 !important;
+      color: #fff !important;
+    }
+    div[role="filtercallout"] {
+      border-color: #000 !important;
+      div[class^="css-"] {
+        background-color: #000 !important;
+        color: #fff !important;
+        .ms-layer {
+          color: #fff !important;
+          display: none;
+        }
+      }
+      .ms-Button-label {
+        color: #ff0;
+      }
+      .ms-TextField-fieldGroup {
+        position: relative;
+        border-color: #525252 !important;
+        border-radius: 5px !important;
+        input {
+          background: #525252 !important;
+          background-position: 97% !important;
+          background-repeat: no-repeat !important;
+          border: none !important;
+          border-radius: 3px !important;
+          caret-color: #fff;
+          color: #ff0 !important;
+          &::placeholder {
+            color: #ff0 !important;
+          }
+        }
+        &::before {
+          position: absolute;
+          content: url(../Icons/Search.png);
+          right: 5px;
+          top: 7px;
+          filter: invert(1);
+        }
+      }
+
+      div[class^="css-"] {
+        .is-checked {
+          .ms-Checkbox-checkbox {
+            background-color: #ff0 !important;
+          }
+        }
+        .ms-Checkbox {
+          &:hover {
+            .ms-Checkbox-checkbox {
+              background-color: #ff0 !important;
+            }
+          }
+        }
+
+        .ms-Checkbox-label {
+          color: #fff;
+          .ms-Checkbox-text {
+            color: #fff !important;
+          }
+        }
+      }
+    }
+    .elliptical-menu {
+      .ms-Button {
+        &:hover {
+          background-color: #ff0 !important;
+          .ms-Button-label {
+            color: #000 !important;
+          }
+        }
+        .ms-Button-label {
+          color: #fff !important;
+        }
+      }
     }
   }
 }
