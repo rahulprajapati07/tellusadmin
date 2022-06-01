@@ -545,8 +545,6 @@ class WorkspaceDetails extends React.Component<
     if (bodyEle) {
       this.state.teamsMode === true ? bodyEle.className = "lightMode" : bodyEle.className = "darkMode";
       
-
-      
       // if (this.state.teamsMode) {
       //   bodyEle.className = "darkMode";
       // } else {
@@ -564,7 +562,7 @@ class WorkspaceDetails extends React.Component<
       if (this.state.teamsMode) {
         bodyEle.className = "lightMode";
       } else {
-        bodyEle.className = "highContrast";
+        bodyEle.className = "darkMode";
       }
     }
 
