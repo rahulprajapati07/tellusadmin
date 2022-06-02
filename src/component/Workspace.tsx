@@ -592,12 +592,7 @@ class WorkspaceDetails extends React.Component<
       }
     });
 
-    columnName.addEventListener('click', function (ev: Event) {
-      if (document.querySelectorAll('.SortClass')) {
-        let sortImg: any = document.querySelectorAll('.SortClass')[0];
-        sortImg.style.transform = 'rotate(180deg)'
-      }     
-    });
+   
 
     const tooltipDiv: any = document.createElement("div");
     tooltipDiv.className = 'exportTooltip';
