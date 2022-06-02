@@ -376,7 +376,17 @@ class WorkspaceDetails extends React.Component<
       console.log(" Current Teams Context :");
       console.log(context.theme);
 
-      context.theme === "default" ?  context.theme === "darkMode" ? this.setState({ teamsMode : "darkMode" })   : this.setState({ teamsMode : "lightMode" }) : this.setState({ teamsMode : "highContrast" });
+      if(context.theme === "default"){
+        this.setState({ teamsMode : "lightMode" })
+      }
+      if(context.theme === "darkMode"){
+        this.setState({ teamsMode : "darkMode" })
+      }
+      
+      else{
+        this.setState({ teamsMode : "highContrast" })
+      }
+      //context.theme === "default" ?  context.theme === "darkMode" ? this.setState({ teamsMode : "darkMode" })   : this.setState({ teamsMode : "lightMode" }) : this.setState({ teamsMode : "highContrast" });
 
       let userEmail = context.userPrincipalName;
       console.log(userEmail);
