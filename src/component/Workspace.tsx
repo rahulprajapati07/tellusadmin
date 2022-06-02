@@ -631,6 +631,16 @@ class WorkspaceDetails extends React.Component<
         };
         let test1 = setInterval(() => { checkPopup(); }, 100);
       });
+      
+      element.addEventListener('contextmenu', (ev: Event) => {
+        let hideICon = () => {
+          let iconSOrtHide: any = document.querySelectorAll('.ms-DetailsHeader-cellTitle .ms-Icon')[0];
+          iconSOrtHide.style.display = 'none'
+          clearInterval(hideicnn);
+        };
+        let hideicnn = setInterval(() => { hideICon(); }, 1);
+        ev.preventDefault()
+      });
     })
   }
 
