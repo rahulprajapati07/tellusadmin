@@ -583,6 +583,15 @@ class WorkspaceDetails extends React.Component<
     para.className = 'SortClass';
     let columnName: any = document.querySelectorAll('.ms-DetailsHeader-cellTitle')[1];
     columnName.appendChild(para);
+    var rottaeDeg = 90;
+    columnName.addEventListener('click', function (ev: Event) {
+      if (document.querySelectorAll('.SortClass')) {
+        let sortImg: any = document.querySelectorAll('.SortClass')[0];
+        sortImg.style.transform = `rotate(${rottaeDeg}deg)`
+        rottaeDeg += 180
+      }
+    });
+
     columnName.addEventListener('click', function (ev: Event) {
       if (document.querySelectorAll('.SortClass')) {
         let sortImg: any = document.querySelectorAll('.SortClass')[0];

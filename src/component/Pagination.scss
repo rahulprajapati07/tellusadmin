@@ -569,10 +569,11 @@
     display: none;
     position: absolute;
     top: -38px;
-    width: 180px;
+    white-space: nowrap;
+    font-size: 13px;
     background: rgb(13, 13, 13);
     color: #fff;
-    padding: 7px;
+    padding: 4px 21px !important;
     border-radius: 3px;
   }
   .ms-Button-label {
