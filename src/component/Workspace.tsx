@@ -374,16 +374,17 @@ class WorkspaceDetails extends React.Component<
 
     microsoftTeams.getContext((context : any) => {
       console.log(" Current Teams Context :");
-      console.log(context.theme);
+      
 
-      if(context.theme === "contrast"){
+      let teamsContext = context.theme.toString();
+      console.log(teamsContext);
+      if(teamsContext === 'contrast'){
         this.setState({ teamsMode : "highContrast" })
       }
-      if(context.theme === "dark"){
+      else if(teamsContext === 'dark') {
         this.setState({ teamsMode : "darkMode" })
       }
-
-      else{
+      else {
         this.setState({ teamsMode : "lightMode" })
       }
 
@@ -539,22 +540,6 @@ class WorkspaceDetails extends React.Component<
 
   public checkMode() {
     console.log(this.state.teamsMode)
-    
-    //let modeCheck: any = document.getElementById('modeCheck')
-    
-    //this.state.teamsMode ? this.setState({ teamsMode : true }) : this.setState({ teamsMode : false });
-    
-    // if (modeCheck.checked) {
-    //   this.setState({
-    //     teamsMode: false
-    //   });
-    // }
-    // else {
-
-    //   this.setState({
-    //     teamsMode: true
-    //   });
-    // }
     let bodyEle: any = document.querySelectorAll('html')[0];
 
     if (bodyEle) {
@@ -568,16 +553,6 @@ class WorkspaceDetails extends React.Component<
       else{
         bodyEle.className = "highContrast"
       }
-      //this.state.teamsMode === true ? bodyEle.className = "lightMode" : bodyEle.className = "darkMode";
-      
-      //this.state.teamsMode === "lightMode" ?  this.state.teamsMode == "darkMode" ? bodyEle.className = "darkMode"   : bodyEle.className = "lightMode" : bodyEle.className = "highContrast" ;
-
-      //this.state.teamsMode === "lightMode" ? ( this.state.teamsMode === "darkMode" ? bodyEle.className = "lightMode" ) : bodyEle.className = "lightMode" : bodyEle.className = "highContrast" ;
-      // if (this.state.teamsMode) {
-      //   bodyEle.className = "darkMode";
-      // } else {
-      //   bodyEle.className = "lightMode";
-      // }
     }
   }
 
