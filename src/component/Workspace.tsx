@@ -376,15 +376,15 @@ class WorkspaceDetails extends React.Component<
       console.log(" Current Teams Context :");
       console.log(context.theme);
 
-      if(context.theme === "default"){
-        this.setState({ teamsMode : "lightMode" })
+      if(context.theme === "contrast"){
+        this.setState({ teamsMode : "highContrast" })
       }
       if(context.theme === "dark"){
         this.setState({ teamsMode : "darkMode" })
       }
 
       else{
-        this.setState({ teamsMode : "highContrast" })
+        this.setState({ teamsMode : "lightMode" })
       }
 
       console.log(" Current Teams context :");
