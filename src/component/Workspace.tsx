@@ -13,6 +13,8 @@ import TeamsMissingIcon from "../Icons/TeamsMissingIcon.png";
 import LockIcon from "../Icons/LockIcon.png";
 import InfoIcon from "../Icons/InfoIcon.jpg";
 import sharepointImg from "../Icons/sharepointImg.svg";
+// import sortIcon from '../Icon/sortIcon.png';
+import sortIcon from '../Icons/sortIcon.png';
 import { EditableGrid, EventEmitter, EventType } from "fluentui-editable-grid";
 import {getClientDetails} from './BackendService';
 //import jwtDecode from "jwt-decode";
@@ -118,7 +120,7 @@ export interface IWorkspaceExampleState {
   dialog: any;
   showSpinner : boolean;
   currentUserEmail : string;
-  teamsMode : boolean;
+  teamsMode : string;
   isSort : boolean;
 }
 
@@ -364,7 +366,7 @@ class WorkspaceDetails extends React.Component<
       isDraggable: false,
       showSpinner : true,
       currentUserEmail : '',
-      teamsMode : true,
+      teamsMode : 'default',
       isSort : true
     };
 
@@ -374,7 +376,7 @@ class WorkspaceDetails extends React.Component<
       console.log(" Current Teams Context :");
       console.log(context.theme);
 
-      context.theme === "default" ? this.setState({ teamsMode : true }) : this.setState({ teamsMode : false });
+      context.theme === "default" ?  context.theme === "darkMode" ? this.setState({ teamsMode : "darkMode" })   : this.setState({ teamsMode : "lightMode" }) : this.setState({ teamsMode : "highContrast" });
 
       let userEmail = context.userPrincipalName;
       console.log(userEmail);
@@ -527,7 +529,7 @@ class WorkspaceDetails extends React.Component<
     
     //let modeCheck: any = document.getElementById('modeCheck')
     
-    this.state.teamsMode ? this.setState({ teamsMode : true }) : this.setState({ teamsMode : false });
+    //this.state.teamsMode ? this.setState({ teamsMode : true }) : this.setState({ teamsMode : false });
     
     // if (modeCheck.checked) {
     //   this.setState({
@@ -543,8 +545,21 @@ class WorkspaceDetails extends React.Component<
     let bodyEle: any = document.querySelectorAll('html')[0];
 
     if (bodyEle) {
-      this.state.teamsMode === true ? bodyEle.className = "lightMode" : bodyEle.className = "darkMode";
+
+      if(this.state.teamsMode === "lightMode"){
+        bodyEle.className = "lightMode"
+      }
+      if(this.state.teamsMode === "darkMode"){
+        bodyEle.className = "darkMode"
+      }
+      else{
+        bodyEle.className = "highContrast"
+      }
+      //this.state.teamsMode === true ? bodyEle.className = "lightMode" : bodyEle.className = "darkMode";
       
+      //this.state.teamsMode === "lightMode" ?  this.state.teamsMode == "darkMode" ? bodyEle.className = "darkMode"   : bodyEle.className = "lightMode" : bodyEle.className = "highContrast" ;
+
+      //this.state.teamsMode === "lightMode" ? ( this.state.teamsMode === "darkMode" ? bodyEle.className = "lightMode" ) : bodyEle.className = "lightMode" : bodyEle.className = "highContrast" ;
       // if (this.state.teamsMode) {
       //   bodyEle.className = "darkMode";
       // } else {
@@ -559,12 +574,29 @@ class WorkspaceDetails extends React.Component<
     let bodyEle: any = document.querySelectorAll('html')[0]
 
     if (bodyEle) {
-      if (this.state.teamsMode) {
+      if (this.state.teamsMode === "lightMode") {
         bodyEle.className = "lightMode";
-      } else {
+      } 
+      if(this.state.teamsMode === "darkMode") {
         bodyEle.className = "darkMode";
       }
+      else {
+        bodyEle.className = "highContrast";
+      }
     }
+
+    const para = document.createElement("img");
+    para.src = sortIcon;
+
+    para.className = 'SortClass';
+    let columnName: any = document.querySelectorAll('.ms-DetailsHeader-cellTitle')[1];
+    columnName.appendChild(para);
+    columnName.addEventListener('click', function (ev: Event) {
+      if (document.querySelectorAll('.SortClass')) {
+        let sortImg: any = document.querySelectorAll('.SortClass')[0];
+        sortImg.style.transform = 'rotate(180deg)'
+      }     
+    });
 
     const tooltipDiv: any = document.createElement("div");
     tooltipDiv.className = 'exportTooltip';

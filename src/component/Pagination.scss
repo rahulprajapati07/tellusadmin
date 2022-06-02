@@ -314,6 +314,12 @@
           justify-content: center;
           align-items: center;
         }
+        .SortClass {
+          width: 10px;
+          margin-left: 5px;
+          cursor: pointer;
+          transform: rotate(270deg);
+        }
         // i[data-icon-name="SortUp"] {
         //   background: url(../Icons/SortIcon.png);
         //   background-repeat: no-repeat;
@@ -674,6 +680,7 @@
               background-position: 97% !important;
               background-repeat: no-repeat !important;
               border: none !important;
+              color:  #fff !important;
               caret-color: #fff;
               border-radius: 3px !important;
               &::placeholder {
@@ -700,8 +707,12 @@
         .ms-DetailsHeader {
           color: #fff !important;
           border-bottom: 1px solid #484644 !important;
+          .SortClass {
+            filter: invert(1);
+          }
           .ms-DetailsHeader-cell {
             color: #fff !important;
+
           }
           .ms-DetailsHeader-cellTitle {
             color: #fff !important;
@@ -906,6 +917,9 @@
         .ms-DetailsHeader {
           color: #ff0 !important;
           border-bottom: 1px solid #484644 !important;
+          .SortClass {
+            filter: invert(1);
+          }
         }
       }
       .ms-ScrollablePane {
