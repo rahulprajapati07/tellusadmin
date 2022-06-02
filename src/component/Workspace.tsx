@@ -379,7 +379,7 @@ class WorkspaceDetails extends React.Component<
       if(context.theme === "default"){
         this.setState({ teamsMode : "lightMode" })
       }
-      if(context.theme === "darkMode"){
+      if(context.theme === "dark"){
         this.setState({ teamsMode : "darkMode" })
       }
 
