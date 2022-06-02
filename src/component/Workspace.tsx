@@ -375,18 +375,21 @@ class WorkspaceDetails extends React.Component<
     microsoftTeams.getContext((context : any) => {
       console.log(" Current Teams Context :");
       
-
       let teamsContext = context.theme.toString();
       console.log(teamsContext);
-      if(teamsContext === 'contrast'){
-        this.setState({ teamsMode : "highContrast" })
-      }
-      else if(teamsContext === 'dark') {
-        this.setState({ teamsMode : "darkMode" })
-      }
-      else {
-        this.setState({ teamsMode : "lightMode" })
-      }
+
+      this.setState({
+        teamsMode : teamsContext
+      })
+      // if(teamsContext === 'contrast'){
+      //   this.setState({ teamsMode : "highContrast" })
+      // }
+      // else if(teamsContext === 'dark') {
+      //   this.setState({ teamsMode : "darkMode" })
+      // }
+      // else {
+      //   this.setState({ teamsMode : "lightMode" })
+      // }
 
       console.log(" Current Teams context :");
       console.log(this.state.teamsMode);
@@ -541,19 +544,19 @@ class WorkspaceDetails extends React.Component<
   public checkMode() {
     console.log(this.state.teamsMode)
     let bodyEle: any = document.querySelectorAll('html')[0];
+    bodyEle.className = this.state.teamsMode;
+    // if (bodyEle) {
 
-    if (bodyEle) {
-
-      if(this.state.teamsMode === "lightMode"){
-        bodyEle.className = "lightMode"
-      }
-      if(this.state.teamsMode === "darkMode"){
-        bodyEle.className = "darkMode"
-      }
-      else{
-        bodyEle.className = "highContrast"
-      }
-    }
+    //   if(this.state.teamsMode === "lightMode"){
+    //     bodyEle.className = "lightMode"
+    //   }
+    //   if(this.state.teamsMode === "darkMode"){
+    //     bodyEle.className = "darkMode"
+    //   }
+    //   else{
+    //     bodyEle.className = "highContrast"
+    //   }
+    // }
   }
 
   public addClickEvent() {
@@ -561,17 +564,18 @@ class WorkspaceDetails extends React.Component<
 
     let bodyEle: any = document.querySelectorAll('html')[0]
 
-    if (bodyEle) {
-      if (this.state.teamsMode === "lightMode") {
-        bodyEle.className = "lightMode";
-      } 
-      if(this.state.teamsMode === "darkMode") {
-        bodyEle.className = "darkMode";
-      }
-      else {
-        bodyEle.className = "highContrast";
-      }
-    }
+    bodyEle.className = this.state.teamsMode;
+    // if (bodyEle) {
+    //   if (this.state.teamsMode === "lightMode") {
+    //     bodyEle.className = "lightMode";
+    //   } 
+    //   if(this.state.teamsMode === "darkMode") {
+    //     bodyEle.className = "darkMode";
+    //   }
+    //   else {
+    //     bodyEle.className = "highContrast";
+    //   }
+    // }
 
     const para = document.createElement("img");
     para.src = sortIcon;
