@@ -328,7 +328,7 @@
         //   transform: rotate(180deg);
         //   width: 20px;
         // }
-        .SortClass {
+        .SortClass , .SortClassBD, .SortClassOwner, .SortClassStatus, .SortClassType, .SortClassClassification  {
           width: 10px;
           margin-left: 5px;
           cursor: pointer;
