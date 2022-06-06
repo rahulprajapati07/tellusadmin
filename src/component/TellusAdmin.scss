@@ -703,7 +703,7 @@
         .ms-DetailsHeader {
           color: #fff !important;
           border-bottom: 1px solid #484644 !important;
-          .SortClass {
+          .SortClass, .SortClassBD, .SortClassOwner, .SortClassStatus, .SortClassType, .SortClassClassification  {
             filter: invert(1);
           }
           .ms-DetailsHeader-cell {
@@ -913,7 +913,7 @@
         .ms-DetailsHeader {
           color: #ff0 !important;
           border-bottom: 1px solid #484644 !important;
-          .SortClass {
+          .SortClass, .SortClassBD, .SortClassOwner, .SortClassStatus, .SortClassType, .SortClassClassification  {
             filter: invert(1);
           }
         }
