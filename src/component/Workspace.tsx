@@ -152,6 +152,8 @@ class WorkspaceDetails extends React.Component<
     super(props);
     let today = new Date();
 
+    // EditableGrid columns Details 
+
     const columns: IColumnConfig[] = [
       {
         key: "test",
@@ -201,7 +203,7 @@ class WorkspaceDetails extends React.Component<
         sortAscendingAriaLabel: "Sorted A to Z",
         sortDescendingAriaLabel: "Sorted Z to A",
         data: "string",
-        onColumnClick : (ev: React.MouseEvent<HTMLElement>) => this.onColumnClick(ev),
+        //onColumnClick : (ev: React.MouseEvent<HTMLElement>) => this.onColumnClick(ev),
         onRender: (item: IWorkspace) => {
           return (
             <div className="test">
@@ -372,35 +374,18 @@ class WorkspaceDetails extends React.Component<
 
     microsoftTeams.initialize();
 
+    // Get The Microsoft Teams context
     microsoftTeams.getContext((context : any) => {
-      console.log(" Current Teams Context :");
-      
       let teamsContext = context.theme.toString();
-      console.log(teamsContext);
-
+      
       this.setState({
         teamsMode : teamsContext
-      })
-      // if(teamsContext === 'contrast'){
-      //   this.setState({ teamsMode : "highContrast" })
-      // }
-      // else if(teamsContext === 'dark') {
-      //   this.setState({ teamsMode : "darkMode" })
-      // }
-      // else {
-      //   this.setState({ teamsMode : "lightMode" })
-      // }
-
-      console.log(" Current Teams context :");
-      console.log(this.state.teamsMode);
-      //context.theme === "default" ?  context.theme === "darkMode" ? this.setState({ teamsMode : "darkMode" })   : this.setState({ teamsMode : "lightMode" }) : this.setState({ teamsMode : "highContrast" });
-
+      });
       let userEmail = context.userPrincipalName;
       console.log(userEmail);
       this.setState({
         currentUserEmail : userEmail
       });
-      console.log("current User Email :", this.state.currentUserEmail);
     });
 
     this.checkMode = this.checkMode.bind(this);
@@ -417,12 +402,6 @@ class WorkspaceDetails extends React.Component<
 
   private _labelId: string = getId("dialogLabel");
   private _subTextId: string = getId("subTextLabel");
-
-  private onColumnClick (event:any){
-    let clickEvent = event;
-    console.log("Click Event :- ");
-    console.log(clickEvent);
-  }
 
   private _dragOptions = {
     moveMenuItemText: "Move",
@@ -494,7 +473,6 @@ class WorkspaceDetails extends React.Component<
         });
       }
     });
-    this.addClickEvent();
 
     await this._getAllPublicTeams().then((teamsDetails: any[]) => {
       console.log("Component Teams Log" + teamsDetails);
@@ -537,26 +515,13 @@ class WorkspaceDetails extends React.Component<
         parentNodeOfScrollPane.style.height = "61vh";
       }
     });
-    
-    
+    this.addClickEvent();
   }
 
+  // Set the teams App by theme 
   public checkMode() {
-    console.log(this.state.teamsMode)
     let bodyEle: any = document.querySelectorAll('html')[0];
     bodyEle.className = this.state.teamsMode;
-    // if (bodyEle) {
-
-    //   if(this.state.teamsMode === "lightMode"){
-    //     bodyEle.className = "lightMode"
-    //   }
-    //   if(this.state.teamsMode === "darkMode"){
-    //     bodyEle.className = "darkMode"
-    //   }
-    //   else{
-    //     bodyEle.className = "highContrast"
-    //   }
-    // }
   }
 
   public addClickEvent() {
@@ -565,24 +530,14 @@ class WorkspaceDetails extends React.Component<
     let bodyEle: any = document.querySelectorAll('html')[0]
 
     bodyEle.className = this.state.teamsMode;
-    // if (bodyEle) {
-    //   if (this.state.teamsMode === "lightMode") {
-    //     bodyEle.className = "lightMode";
-    //   } 
-    //   if(this.state.teamsMode === "darkMode") {
-    //     bodyEle.className = "darkMode";
-    //   }
-    //   else {
-    //     bodyEle.className = "highContrast";
-    //   }
-    // }
+    
 
-    const para = document.createElement("img");
-    para.src = sortIcon;
+    const sortIconClass = document.createElement("img");
+    sortIconClass.src = sortIcon;
 
-    para.className = 'SortClass';
+    sortIconClass.className = 'SortClass';
     let columnName: any = document.querySelectorAll('.ms-DetailsHeader-cellTitle')[1];
-    columnName.appendChild(para);
+    columnName.appendChild(sortIconClass);
     var rottaeDeg = 90;
     columnName.addEventListener('click', function (ev: Event) {
       if (document.querySelectorAll('.SortClass')) {
@@ -644,14 +599,13 @@ class WorkspaceDetails extends React.Component<
     })
   }
 
+
+  // Sort the workspace on Name Column 
   public sortColumn (currentSort : boolean)
   {
-
     let currentWorkspaces = [...this.state.workspaceItemList];
-
     if(this.state.isSort)
     {
-      
       let decWorkspaces = currentWorkspaces.sort((a, b) => b.name.localeCompare(a.name));
       
       this.setState({
@@ -662,7 +616,6 @@ class WorkspaceDetails extends React.Component<
     else
     {
       let accWorkspaces = currentWorkspaces.sort((a, b) => a.name.localeCompare(b.name));
-      
       this.setState({
           workspaceItemList : accWorkspaces,
           isSort : true
