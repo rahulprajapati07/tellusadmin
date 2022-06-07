@@ -526,6 +526,28 @@ class WorkspaceDetails extends React.Component<
 
   public addClickEvent() {
     const that = this;
+
+    let Columnhover: any = document.querySelectorAll('.ms-DetailsHeader-cell')
+    Columnhover.forEach((element: any) => {
+      element.addEventListener('mouseenter', (ev: Event) => {
+        let hideTooltip = () => {
+          if (document.querySelectorAll('.ms-Tooltip-subtext')[0] || document.querySelectorAll('.ms-Tooltip')[0]) {
+            let tooltTipColumn: any = document.querySelectorAll('.ms-Tooltip-subtext')[0]
+            let parentTooltip: any = tooltTipColumn.closest('.ms-Tooltip')
+            parentTooltip.style.display = "none"
+            clearInterval(intervalHide);
+          }
+        }
+        let intervalHide = setInterval(() => { hideTooltip(); }, 100);
+      });
+    });
+
+    if(document.querySelectorAll('.ms-Tooltip-subtext')[0]){
+      let tooltipColumn: any = document.querySelectorAll('.ms-Tooltip-subtext')[0]
+      let parentTooltip: any = tooltipColumn.closest('.ms-Tooltip')[0]
+      parentTooltip.style.display = 'none'
+    }
+    
     // Get the HTML body 
     let bodyEle: any = document.querySelectorAll('html')[0]
     bodyEle.className = this.state.teamsMode;
@@ -609,27 +631,27 @@ class WorkspaceDetails extends React.Component<
     }
 
     // Sort Name Column On this
-    let nameColumn: any = document.querySelectorAll('.ms-DetailsHeader-cell')[1]
-    nameColumn.addEventListener('click',  (ev: Event) => {
-      let currentEvent = ev;
-      console.log(currentEvent);
-      this.sortColumn(true);
-    });
+    // let nameColumn: any = document.querySelectorAll('.ms-DetailsHeader-cell')[1]
+    // nameColumn.addEventListener('click',  (ev: Event) => {
+    //   let currentEvent = ev;
+    //   console.log(currentEvent);
+    //   this.sortColumn(true);
+    // });
 
     // sort the Business Department
-    let sortBD: any = document.querySelectorAll('.ms-DetailsHeader-cell')[3]
-    sortBD.addEventListener('click',  (ev: Event) => {
-      let currentEvent = ev;
-      console.log(currentEvent);
-      this.sortColumn(false);
-    });
+    // let sortBD: any = document.querySelectorAll('.ms-DetailsHeader-cell')[3]
+    // sortBD.addEventListener('click',  (ev: Event) => {
+    //   let currentEvent = ev;
+    //   console.log(currentEvent);
+    //   //this.sortColumn(false);
+    // });
 
     // sort the Business Owner 
     let sortOwner: any = document.querySelectorAll('.ms-DetailsHeader-cell')[4]
     sortOwner.addEventListener('click',  (ev: Event) => {
       let currentEvent = ev;
       console.log(currentEvent);
-      this.sortColumn(false);
+      //this.sortColumn(false);
     });
 
     // sort the Business Status 
@@ -637,7 +659,7 @@ class WorkspaceDetails extends React.Component<
     sortStatus.addEventListener('click',  (ev: Event) => {
       let currentEvent = ev;
       console.log(currentEvent);
-      this.sortColumn(false);
+      //this.sortColumn(false);
     });
 
     // sort the Business Type 
@@ -645,10 +667,10 @@ class WorkspaceDetails extends React.Component<
     sortType.addEventListener('click',  (ev: Event) => {
       let currentEvent = ev;
       console.log(currentEvent);
-      this.sortColumn(false);
+      //this.sortColumn(false);
     });
 
-    // sort the Business Type 
+    // Get the column click  
     let sortClassification: any = document.querySelectorAll('.ms-DetailsHeader-cell')[1]
     sortClassification.addEventListener('click',  (ev: Event) => {
       let currentEvent = ev;
@@ -656,12 +678,57 @@ class WorkspaceDetails extends React.Component<
       let columnsName = "name";
       this.sortColumn(true,columnsName);
     });
+
+    // get the column click for Business Department 
     let onClickBD : any = document.querySelectorAll('.ms-DetailsHeader-cellName')[3]
+    //let targetClass = onClickBD.target.className;
+    //let targetClasss = onClickBD;
     onClickBD.addEventListener('click',  (ev: Event) => {
       let currentEvent = ev;
+      let cellName = "businessDepartment";
+      this.sortColumn(true, cellName);
+      currentEvent.stopPropagation();
       console.log(currentEvent);
-      let cellName = "ms-DetailsHeader-cellName";
-      this.sortColumn(false, cellName);
+    });
+
+    // get the column click for Business Owner 
+    let onClickBO : any = document.querySelectorAll('.ms-DetailsHeader-cellName')[4]
+    onClickBO.addEventListener('click',  (ev: Event) => {
+      let currentEvent = ev;
+      let cellName = "businessOwner";
+      this.sortColumn(true, cellName);
+      currentEvent.stopPropagation();
+      console.log(currentEvent);
+    });
+
+    // get tje column click for Status
+    let onClickStatus : any = document.querySelectorAll('.ms-DetailsHeader-cellName')[5]
+    onClickStatus.addEventListener('click',  (ev: Event) => {
+      let currentEvent = ev;
+      let cellName = "status";
+      this.sortColumn(true, cellName);
+      currentEvent.stopPropagation();
+      console.log(currentEvent);
+    });
+
+    // get tje column click for Type
+    let onClickType : any = document.querySelectorAll('.ms-DetailsHeader-cellName')[6]
+    onClickType.addEventListener('click',  (ev: Event) => {
+      let currentEvent = ev;
+      let cellName = "type";
+      this.sortColumn(true, cellName);
+      currentEvent.stopPropagation();
+      console.log(currentEvent);
+    });
+
+    // get tje column click for classification
+    let onClickClassification : any = document.querySelectorAll('.ms-DetailsHeader-cellName')[7]
+    onClickClassification.addEventListener('click',  (ev: Event) => {
+      let currentEvent = ev;
+      let cellName = "classification";
+      this.sortColumn(true, cellName);
+      currentEvent.stopPropagation();
+      console.log(currentEvent);
     });
     
 
@@ -669,60 +736,61 @@ class WorkspaceDetails extends React.Component<
     testArr.forEach((element: any) => {
       element.addEventListener('click',  (ev: any) => {
 
-        // Apply Custom sorting on columns
-        if(ev.target.className === "SortClass"){
-          let sortColumns = "name";
-          this.sortColumn(true,sortColumns);
-          let sortImg: any = document.querySelectorAll('.SortClass')[0];
-          sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
-          rottaeDeg += 180;
-          ev.stopPropagation();
-        }
+        // // Apply Custom sorting on columns
+        // if(ev.target.className === "SortClass"){
+        //   let sortColumns = "name";
+        //   this.sortColumn(true,sortColumns);
+        //   let sortImg: any = document.querySelectorAll('.SortClass')[0];
+        //   sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
+        //   rottaeDeg += 180;
+        //   ev.stopPropagation();
+        // }
 
         if(ev.target.className === "SortClassBD"){
-          let sortColumns = "businessDepartment";
-          this.sortColumn(true,sortColumns);
-          let sortImg: any = document.querySelectorAll('.SortClassBD')[0];
-          sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
-          rottaeDeg += 180;
-          ev.stopPropagation();
+          
+          //let sortColumns = "businessDepartment";
+          // this.sortColumn(true,sortColumns);
+          // let sortImg: any = document.querySelectorAll('.SortClassBD')[0];
+          // sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
+          // rottaeDeg += 180;
+          //ev.stopPropagation();
         }
 
-        if(ev.target.className === "SortClassOwner"){
-          let sortColumns = "businessOwner";
-          this.sortColumn(true,sortColumns);
-          let sortImg: any = document.querySelectorAll('.SortClassOwner')[0];
-          sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
-          rottaeDeg += 180;
-          ev.stopPropagation();
-        }
+        // if(ev.target.className === "SortClassOwner"){
+        //   //let sortColumns = "businessOwner";
+        //   // this.sortColumn(true,sortColumns);
+        //   // let sortImg: any = document.querySelectorAll('.SortClassOwner')[0];
+        //   // sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
+        //   // rottaeDeg += 180;
+        //   // ev.stopPropagation();
+        // }
 
-        if(ev.target.className === "SortClassStatus"){
-          let sortColumns = "status";
-          this.sortColumn(true,sortColumns);
-          let sortImg: any = document.querySelectorAll('.SortClassStatus')[0];
-          sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
-          rottaeDeg += 180;
-          ev.stopPropagation();
-        }
+        // if(ev.target.className === "SortClassStatus"){
+        //   // let sortColumns = "status";
+        //   // this.sortColumn(true,sortColumns);
+        //   // let sortImg: any = document.querySelectorAll('.SortClassStatus')[0];
+        //   // sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
+        //   // rottaeDeg += 180;
+        //   // ev.stopPropagation();
+        // }
 
-        if(ev.target.className === "SortClassType"){
-          let sortColumns = "type";
-          this.sortColumn(true,sortColumns);
-          let sortImg: any = document.querySelectorAll('.SortClassType')[0];
-          sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
-          rottaeDeg += 180;
-          ev.stopPropagation();
-        }
+        // if(ev.target.className === "SortClassType"){
+        //   // let sortColumns = "type";
+        //   // this.sortColumn(true,sortColumns);
+        //   // let sortImg: any = document.querySelectorAll('.SortClassType')[0];
+        //   // sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
+        //   // rottaeDeg += 180;
+        //   // ev.stopPropagation();
+        // }
 
-        if(ev.target.className === "SortClassClassification"){
-          let sortColumns = "classification";
-          this.sortColumn(true,sortColumns);
-          let sortImg: any = document.querySelectorAll('.SortClassClassification')[0];
-          sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
-          rottaeDeg += 180;
-          ev.stopPropagation();
-        }
+        // if(ev.target.className === "SortClassClassification"){
+        //   // let sortColumns = "classification";
+        //   // this.sortColumn(true,sortColumns);
+        //   // let sortImg: any = document.querySelectorAll('.SortClassClassification')[0];
+        //   // sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
+        //   // rottaeDeg += 180;
+        //   // ev.stopPropagation();
+        // }
 
         let checkPopup = () => {
           if (document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label") &&
@@ -747,13 +815,14 @@ class WorkspaceDetails extends React.Component<
   }
 
 
-  // Sort the workspace on Name Column 
-  public sortColumn (currentSort : boolean, checkColumnClass : string = "" )
+  // Sort the workspace on all Column
+  // give parametr for column name 
+  private sortColumn (currentSort : boolean, checkColumnClass : string = "" )
   {
     let currentWorkspaces:any[] = [...this.state.workspaceItemList];
     if(currentSort){
 
-      if(this.state.isSort)
+      if(this.state.isSort === true && checkColumnClass !== "")
       {
         let decWorkspaces = currentWorkspaces.sort((a, b) => b[checkColumnClass].localeCompare(a[checkColumnClass]));
         

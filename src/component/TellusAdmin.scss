@@ -303,6 +303,7 @@
     // }
 
     .ms-DetailsHeader {
+      margin-top: -25px;
       .ms-DetailsHeader-cell {
         position: relative;
         &:hover {
@@ -694,6 +695,7 @@
       }
 
       .ms-DetailsList-contentWrapper {
+        // margin-top: -25px;
         .ms-FocusZone {
           border-bottom: 1px solid #484644 !important;
           .ms-DetailsHeader-cell {
@@ -992,6 +994,7 @@
     }
     .ms-layer {
       .ms-Tooltip {
+        display: none !important;
         .ms-Callout-beakCurtain,
         .ms-Callout-main {
           border: 1px solid transparent !important;
