@@ -214,7 +214,7 @@
           height: 6px;
         }
         &::-webkit-scrollbar-track {
-          margin-top: 60px;
+          margin-top: 37px;
           background: rgba(255, 255, 255, 0); /* color of the tracking area */
         }
         &::-webkit-scrollbar-thumb {
@@ -329,11 +329,20 @@
         //   transform: rotate(180deg);
         //   width: 20px;
         // }
-        .SortClass , .SortClassBD, .SortClassOwner, .SortClassStatus, .SortClassType, .SortClassClassification  {
+        
+        i[data-icon-name="Filter"] {
+          display: none;
+        }
+        .SortClass  {
           width: 10px;
           margin-left: 5px;
           cursor: pointer;
           transform: rotate(270deg);
+        }
+        .SortClassBD, .SortClassOwner, .SortClassStatus, .SortClassType, .SortClassClassification  {
+          width: 10px;
+          margin-left: 5px;
+          cursor: pointer;
         }
         .ms-DetailsHeader-cellName {
           font-weight: 500;

@@ -15,6 +15,7 @@ import InfoIcon from "../Icons/InfoIcon.jpg";
 import sharepointImg from "../Icons/sharepointImg.svg";
 // import sortIcon from '../Icon/sortIcon.png';
 import sortIcon from '../Icons/sortIcon.png';
+import Filter from '../Icons/Filter.png';
 import { EditableGrid, EventEmitter, EventType } from "fluentui-editable-grid";
 import {getClientDetails} from './BackendService';
 //import jwtDecode from "jwt-decode";
@@ -351,6 +352,8 @@ class WorkspaceDetails extends React.Component<
       },
     ];
 
+
+    // Initialize the Workspace State 
     this.state = {
       workspaceItemList : [],
       columns: columns,
@@ -374,20 +377,22 @@ class WorkspaceDetails extends React.Component<
 
     microsoftTeams.initialize();
 
-    // Get The Microsoft Teams context
+    // Get The Microsoft Teams context And Theme
     microsoftTeams.getContext((context : any) => {
+
       let teamsContext = context.theme.toString();
-      
       this.setState({
         teamsMode : teamsContext
       });
       let userEmail = context.userPrincipalName;
-      console.log(userEmail);
+
       this.setState({
         currentUserEmail : userEmail
       });
     });
 
+
+    // Bind The method's 
     this.checkMode = this.checkMode.bind(this);
     this.onRenderPlainCard = this.onRenderPlainCard.bind(this);
     this.onContextualMenuDismissed = this.onContextualMenuDismissed.bind(this);
@@ -409,12 +414,14 @@ class WorkspaceDetails extends React.Component<
     menu: ContextualMenu,
   };
 
+  // Dismissed The ContextualMenu
   private onContextualMenuDismissed = (): void => {
     this.setState({
       contextualMenuProps: undefined,
     });
   };
 
+  // Render the PlainCard for the Three Dotes
   private onRenderPlainCard(item: any): JSX.Element {
     return (
       <div className={styles.block + ' elliptical-menu'}>
@@ -457,8 +464,10 @@ class WorkspaceDetails extends React.Component<
   }
 
 
+  // Call The Initilize API For App 
   public async componentDidMount() {
 
+    // This Function Check the user is Admin Or not and set the userRole.
     await this._getUserRole().then((teamsUserRoleStatus: boolean) => {
       if (teamsUserRoleStatus === true) {
         //userRole = teamsUserRoleStatus;
@@ -474,16 +483,16 @@ class WorkspaceDetails extends React.Component<
       }
     });
 
+    // This Function is Get the Teams Details From The API And Apply the 4 Box Count.
     await this._getAllPublicTeams().then((teamsDetails: any[]) => {
-      console.log("Component Teams Log" + teamsDetails);
-      //if(teamsDetails.status === ''){}
-      // this._allItems = teamsDetails;
-      let countNumber = 0;
+      
+      let countWorkspaceWithNoOwner = 0;
       let countMissiongInformation = 0;
       let countExternalUser = 0;
+
       for (let i = 0; i < teamsDetails.length; i++) {
         if (teamsDetails[i].teamsWithNoOwner === 0) {
-          countNumber = countNumber + 1;
+          countWorkspaceWithNoOwner = countWorkspaceWithNoOwner + 1;
         }
         if (teamsDetails[i].teamsExternalUser > 0) {
           countExternalUser = countExternalUser + 1;
@@ -497,17 +506,26 @@ class WorkspaceDetails extends React.Component<
           countMissiongInformation = countMissiongInformation + 1;
         }
       }
+
+      // Set the by default accending order in title column
       teamsDetails = teamsDetails.sort((a, b) => a.name.localeCompare(b.name));
+
+      // set the workspace Information and Count
       this.setState({
         workspaceItemList: teamsDetails,
-        itemWithNoOwner: countNumber,
+        itemWithNoOwner: countWorkspaceWithNoOwner,
         teamsMissingInfo: countMissiongInformation,
         teamsExternalUser: countExternalUser,
       });
+
+      // Change the Export Location 
       var exp: any = document.getElementById("export");
       document
         .getElementsByClassName("ms-TextField-wrapper")[0]
         .appendChild(exp);
+
+      // change the table size after data fill and change the table width.
+
       if (document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')) {
         var gridHeight: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-ScrollablePane')[0];
         // var HeightUnset: any = document.querySelectorAll('.ms-DetailsList-contentWrapper .ms-Fabric div:nth-child(2)')[0];
@@ -515,6 +533,7 @@ class WorkspaceDetails extends React.Component<
         parentNodeOfScrollPane.style.height = "61vh";
       }
     });
+    // bind the click event with componentdidmount for column click.
     this.addClickEvent();
   }
 
@@ -524,9 +543,11 @@ class WorkspaceDetails extends React.Component<
     bodyEle.className = this.state.teamsMode;
   }
 
+  // Excecute when the click on columns.
   public addClickEvent() {
     const that = this;
 
+    // Column tooltip Hide
     let Columnhover: any = document.querySelectorAll('.ms-DetailsHeader-cell')
     Columnhover.forEach((element: any) => {
       element.addEventListener('mouseenter', (ev: Event) => {
@@ -541,7 +562,6 @@ class WorkspaceDetails extends React.Component<
         let intervalHide = setInterval(() => { hideTooltip(); }, 100);
       });
     });
-
     if(document.querySelectorAll('.ms-Tooltip-subtext')[0]){
       let tooltipColumn: any = document.querySelectorAll('.ms-Tooltip-subtext')[0]
       let parentTooltip: any = tooltipColumn.closest('.ms-Tooltip')[0]
@@ -561,48 +581,48 @@ class WorkspaceDetails extends React.Component<
     let columnName: any = document.querySelectorAll('.ms-DetailsHeader-cellTitle')[1];
     columnName.appendChild(sortIconClass);
 
-    // Sort Icon For Business Department
+    // Filter Icon For Business Department
     const sortIconBD = document.createElement("img");
-    sortIconBD.src = sortIcon;
+    sortIconBD.src = Filter;
     sortIconBD.className =  'SortClassBD';
 
     // append the sort class on Business Department
     let getbusinessDepartment : any = document.querySelectorAll('.ms-DetailsHeader-cellTitle')[3];
     getbusinessDepartment.appendChild(sortIconBD);
 
-    // Sort Icon For Business Owner
+    // Filter Icon For Business Owner
     const sortIconOwner = document.createElement("img");
-    sortIconOwner.src = sortIcon;
+    sortIconOwner.src = Filter;
     sortIconOwner.className =  'SortClassOwner';
 
     let getbusinessOwner : any = document.querySelectorAll('.ms-DetailsHeader-cellTitle')[4];
     getbusinessOwner.appendChild(sortIconOwner);
 
-    // Sort Icon For Status
+    // Filter Icon For Status
     const sortIconStatus = document.createElement("img");
-    sortIconStatus.src = sortIcon;
+    sortIconStatus.src = Filter;
     sortIconStatus.className =  'SortClassStatus';
 
     let getbusinessStatus : any = document.querySelectorAll('.ms-DetailsHeader-cellTitle')[5];
     getbusinessStatus.appendChild(sortIconStatus);
 
-    // Sort Icon For Type
+    // Filter Icon For Type
     const sortIconType = document.createElement("img");
-    sortIconType.src = sortIcon;
+    sortIconType.src = Filter;
     sortIconType.className =  'SortClassType';
 
     let getbusinessType : any = document.querySelectorAll('.ms-DetailsHeader-cellTitle')[6];
     getbusinessType.appendChild(sortIconType);
 
-    // Sort Icon For Classification
+    // Filter Icon For Classification
     const sortIconClassification = document.createElement("img");
-    sortIconClassification.src = sortIcon;
+    sortIconClassification.src = Filter;
     sortIconClassification.className =  'SortClassClassification';
    
     let getbusinessClassification : any = document.querySelectorAll('.ms-DetailsHeader-cellTitle')[7];
     getbusinessClassification.appendChild(sortIconClassification);
     
-
+    // SortIcon Change on click name column
     var rottaeDeg = 90;
     columnName.addEventListener('click', function (ev: Event) {
       
@@ -614,6 +634,7 @@ class WorkspaceDetails extends React.Component<
       }
     });
 
+    // Export ToolTip.
     const tooltipDiv: any = document.createElement("div");
     tooltipDiv.className = 'exportTooltip';
     tooltipDiv.textContent = 'Export list of All Teams';
@@ -629,22 +650,6 @@ class WorkspaceDetails extends React.Component<
         exportDocumnet.setAttribute('title', 'Export Teams');
 
     }
-
-    // Sort Name Column On this
-    // let nameColumn: any = document.querySelectorAll('.ms-DetailsHeader-cell')[1]
-    // nameColumn.addEventListener('click',  (ev: Event) => {
-    //   let currentEvent = ev;
-    //   console.log(currentEvent);
-    //   this.sortColumn(true);
-    // });
-
-    // sort the Business Department
-    // let sortBD: any = document.querySelectorAll('.ms-DetailsHeader-cell')[3]
-    // sortBD.addEventListener('click',  (ev: Event) => {
-    //   let currentEvent = ev;
-    //   console.log(currentEvent);
-    //   //this.sortColumn(false);
-    // });
 
     // sort the Business Owner 
     let sortOwner: any = document.querySelectorAll('.ms-DetailsHeader-cell')[4]
@@ -736,72 +741,20 @@ class WorkspaceDetails extends React.Component<
     testArr.forEach((element: any) => {
       element.addEventListener('click',  (ev: any) => {
 
-        // // Apply Custom sorting on columns
-        // if(ev.target.className === "SortClass"){
-        //   let sortColumns = "name";
-        //   this.sortColumn(true,sortColumns);
-        //   let sortImg: any = document.querySelectorAll('.SortClass')[0];
-        //   sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
-        //   rottaeDeg += 180;
-        //   ev.stopPropagation();
-        // }
-
-        if(ev.target.className === "SortClassBD"){
-          
-          //let sortColumns = "businessDepartment";
-          // this.sortColumn(true,sortColumns);
-          // let sortImg: any = document.querySelectorAll('.SortClassBD')[0];
-          // sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
-          // rottaeDeg += 180;
-          //ev.stopPropagation();
-        }
-
-        // if(ev.target.className === "SortClassOwner"){
-        //   //let sortColumns = "businessOwner";
-        //   // this.sortColumn(true,sortColumns);
-        //   // let sortImg: any = document.querySelectorAll('.SortClassOwner')[0];
-        //   // sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
-        //   // rottaeDeg += 180;
-        //   // ev.stopPropagation();
-        // }
-
-        // if(ev.target.className === "SortClassStatus"){
-        //   // let sortColumns = "status";
-        //   // this.sortColumn(true,sortColumns);
-        //   // let sortImg: any = document.querySelectorAll('.SortClassStatus')[0];
-        //   // sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
-        //   // rottaeDeg += 180;
-        //   // ev.stopPropagation();
-        // }
-
-        // if(ev.target.className === "SortClassType"){
-        //   // let sortColumns = "type";
-        //   // this.sortColumn(true,sortColumns);
-        //   // let sortImg: any = document.querySelectorAll('.SortClassType')[0];
-        //   // sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
-        //   // rottaeDeg += 180;
-        //   // ev.stopPropagation();
-        // }
-
-        // if(ev.target.className === "SortClassClassification"){
-        //   // let sortColumns = "classification";
-        //   // this.sortColumn(true,sortColumns);
-        //   // let sortImg: any = document.querySelectorAll('.SortClassClassification')[0];
-        //   // sortImg.style.transform = `rotate(${rottaeDeg}deg)`;
-        //   // rottaeDeg += 180;
-        //   // ev.stopPropagation();
-        // }
-
         let checkPopup = () => {
           if (document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label") &&
             document.querySelectorAll("div[role='filtercallout'] .ms-Button .ms-Button-label")[1]) {
-            that.applyCustomCSS();
+            
+            // apply css for filter dilogbox. 
+              that.applyCustomCSS();
             clearInterval(test1);
           }
         };
         let test1 = setInterval(() => { checkPopup(); }, 100);
       });
       
+
+      // Hide sorting arrow on column right click
       element.addEventListener('contextmenu', (ev: Event) => {
         let hideICon = () => {
           let iconSOrtHide: any = document.querySelectorAll('.ms-DetailsHeader-cellTitle .ms-Icon')[0];
@@ -849,6 +802,7 @@ class WorkspaceDetails extends React.Component<
     }
   }
 
+  // This function useed for Apply Filter Dilog Box Css 
   public applyCustomCSS() {
 
     // change text clear All to clear
@@ -884,6 +838,7 @@ class WorkspaceDetails extends React.Component<
     }
   }
 
+  // Rendert The HTML For the Application 
   public render() {
 
     return (
@@ -1252,6 +1207,8 @@ class WorkspaceDetails extends React.Component<
       </div>
     );
   }
+
+  // This function is used for the render the dilog box on delete Workspace
   private renderDialogDelete(item: any): JSX.Element {
     return (
       <Dialog
@@ -1277,6 +1234,7 @@ class WorkspaceDetails extends React.Component<
     );
   }
 
+  // This Function is used for the render the dialog box on edit workspace
   private renderEditDialog(item: any): JSX.Element {
     <script src="https://unpkg.com/@microsoft/mgt/dist/bundle/mgt-loader.js"></script>
     return (
@@ -1321,6 +1279,7 @@ class WorkspaceDetails extends React.Component<
     );
   }
 
+  // This FUnction is used for the reder loader in table and 4 boxes
   private renderSpinner(label:any, size:any, position:any): JSX.Element {
     return (
       <Spinner
@@ -1332,6 +1291,7 @@ class WorkspaceDetails extends React.Component<
     );
   }
 
+  // This function render the dialog for Edit 
   private renderDialog(item: any): JSX.Element {
     return (
           <Dialog
@@ -1358,11 +1318,13 @@ class WorkspaceDetails extends React.Component<
     );
   }
 
+  // This Function is used for close the dialog box
   private closeDialog = (confirm: boolean): void => {
     this.onContextualMenuDismissed();
     this.setState({ dialog: "none" });
   };
 
+// This Function is used for close the dialog box
   private _closeDialog = (): void => {
     this.onContextualMenuDismissed();
     this.setState({ hideDialog: true });
@@ -1373,12 +1335,9 @@ class WorkspaceDetails extends React.Component<
   public _getAllPublicTeams = async (accessToken:string = ""): Promise<IWorkspace[]> => {
     return new Promise<any>(async (resolve, reject) => {  
       
-      console.log("Call The get all public Teams :");
+      
       // this _getAccessToken method Genrates the access token for azure function API Call 
       accessToken = await this._getAccessToken();
-
-      // console.log("get Token for all public teams ");
-      // console.log(accessToken);
 
       const items: IWorkspace[] = [];
       var today = this.state.today.getTime();
@@ -1387,7 +1346,7 @@ class WorkspaceDetails extends React.Component<
       
       // Call Azure Function With Access Token 
       callGetPublicTeams(accessToken)
-            .then((response) => response)
+          .then((response) => response)
             .then((data: any[]) => {
               data.forEach((element) => {
 
@@ -1400,7 +1359,7 @@ class WorkspaceDetails extends React.Component<
                     (1000 * 60 * 60 * 24.0);
                 }
                 
-                // Condition true then team will Inactie Otherwise teams will Active
+                // Condition true then team will Inactive Otherwise teams will Active
 
                 if (element.status === "Active" && daysSinceActivity >= 97) {
                   
@@ -1441,13 +1400,13 @@ class WorkspaceDetails extends React.Component<
                 });
               }
               });
-              
+
+              // Set the count for InActive Teams 
               this.setState({
                 inActiveCount: totalInActiveTeams,
                 showSpinner : false
               });
-              console.log("Get All Public Teams Response");
-              console.log(items);
+
               resolve(items);
             });
     });
@@ -1484,19 +1443,24 @@ class WorkspaceDetails extends React.Component<
     let teamsWithExternalUserCountTemp = this.state.teamsExternalUser;
     let teamsMissingInfoCountTemp = this.state.teamsMissingInfo;
 
+    // Decrese the InActive count if Deleted Workspace Is InActive.
     if(item.status === "Inactive"){
       inactiveTeamsCountTemp = inactiveTeamsCountTemp - 1; 
     }
+    // Decrese the MissingInfo count if Deleted Workspace Has Missing Info.
     if(item.businessOwner.trim() === "" || item.businessDepartment.trim() === "" || item.classification.trim() === "" || item.type.trim() === "" ){
       teamsMissingInfoCountTemp = teamsMissingInfoCountTemp - 1;
     }
+    // Decrese the ExternalUser count if Deleted Workspace Has External User.
     if(item.teamsExternalUser > 0){
       teamsWithExternalUserCountTemp = teamsWithExternalUserCountTemp - 1;
     }
+    // Decrese the TeamsOwner count if Deleted Workspace Has noOwner.
     if(item.teamsWithNoOwner === 0){
       teamsWithNoOwnerCountTemp = teamsWithNoOwnerCountTemp - 1; 
     }
 
+    // Remove the Deleted Workspace and Set Workspaces And count. 
     var currentItemList = this.state.workspaceItemList;
     currentItemList.splice(currentItemList.indexOf(item),1);
     let updatedWorkspces = currentItemList;
@@ -1531,15 +1495,9 @@ class WorkspaceDetails extends React.Component<
       archiveWorkspace(accessToken, item)
             .then(
               async (response: any) => {
-
-                // console.log("Archived API Response");
-                // console.log(response);
-
                 if (response.ok === true) {
-
                   let currentStatus : any = item.status;
-
-                  if(currentStatus === "Archived")
+                  if (currentStatus === "Archived")
                   {
                     currentStatus = "Active";
                   }
@@ -1548,16 +1506,6 @@ class WorkspaceDetails extends React.Component<
                     currentStatus = "Archived";
                   }
                   item.status = currentStatus;
-                  // if(item.status === "Inactive")
-                  // {
-                  //   item.status === "Archived" ? "Active" : "Archived";  
-                  // }
-                  // else
-                  // {
-                    
-                  // }
-                  // item.status == "Archived" ? (item.status == "Active" ?  "Active":  "Active") : "Archived";
-                  
                   let tempItem = item;
                   let tempWorkspaces = [...this.state.workspaceItemList];
 
@@ -1581,17 +1529,12 @@ class WorkspaceDetails extends React.Component<
   public _getUserRole = async (): Promise<boolean> => {
     return new Promise<boolean>( async (resolve, reject) => {
       console.log("Call The GetUserRole API :");
-      // let accessToken = "";
-      // this.setState({
-      //   currentUserEmail : "belinda@iiab.onmicrosoft.com"
-      // })
+
       let accessToken = await this._getAccessToken();
       
       canUserRestoreTeams(accessToken, this.state.currentUserEmail)
         .then((response) => response)
         .then((data: any) => {
-          console.log("GetUserRole API Response :");
-          console.log(data);
           resolve(data);
         });
     });
@@ -1600,26 +1543,15 @@ class WorkspaceDetails extends React.Component<
   // Genrates Access Token For the API 
   public _getAccessToken = async () : Promise<string> => {
     return new Promise<string>((resolve, reject) => {
-       
-      //console.log("Function : Get Token Function Call");
-
       microsoftTeams.authentication.getAuthToken({
           
         successCallback: (token: string) => {
-            //console.log("Function : Teams Token : " + token);
-              //const decoded: { [key: string]: any; } = jwtDecode(token) as { [key: string]: any; };
-              //setName(decoded!.name);
+
               microsoftTeams.appInitialization.notifySuccess();
-
-              console.log("Function : Teams Token :")  
-                console.log(token);
-    
+              // call backEnd APi With Teams Token.    
               getClientDetails(token + "", this.state.currentUserEmail, "082a7423-5b17-4f5e-a4dc-6d2396d7edfa").then((graphToken) => {
-                
-                console.log("Function : Graph Token :")  
-                console.log(graphToken);
-
-                  resolve(graphToken as string);
+                  
+                resolve(graphToken as string);
               }).catch((err) => {
                   // console.log("Function : Error For Genrates Token :");
                   // console.log(err);
